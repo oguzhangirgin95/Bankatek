@@ -243,6 +243,14 @@ app-card {
   font-size: 12px;
 }
 
+/* Dar ekranda çağrı şeridindeki buton tam genişliğe yayılır. Kural burada
+   duruyor çünkü kapsüllenmiş stil alt bileşenin içine işlemiyor. */
+@media (max-width: 700px) {
+  .app-addnewtransaction .app-button {
+    width: 100%;
+  }
+}
+
 .stats {
   display: flex;
   gap: var(--space);

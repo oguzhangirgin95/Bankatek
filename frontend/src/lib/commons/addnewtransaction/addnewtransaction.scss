@@ -1,0 +1,80 @@
+:host {
+  display: block;
+}
+
+.app-addnewtransaction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space);
+  flex-wrap: wrap;
+  margin: var(--space) 0;
+  padding: var(--space) calc(var(--space) * 1.25);
+  background: var(--color-surface);
+  border: 2px solid var(--color-border-strong);
+  border-radius: var(--radius);
+
+  // Vurgulu halde kenarlik icinde bulunulan modulun rengini alir; modul
+  // rengi tanimli degilse temanin vurgusuna duser.
+  &--accent {
+    border-color: var(--color-module, var(--color-accent));
+  }
+
+  &__lines {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  // Satirlar esit agirlikta; aralarinda baslik/aciklama ayrimi yok, sirayi
+  // cagiran ekran belirliyor.
+  &__line {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    overflow-wrap: anywhere;
+  }
+
+  &__content {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    vertical-align: middle;
+  }
+
+  // Ikon kendi cercevesinde duruyor; rengini butondan devralir.
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border: 1px solid currentColor;
+    border-radius: 6px;
+    opacity: 0.75;
+  }
+
+  &__icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &__label {
+    white-space: nowrap;
+  }
+}
+
+// Dar ekranda buton alt satira gecip tam genislige yayilir. Butonun kendi
+// govdesini genisleten kural styles.scss'te; kapsullenmis stil alt bilesenin
+// icine islemiyor.
+@media (max-width: 700px) {
+  .app-addnewtransaction {
+    align-items: stretch;
+
+    app-button {
+      display: block;
+    }
+  }
+}

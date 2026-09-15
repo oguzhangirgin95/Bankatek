@@ -5,6 +5,7 @@ import { BaseComponent } from '@lib/base/basecomponent/basecomponent';
 import { TourService } from '@lib/base/baseservice/tourservice';
 import { WEATHER_BASE_PATH, WeatherService } from '@lib/services/external/weatherservice';
 import { Body } from '@lib/commons/body/body';
+import { Addnewtransaction } from '@lib/commons/addnewtransaction/addnewtransaction';
 import { Avatar } from '@lib/commons/avatar/avatar';
 import { Badge } from '@lib/commons/badge/badge';
 import { Barchart, ChartItem } from '@lib/commons/barchart/barchart';
@@ -49,7 +50,7 @@ const ANKARA = { latitude: 39.93, longitude: 32.86 };
 
 @Component({
   imports: [
-    Avatar, Badge, Barchart, Body, Button, Card, Datepicker, Detailcard,
+    Addnewtransaction, Avatar, Badge, Barchart, Body, Button, Card, Datepicker, Detailcard,
     Chart, Documentview, Donutchart, Footer, FormsModule, Genericlist, Gif, Grid,
     Header, Info, Input, List, Map, Menu, Modal, Pagination, Profilemenu,
     Progress, Ringprogress, Search, Select, Sidebar, Sidemodal, Skeleton, Slider,

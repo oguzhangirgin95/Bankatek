@@ -1,0 +1,28 @@
+<div class="app-addnewtransaction" [class.app-addnewtransaction--accent]="accent()">
+  @if (visibleLines().length) {
+    <div class="app-addnewtransaction__lines">
+      @for (line of visibleLines(); track $index) {
+        <span class="app-addnewtransaction__line">{{ line }}</span>
+      }
+    </div>
+  }
+
+  <app-button [variant]="variant()" [disabled]="disabled()" (clicked)="clicked.emit()">
+    <!-- Butonun icerigi buradan yansitiliyor; ikon ile yazinin hizalanmasi
+         bu sarmalayicinin isi, native butona flex yazmak gerekmiyor. -->
+    <span class="app-addnewtransaction__content">
+      @if (showIcon()) {
+        <span class="app-addnewtransaction__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path [attr.d]="iconPath()" />
+          </svg>
+        </span>
+      }
+
+      @if (buttonLabel()) {
+        <span class="app-addnewtransaction__label">{{ buttonLabel() }}</span>
+      }
+    </span>
+  </app-button>
+</div>

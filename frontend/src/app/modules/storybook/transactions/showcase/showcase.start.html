@@ -1,3 +1,21 @@
+<!-- Şerit tam genişlik ister; aşağıdaki kart ızgarası 320px sütunlara
+     böldüğü için örnek burada, sayfanın en üstünde duruyor. -->
+<app-addnewtransaction
+  [lines]="['Yeni bir transfer başlatın', 'Havale, EFT, FAST ve SWIFT desteklenir', 'Günlük limitiniz işlem sırasında kontrol edilir']"
+  buttonLabel="Yeni Transfer"
+  icon="transfer"
+  accent
+  (clicked)="navigate('transfercreate')"
+/>
+
+<app-addnewtransaction
+  [lines]="['Rapor girişi']"
+  buttonLabel="Yeni Rapor"
+  icon="document"
+  variant="outline"
+  (clicked)="navigate('reportentry')"
+/>
+
 <div class="page-head">
   <h2>Storybook</h2>
 
