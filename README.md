@@ -68,21 +68,19 @@ kullanır; ekran başına ayrı bileşen yazılmaz.
 Ekranlar veriye `lib/services/api/*Controller.service.ts` üzerinden erişir.
 Bu servisler gerçek bir OpenAPI istemcisi gibi HTTP isteği atar.
 
-## Modül menüleri
+## Modül yapılandırması
 
-Her modülün bir `<modül>.config.ts` dosyası vardır ve o modülün altındaki
-transaction'ları sayar. `<modül>.routes.ts` bu yapılandırmayı transaction
-route'una `moduleConfig` anahtarıyla bağlar; `FlowService` route ağacında
-yukarı doğru arayıp bulur.
-
-Menü bu yüzden ekrana göre değişir: `transfers` altındaki bir transaction
-açıkken menüde transfers modülünün bütün ekranları, `customers` altındaki bir
-transaction açıkken customers modülünün ekranları listelenir.
+Her modülün bir `<modül>.config.ts` dosyası vardır: altındaki transaction'ları,
+modülün rengini ve arka plan animasyonunu taşır. `<modül>.routes.ts` bu
+yapılandırmayı transaction route'una `moduleConfig` anahtarıyla bağlar;
+`FlowService` route ağacında yukarı doğru arayıp bulur.
 
 ```ts
 export const TransfersConfig: ModuleConfig = {
   code: 'MENU_TRANSFERS',
   title: 'Transferler',
+  color: '#f59e0b',
+  background: '/assets/modules/olay.svg',
   transactions: [
     { code: 'MENU_TRANSFERLIST', title: 'Transfer Takibi', path: '/transfers/transferlist/start' },
     { code: 'MENU_TRANSFERCREATE', title: 'Transfer Oluştur', path: '/transfers/transfercreate/start' },
@@ -90,12 +88,54 @@ export const TransfersConfig: ModuleConfig = {
 };
 ```
 
-Başlıklar `code` ile çevrilir, karşılığı yoksa `title` gösterilir. `isEnable`
-verilirse bağlantı yalnızca o özellik bayrağı açıkken menüde yer alır.
+### Menü
+
+Menü ekrana göre değişir: `transfers` altındaki bir transaction açıkken menüde
+transfers modülünün bütün ekranları, `customers` altındaki bir transaction
+açıkken customers modülünün ekranları listelenir. Başlıklar `code` ile
+çevrilir, karşılığı yoksa `title` gösterilir; `isEnable` verilirse bağlantı
+yalnızca o özellik bayrağı açıkken menüde yer alır.
 
 Panelin altındaki modül listesi bunun dışındadır: sunucudan (`/menu/list`)
 gelir ve modüller arası geçişi sağlar, yani kullanıcının yetkisi neyse menüde
 o modüller görünür.
+
+### Renk
+
+`color`, `App` bileşeni üzerinden `--color-module` değişkenine yazılır. Üst
+şeridin çizgisi, menüdeki açık ekran işareti, panel başlığı ve arka plan
+parıltısı bu değişkeni okur. Seçili tema zemini belirlemeye devam eder; modül
+rengi yalnızca hangi modülde olunduğunu ayırt eder.
+
+### Arka plan
+
+`background`, `src/assets/modules/` altındaki hareketli bir SVG'yi gösterir.
+Animasyon dosyanın kendisindedir (SMIL); kod tarafında animasyon yoktur. Görsel
+`App` şablonundaki `.app-backdrop` katmanında tam ekran çizilir, tıklamayı
+geçirir ve içeriğin altında kalır. `prefers-reduced-motion` açıkken görsel
+düşer, modülün rengi kalır.
+
+Görsel dil Keycloak giriş temasındaki arka planlarla aynı: koyu zemin üzerinde
+ince açık mavi teknik çizgiler, braket köşeli paneller, cetvel taksimatı,
+odak dışı ışık lekeleri ve modülün renginde vurgu eğrileri. Arka planda **yazı
+yoktur** — etiketlerin yerini, ekranın kendi metniyle yarışmayan ince veri
+çizgileri alır.
+
+Dosyadaki vurgu rengi yapılandırmadaki `color` ile aynıdır; SVG bir arka plan
+görseli olarak yüklendiği için sayfanın CSS değişkenlerini okuyamaz.
+
+| Modül | Renk | Arka plan | Sahne |
+| --- | --- | --- | --- |
+| `monitoring` | `#22d3ee` | `veri.svg` | Radar kadranı, tarama huzmesi, dalga formu |
+| `customers` | `#a78bfa` | `kopek.svg` | Büyük Köpek takımyıldızı, gök koordinat ağı |
+| `accounts` | `#34d399` | `hesap.svg` | İki hesap paneli, arada bakiye aktarımı |
+| `transfers` | `#f59e0b` | `olay.svg` | Uçlar arası olay hattı, ilerleyen paketler |
+| `regions` | `#60a5fa` | `harita.svg` | Eş yükselti eğrileri, ölçüm noktaları |
+| `branches` | `#f472b6` | `ag.svg` | Şube düğümleri, merkezden yayılan sinyal |
+| `reports` | `#f87171` | `rapor.svg` | Rapor sayfası, dağılım sütunları |
+| `analytics` | `#a3e635` | `kimyasal.svg` | Benzen halkası, elektron yörüngeleri |
+| `settings` | `#818cf8` | `devre.svg` | Baskı devre, yollarda ilerleyen akım |
+| `storybook` | `#e879f9` | `egitim.svg` | Açı ölçer, çizilen yay, teknik resim |
 
 ## Veri katmanı
 

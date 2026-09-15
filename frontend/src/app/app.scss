@@ -2,6 +2,45 @@
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  position: relative;
+}
+
+// Modulun hareketli arka plani. Sabit duruyor ki sayfa kaydirilirken
+// kaymasin; z-index 0 ile icerigin altinda kaliyor.
+.app-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.42;
+  background-color: transparent;
+  background-image: var(--app-backdrop, none);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  transition: opacity var(--transition);
+}
+
+// Modulun rengiyle hafif bir parilti; arka plan gorseli yuklenmese de
+// modulun rengi hissediliyor.
+.app-backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120% 90% at 50% 0%,
+    var(--color-module, var(--color-accent)) 0%,
+    transparent 62%
+  );
+  opacity: 0.12;
+}
+
+// Header, govde ve footer arka planin uzerinde kalmali.
+app-header,
+app-body,
+app-footer {
+  position: relative;
+  z-index: 1;
 }
 
 // Menu sol tarafta sabit duruyor; icerik onun genisligi kadar iceri alinir.
@@ -13,5 +52,13 @@
 
   :host-context(body.app-menu-open) {
     padding-left: 260px;
+  }
+}
+
+// Hareket azaltma isteginde animasyonlu gorsel dusuyor, modulun rengi kaliyor.
+@media (prefers-reduced-motion: reduce) {
+  .app-backdrop {
+    background-image: none;
+    opacity: 0.6;
   }
 }

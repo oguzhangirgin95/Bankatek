@@ -1,3 +1,7 @@
+<!-- Modulun arka plani. Icerikten once geliyor ve tiklamayi gecirdigi icin
+     ekranin isleyisine karismaz. -->
+<div class="app-backdrop" aria-hidden="true" [style.--app-backdrop]="moduleBackground()"></div>
+
 @if (showHeader()) {
   <app-header />
 }

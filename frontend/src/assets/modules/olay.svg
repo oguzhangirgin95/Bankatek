@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" preserveAspectRatio="xMidYMid slice" role="presentation">
+  <!-- transfers modulunun arka plani: Olay hatti ve kuyruk.
+       Animasyon dosyanin kendisinde (SMIL). Vurgu rengi module config'teki
+       color degeriyle ayni tutulur. -->
+  <defs>
+    <radialGradient id="glow" cx=".5" cy=".5" r=".5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity=".42" />
+      <stop offset=".55" stop-color="#f59e0b" stop-opacity=".12" />
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="sweep" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity=".34" />
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0" />
+    </linearGradient>
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="14" />
+    </filter>
+  </defs>
+
+  <ellipse cx="-30" cy="-50" rx="700" ry="520" fill="url(#glow)" opacity=".85" />
+  <ellipse cx="1340" cy="790" rx="620" ry="470" fill="url(#glow)" opacity=".5" />
+
+  <path d="M64 0 V720 M128 0 V720 M192 0 V720 M256 0 V720 M320 0 V720 M384 0 V720 M448 0 V720 M512 0 V720 M576 0 V720 M640 0 V720 M704 0 V720 M768 0 V720 M832 0 V720 M896 0 V720 M960 0 V720 M1024 0 V720 M1088 0 V720 M1152 0 V720 M1216 0 V720 M0 64 H1280 M0 128 H1280 M0 192 H1280 M0 256 H1280 M0 320 H1280 M0 384 H1280 M0 448 H1280 M0 512 H1280 M0 576 H1280 M0 640 H1280 M0 704 H1280" stroke="#dbe9fb" stroke-opacity=".065" stroke-width="1" fill="none" />
+
+  <g>
+    <circle cx="677" cy="410" r="13" fill="#dbe9fb" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="9s" repeatCount="indefinite" /></circle>
+    <circle cx="1031" cy="372" r="22" fill="#f59e0b" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="9s" repeatCount="indefinite" /></circle>
+    <circle cx="345" cy="238" r="21" fill="#dbe9fb" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="7s" repeatCount="indefinite" /></circle>
+    <circle cx="27" cy="392" r="24" fill="#dbe9fb" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="13s" repeatCount="indefinite" /></circle>
+    <circle cx="1229" cy="82" r="11" fill="#dbe9fb" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="15s" repeatCount="indefinite" /></circle>
+    <circle cx="239" cy="588" r="27" fill="#dbe9fb" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="15s" repeatCount="indefinite" /></circle>
+    <circle cx="513" cy="310" r="25" fill="#dbe9fb" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="13s" repeatCount="indefinite" /></circle>
+    <circle cx="1155" cy="144" r="13" fill="#f59e0b" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="9s" repeatCount="indefinite" /></circle>
+    <circle cx="245" cy="202" r="23" fill="#dbe9fb" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="9s" repeatCount="indefinite" /></circle>
+    <circle cx="727" cy="52" r="16" fill="#f59e0b" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="7s" repeatCount="indefinite" /></circle>
+    <circle cx="1193" cy="622" r="23" fill="#dbe9fb" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="11s" repeatCount="indefinite" /></circle>
+    <circle cx="1003" cy="632" r="30" fill="#dbe9fb" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="9s" repeatCount="indefinite" /></circle>
+    <circle cx="541" cy="226" r="14" fill="#f59e0b" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="15s" repeatCount="indefinite" /></circle>
+    <circle cx="1215" cy="220" r="11" fill="#dbe9fb" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="11s" repeatCount="indefinite" /></circle>
+    <circle cx="337" cy="214" r="17" fill="#f59e0b" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="15s" repeatCount="indefinite" /></circle>
+    <circle cx="339" cy="704" r="8" fill="#f59e0b" fill-opacity="0.1" filter="url(#soft)"><animate attributeName="fill-opacity" values="0.1;0;0.1" dur="9s" repeatCount="indefinite" /></circle>
+  </g>
+
+  <g>
+    <path d="M140 150 V120 H170 M450 120 H480 V150 M480 340 V370 H450 M170 370 H140 V340" stroke="#dbe9fb" stroke-opacity=".34" stroke-width="1.3" fill="none" />
+    <rect x="176" y="156" width="268" height="178" rx="5" fill="none" stroke="#dbe9fb" stroke-opacity=".24" stroke-width="1.2" />
+    <rect x="200" y="180" width="96" height="130" rx="4" fill="none" stroke="#dbe9fb" stroke-opacity=".2" stroke-width="1" />
+    <path fill="none" d="M200 212 H296 M200 244 H296 M200 276 H296" stroke="#dbe9fb" stroke-opacity=".16" stroke-width="1" />
+    <rect x="320" y="180" width="100" height="100" rx="3" fill="none" stroke="#dbe9fb" stroke-opacity=".24" stroke-width="1" />
+    <path fill="none" d="M336 196 h68 M336 212 h68 M336 228 h68 M336 244 h68 M336 260 h68" stroke="#dbe9fb" stroke-opacity=".14" stroke-width="1" stroke-dasharray="2 6" />
+    <path d="M176 386 H444 M176 386 V395 M192 386 V390 M208 386 V390 M224 386 V390 M240 386 V390 M256 386 V395 M272 386 V390 M288 386 V390 M304 386 V390 M320 386 V390 M336 386 V395 M352 386 V390 M368 386 V390 M384 386 V390 M400 386 V390 M416 386 V395 M432 386 V390" stroke="#dbe9fb" stroke-opacity=".24" stroke-width="1" fill="none" />
+    <path d="M176 110.1 H231.7 M237.7 110.1 H244.6 M250.6 110.1 H285.4" stroke="#dbe9fb" stroke-opacity="0.2" stroke-width="3.8" stroke-linecap="round" fill="none" />
+  </g>
+  <g>
+    <path d="M800 150 V120 H830 M1110 120 H1140 V150 M1140 340 V370 H1110 M830 370 H800 V340" stroke="#dbe9fb" stroke-opacity=".34" stroke-width="1.3" fill="none" />
+    <rect x="836" y="156" width="268" height="178" rx="5" fill="none" stroke="#dbe9fb" stroke-opacity=".24" stroke-width="1.2" />
+    <rect x="984" y="180" width="96" height="130" rx="4" fill="none" stroke="#dbe9fb" stroke-opacity=".2" stroke-width="1" />
+    <path fill="none" d="M984 212 H1080 M984 244 H1080 M984 276 H1080" stroke="#dbe9fb" stroke-opacity=".16" stroke-width="1" />
+    <rect x="860" y="180" width="100" height="100" rx="3" fill="none" stroke="#dbe9fb" stroke-opacity=".24" stroke-width="1" />
+    <path fill="none" d="M876 196 h68 M876 212 h68 M876 228 h68 M876 244 h68 M876 260 h68" stroke="#dbe9fb" stroke-opacity=".14" stroke-width="1" stroke-dasharray="2 6" />
+    <path d="M836 386 H1104 M836 386 V395 M852 386 V390 M868 386 V390 M884 386 V390 M900 386 V390 M916 386 V395 M932 386 V390 M948 386 V390 M964 386 V390 M980 386 V390 M996 386 V395 M1012 386 V390 M1028 386 V390 M1044 386 V390 M1060 386 V390 M1076 386 V395 M1092 386 V390" stroke="#dbe9fb" stroke-opacity=".24" stroke-width="1" fill="none" />
+    <path d="M836 110.1 H870.8 M876.8 110.1 H883.8 M889.8 110.1 H924.6" stroke="#dbe9fb" stroke-opacity="0.2" stroke-width="3.8" stroke-linecap="round" fill="none" />
+  </g>
+  <g>
+    <path d="M250 400 C250 600 500 640 640 640" fill="none" stroke="#f59e0b" stroke-opacity=".44" stroke-width="1.4" />
+    <circle r="3.6" fill="#f59e0b" fill-opacity=".95"><animateMotion dur="2.6ss" begin="0s" repeatCount="indefinite" path="M250 400 C250 600 500 640 640 640" /></circle>
+    <circle cx="250" cy="400" r="4" fill="#f59e0b" fill-opacity=".75" />
+    <path d="M320 400 C320 570 520 612 640 612" fill="none" stroke="#f59e0b" stroke-opacity=".26" stroke-width="1.4" />
+    <circle r="3.6" fill="#f59e0b" fill-opacity=".95"><animateMotion dur="3.2ss" begin="0.6s" repeatCount="indefinite" path="M320 400 C320 570 520 612 640 612" /></circle>
+    <circle cx="320" cy="400" r="4" fill="#f59e0b" fill-opacity=".75" />
+    <path d="M1030 400 C1030 600 780 640 640 640" fill="none" stroke="#f59e0b" stroke-opacity=".44" stroke-width="1.4" />
+    <circle r="3.6" fill="#f59e0b" fill-opacity=".95"><animateMotion dur="2.9ss" begin="0.3s" repeatCount="indefinite" path="M1030 400 C1030 600 780 640 640 640" /></circle>
+    <circle cx="1030" cy="400" r="4" fill="#f59e0b" fill-opacity=".75" />
+    <path d="M960 400 C960 570 760 612 640 612" fill="none" stroke="#f59e0b" stroke-opacity=".26" stroke-width="1.4" />
+    <circle r="3.6" fill="#f59e0b" fill-opacity=".95"><animateMotion dur="3.5ss" begin="0.9s" repeatCount="indefinite" path="M960 400 C960 570 760 612 640 612" /></circle>
+    <circle cx="960" cy="400" r="4" fill="#f59e0b" fill-opacity=".75" />
+    <rect x="604" y="596" width="72" height="60" rx="6" fill="none" stroke="#f59e0b" stroke-opacity=".55" stroke-width="1.4" />
+    <path fill="none" d="M604 626 H676 M640 596 V656" stroke="#dbe9fb" stroke-opacity=".3" stroke-width="1" />
+    <path fill="none" d="M640 656 V684 M616 684 H664" stroke="#dbe9fb" stroke-opacity=".35" stroke-width="1" />
+    <circle cx="640" cy="626" r="44" fill="none" stroke="#f59e0b" stroke-width="1.2"><animate attributeName="r" values="44;110" dur="3.2s" begin="0s" repeatCount="indefinite" /><animate attributeName="stroke-opacity" values=".55;0" dur="3.2s" begin="0s" repeatCount="indefinite" /></circle>
+    <path d="M596 580.1 H637.8" stroke="#dbe9fb" stroke-opacity="0.2" stroke-width="3.8" stroke-linecap="round" fill="none" />
+  </g>
+
+  <path d="M1033 517 H1043 M1038 512 V522 M1107 285 H1117 M1112 280 V290 M225 460 H235 M230 455 V465 M831 105 H841 M836 100 V110 M898 381 H908 M903 376 V386 M1121 364 H1131 M1126 359 V369 M526 367 H536 M531 362 V372 M764 591 H774 M769 586 V596 M327 381 H337 M332 376 V386" stroke="#dbe9fb" stroke-opacity=".2" stroke-width="1" fill="none" />
+</svg>
