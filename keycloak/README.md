@@ -99,7 +99,8 @@ degerleri yeni Keycloak'ta realm/client ayarlarina girin.
 | `login.ftl` | Yalnizca baslik, form ve seritler; html/head/body base'den gelir |
 | `resources/css/login.css` | Gorunum. Degerler `frontend/src/styles.scss` ile ayni |
 | `resources/img/bankatek-logo.svg` | Seritlerdeki ve kart ustundeki rozet |
-| `resources/img/arka-plan.svg` | Sayfanin arka plani |
+| `resources/img/arka-plan.svg` | Hareketsiz arka plan (yedek) |
+| `resources/img/giris-*.gif` | Hareketli arka planlar; on sekiz secenek, secim `login.css` icinde |
 | `messages/messages_tr.properties` | Turkce metinler; yazilmayanlar Keycloak'in kendi paketinden gelir |
 | `messages/messages_en.properties` | Ayni anahtarlarin Ingilizcesi |
 
