@@ -1,0 +1,37 @@
+.app-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: var(--space);
+  border-bottom: 1px solid var(--color-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &__tab {
+    flex: 0 0 auto;
+    min-height: var(--touch);
+    padding: 0 20px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    color: var(--color-muted);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  &__tab:hover:not(:disabled) {
+    background: var(--color-surface-2);
+    color: var(--color-text);
+  }
+
+  &__tab--active,
+  &__tab--active:hover:not(:disabled) {
+    background: transparent;
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+}

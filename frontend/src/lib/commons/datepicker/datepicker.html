@@ -1,0 +1,203 @@
+<div class="field">
+  @if (label()) {
+    <label [attr.for]="id()">{{ label() }}</label>
+  }
+
+  <div class="datepicker__control">
+    <button
+      #trigger
+      type="button"
+      class="datepicker__trigger"
+      aria-haspopup="dialog"
+      [attr.id]="id()"
+      [attr.aria-expanded]="open()"
+      [class.is-open]="open()"
+      [class.field-error]="!!getError(id())"
+      [disabled]="isDisabled()"
+      (click)="toggle()"
+      (keydown.arrowdown)="$event.preventDefault(); show()"
+    >
+      @if (hasDate()) {
+        <svg class="datepicker__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="16" rx="2" />
+          <path d="M3 10h18M8 3v4M16 3v4" />
+        </svg>
+      } @else {
+        <svg class="datepicker__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 7v5l3 2" />
+        </svg>
+      }
+      <span class="datepicker__text" [class.is-empty]="!value()">{{ display() || placeholderText() }}</span>
+    </button>
+
+    @if (value() && !isDisabled()) {
+      <button type="button" class="datepicker__clear" [attr.aria-label]="labels().clear" (click)="clear()">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6l12 12M18 6 6 18" />
+        </svg>
+      </button>
+    }
+
+    @if (open()) {
+      <div
+        class="datepicker__panel"
+        role="dialog"
+        [attr.aria-label]="label() || placeholderText()"
+        [class.is-up]="placement().up"
+        [class.is-right]="placement().right"
+        [class.is-time]="!hasDate()"
+      >
+        <div class="datepicker__summary">
+          @if (hasDate()) {
+            <div class="datepicker__summary-date">
+              <span>{{ summary().weekday }}</span>
+              <strong>{{ summary().date }}</strong>
+            </div>
+          }
+
+          @if (hasTime()) {
+            <strong class="datepicker__summary-time">{{ summary().time }}</strong>
+          }
+        </div>
+
+        <div class="datepicker__body">
+          @if (hasDate()) {
+            <div class="datepicker__calendar">
+              <div class="datepicker__nav">
+                <button type="button" class="datepicker__arrow" [attr.aria-label]="labels().previous" (click)="shift(-1)">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                </button>
+
+                <button type="button" class="datepicker__title" [disabled]="view() === 'years'" (click)="zoomOut()">
+                  {{ title() }}
+                  @if (view() !== 'years') {
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  }
+                </button>
+
+                <button type="button" class="datepicker__arrow" [attr.aria-label]="labels().next" (click)="shift(1)">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m9 18 6-6-6-6" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="datepicker__view">
+                @switch (view()) {
+                  @case ('days') {
+                    <div class="datepicker__weekdays">
+                      @for (name of weekdays(); track $index) {
+                        <span [class.is-weekend]="$index > 4">{{ name }}</span>
+                      }
+                    </div>
+
+                    <div class="datepicker__days" (keydown)="onDaysKeydown($event)">
+                      @for (day of days(); track day.key) {
+                        <button
+                          type="button"
+                          class="datepicker__day"
+                          [class.is-outside]="day.outside"
+                          [class.is-weekend]="day.weekend"
+                          [class.is-today]="day.today"
+                          [class.is-selected]="day.selected"
+                          [disabled]="day.disabled"
+                          [attr.tabindex]="day.active ? 0 : -1"
+                          [attr.data-focus]="day.active ? '' : null"
+                          [attr.aria-label]="day.name"
+                          [attr.aria-pressed]="day.selected"
+                          [attr.aria-current]="day.today ? 'date' : null"
+                          (click)="selectDay(day)"
+                        >
+                          {{ day.label }}
+                        </button>
+                      }
+                    </div>
+                  }
+
+                  @case ('months') {
+                    <div class="datepicker__grid">
+                      @for (month of months(); track month.value) {
+                        <button
+                          type="button"
+                          class="datepicker__cell"
+                          [class.is-current]="month.current"
+                          [class.is-selected]="month.selected"
+                          [disabled]="month.disabled"
+                          [attr.data-focus]="month.active ? '' : null"
+                          (click)="selectMonth(month.value)"
+                        >
+                          {{ month.label }}
+                        </button>
+                      }
+                    </div>
+                  }
+
+                  @case ('years') {
+                    <div class="datepicker__grid">
+                      @for (year of years(); track year.value) {
+                        <button
+                          type="button"
+                          class="datepicker__cell"
+                          [class.is-current]="year.current"
+                          [class.is-selected]="year.selected"
+                          [disabled]="year.disabled"
+                          [attr.data-focus]="year.active ? '' : null"
+                          (click)="selectYear(year.value)"
+                        >
+                          {{ year.label }}
+                        </button>
+                      }
+                    </div>
+                  }
+                }
+              </div>
+            </div>
+          }
+
+          @if (hasTime()) {
+            <div class="datepicker__time">
+              @for (column of columns(); track column.key) {
+                <div class="datepicker__column">
+                  <span class="datepicker__column-title">{{ column.label }}</span>
+
+                  <div class="datepicker__list" (keydown)="onColumnKeydown($event, column.key, column.items)">
+                    @for (item of column.items; track item) {
+                      <button
+                        type="button"
+                        class="datepicker__cell"
+                        [class.is-selected]="part(column.key) === item"
+                        [attr.tabindex]="part(column.key) === item || (part(column.key) < 0 && $first) ? 0 : -1"
+                        (click)="setTime(column.key, item)"
+                      >
+                        {{ pad(item) }}
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="datepicker__footer">
+          <button type="button" class="datepicker__link" [disabled]="!todayAllowed()" (click)="pickNow()">
+            {{ hasTime() ? labels().now : labels().today }}
+          </button>
+
+          <button type="button" class="datepicker__link" (click)="clear()">{{ labels().clear }}</button>
+
+          @if (hasTime()) {
+            <button type="button" class="datepicker__ok" [disabled]="!draft()" (click)="confirm()">{{ labels().ok }}</button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <app-validation [id]="id()" />
+</div>

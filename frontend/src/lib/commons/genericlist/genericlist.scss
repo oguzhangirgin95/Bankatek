@@ -1,0 +1,101 @@
+.app-genericlist {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  table {
+    width: 100%;
+    min-width: 520px;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 12px 16px;
+    text-align: left;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  th {
+    background: var(--color-surface-2);
+    color: var(--color-muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+  }
+
+  /* Butonlar tek satırda kalsın; sığmazsa tablo yatay kayar. */
+  &__actions {
+    display: flex;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 900px) {
+  .app-genericlist {
+    overflow-x: visible;
+
+    table {
+      min-width: 0;
+    }
+
+    thead {
+      display: none;
+    }
+
+    table,
+    tbody,
+    tr,
+    td {
+      display: block;
+      width: 100%;
+    }
+
+    tbody tr {
+      margin-bottom: 10px;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    td {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space);
+      padding: 10px 14px;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      text-align: right;
+    }
+
+    td::before {
+      content: attr(data-label);
+      flex: 0 0 40%;
+      color: var(--color-muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      text-align: left;
+    }
+
+    .app-genericlist__actions {
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    td[colspan] {
+      justify-content: center;
+      text-align: center;
+      border-bottom: none;
+    }
+
+    td[colspan]::before {
+      content: none;
+    }
+  }
+}

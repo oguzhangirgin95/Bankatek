@@ -1,0 +1,68 @@
+.app-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space);
+  flex-wrap: wrap;
+  padding-top: var(--space);
+  margin-top: var(--space);
+  border-top: 1px solid var(--color-border);
+
+  &__info {
+    color: var(--color-muted);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  &__pages {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+  }
+
+  &__button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 10px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--color-muted);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  &__button:hover:not(:disabled) {
+    background: var(--color-surface-2);
+    border-color: var(--color-border-strong);
+    color: var(--color-text);
+  }
+
+  &__button--active,
+  &__button--active:hover:not(:disabled) {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  &__button:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+}
+
+@media (max-width: 700px) {
+  .app-pagination {
+    justify-content: center;
+
+    &__info {
+      width: 100%;
+      text-align: center;
+    }
+
+    &__pages {
+      margin: 0 auto;
+    }
+  }
+}

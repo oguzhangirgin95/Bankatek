@@ -1,0 +1,337 @@
+:root {
+  --color-bg: hsl(224 45% 8%);
+  --color-surface: hsl(224 42% 14%);
+  --color-surface-2: hsl(224 40% 19%);
+  --color-border: hsl(224 38% 28%);
+  --color-border-strong: hsl(224 36% 40%);
+  --color-text: hsl(224 30% 97%);
+  --color-muted: hsl(224 25% 74%);
+
+  --color-accent: hsl(216 75% 51%);
+  --color-accent-dark: hsl(216 78% 42%);
+  --color-accent-soft: hsl(216 75% 51% / 0.24);
+  --color-on-accent: #ffffff;
+
+  --color-success: #2fbf5f;
+  --color-warning: #f5b301;
+  --color-error: #ff6b78;
+  --color-info: #4da3ff;
+  --color-teal: #00c7be;
+  --color-violet: #a78bfa;
+
+  --space: 16px;
+  --radius: 10px;
+  --touch: 52px;
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --transition: 160ms ease;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body.app-modal-open {
+  overflow: hidden;
+}
+
+/* Menu dar ekranda cekmece oldugu icin arkadaki sayfa kilitlenir; genis
+   ekranda kalici bir serit oldugundan kaydirma serbest kalmali. */
+@media (max-width: 1100px) {
+  body.app-menu-open {
+    overflow: hidden;
+  }
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 var(--space);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+h2 {
+  font-size: 22px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: var(--space);
+
+  label {
+    color: var(--color-muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    height: var(--touch);
+    padding: 0 14px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--color-text);
+    background: var(--color-surface-2);
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+
+  select {
+    cursor: pointer;
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--color-muted) 50%),
+      linear-gradient(135deg, var(--color-muted) 50%, transparent 50%);
+    background-position: right 20px center, right 14px center;
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+    padding-right: 40px;
+  }
+
+  option {
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-soft);
+  }
+
+  input.field-error,
+  select.field-error,
+  textarea.field-error {
+    border-color: var(--color-error);
+  }
+}
+
+button {
+  min-height: var(--touch);
+  padding: 0 24px;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+
+button:hover:not(:disabled) {
+  background: var(--color-accent-dark);
+  border-color: var(--color-accent-dark);
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.buttons {
+  display: flex;
+  gap: var(--space);
+  margin-top: calc(var(--space) * 1.5);
+}
+
+app-card {
+  display: block;
+}
+
+.page-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space);
+  flex-wrap: wrap;
+  margin-bottom: var(--space);
+}
+
+.page-head h2 {
+  margin: 0;
+}
+
+.page-head__hint {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.page-head__hint b {
+  color: var(--color-text);
+}
+
+.filters {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space);
+  flex-wrap: wrap;
+  margin-bottom: var(--space);
+}
+
+.filters > app-select,
+.filters > app-input {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.filters > app-button {
+  display: flex;
+  flex: 0 0 auto;
+}
+
+.filters > app-button .app-button {
+  flex: 1;
+  margin-bottom: 5px;
+}
+
+.filters .field {
+  margin-bottom: 0;
+}
+
+/* Liste satırlarındaki işlem butonları formdakilerden küçük olmalı. Kural
+   burada duruyor çünkü kapsüllenmiş stil alt bileşenin içine işlemiyor. */
+.app-genericlist__actions .app-button {
+  min-height: 30px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+.stats {
+  display: flex;
+  gap: var(--space);
+  flex-wrap: wrap;
+  margin-bottom: var(--space);
+}
+
+.panels,
+.content {
+  display: grid;
+  gap: var(--space);
+  grid-template-columns: var(--columns, 1fr);
+  margin-bottom: var(--space);
+}
+
+.panels > *,
+.content > * {
+  min-width: 0;
+}
+
+.panels > .stats,
+.content > .stats {
+  margin-bottom: 0;
+}
+
+.error {
+  margin: var(--space) 0;
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+router-outlet ~ * {
+  animation: app-fade-in 260ms ease backwards;
+}
+
+@keyframes app-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 1200px) {
+  .panels,
+  .content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  :root {
+    --space: 14px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .filters > app-select,
+  .filters > app-input {
+    flex: 1 1 100%;
+  }
+
+  .filters > app-button {
+    flex: 1 1 100%;
+  }
+
+  .stats app-statcard {
+    flex: 1 1 140px;
+  }
+
+  .buttons {
+    flex-direction: column-reverse;
+  }
+
+  .buttons button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}

@@ -1,0 +1,39 @@
+<h2>{{ labels().title }}</h2>
+
+<app-card [title]="labels().formTitle">
+  <div class="filters">
+    <app-select
+      id="language"
+      [label]="labels().language"
+      [options]="languageList()"
+      [(ngModel)]="State.Request.language"
+    />
+    <app-select
+      id="pageSize"
+      [label]="labels().pageSize"
+      [options]="pageSizeList"
+      [(ngModel)]="State.Request.pageSize"
+    />
+    <app-select
+      id="defaultCityId"
+      [label]="labels().defaultCity"
+      [placeholder]="labels().all"
+      [options]="State.CityList ?? []"
+      [(ngModel)]="State.Request.defaultCityId"
+    />
+    <app-input
+      id="refreshSeconds"
+      type="number"
+      [label]="labels().refresh"
+      [(ngModel)]="State.Request.refreshSeconds"
+    />
+  </div>
+
+  <div class="buttons">
+    <app-button [label]="labels().save" (clicked)="saveSetting()" />
+  </div>
+
+  @if (State.Message) {
+    <app-info [message]="State.Message" variant="success" />
+  }
+</app-card>

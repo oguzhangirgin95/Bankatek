@@ -1,0 +1,31 @@
+@if (totalCount() > 0) {
+  <div class="app-pagination">
+    <span class="app-pagination__info">{{ info() }}</span>
+
+    <div class="app-pagination__pages">
+      <button type="button" class="app-pagination__button" [disabled]="pageNumber() <= 1" (click)="go(pageNumber() - 1)">
+        ‹
+      </button>
+
+      @for (page of pages(); track page) {
+        <button
+          type="button"
+          class="app-pagination__button"
+          [class.app-pagination__button--active]="page === pageNumber()"
+          (click)="go(page)"
+        >
+          {{ page }}
+        </button>
+      }
+
+      <button
+        type="button"
+        class="app-pagination__button"
+        [disabled]="pageNumber() >= pageCount()"
+        (click)="go(pageNumber() + 1)"
+      >
+        ›
+      </button>
+    </div>
+  </div>
+}

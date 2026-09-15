@@ -1,0 +1,126 @@
+/** app-root flex sütun olduğu için host kutusu oluşmasın; yoksa fazladan satır açar. */
+:host {
+  display: contents;
+}
+
+/**
+ * Kaplama bütün ekranı örter ve tıklamaları yutar: tur sürerken arkadaki
+ * filtreleri değiştirmek anlatılan şeyi ortadan kaldırırdı.
+ *
+ * Yığın sırası: header 50, menü 90, modal 100, ipucu 200. Tur hepsinin üstünde.
+ */
+.app-tour {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  /* Deliğin 100vmax yayılan gölgesi kaydırma çubuğu üretmesin diye kırpılıyor. */
+  overflow: hidden;
+  animation: app-tour-fade 160ms ease;
+}
+
+/**
+ * Karartma ve delik tek öğe: öğenin kendisi saydam, dışarısını 100vmax yayılan
+ * gölge kaplıyor.
+ */
+.app-tour__hole {
+  position: absolute;
+  border-radius: var(--radius);
+  box-shadow:
+    0 0 0 100vmax rgba(0, 0, 0, 0.72),
+    inset 0 0 0 2px var(--color-accent);
+}
+
+.app-tour__card {
+  position: absolute;
+  padding: calc(var(--space) * 1.1);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 14px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+
+  /* Üstte ve solda dururken balon kendi ölçüsü kadar geri kayar; böylece
+     genişliğini ve yüksekliğini ölçmeye gerek kalmıyor. */
+  &--top {
+    transform: translateY(-100%);
+  }
+
+  &--left {
+    transform: translateX(-100%);
+  }
+}
+
+.app-tour__title {
+  margin: 0 0 6px;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+
+.app-tour__text {
+  margin: 0 0 var(--space);
+  color: var(--color-muted);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.app-tour__foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  button {
+    min-height: 40px;
+    padding: 0 16px;
+    font-size: 14px;
+  }
+
+  /* Sayaç solda, butonlar sağda. */
+  button:first-of-type {
+    margin-left: auto;
+  }
+}
+
+.app-tour__count {
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+}
+
+.app-tour__back {
+  background: transparent;
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+}
+
+.app-tour__back:hover:not(:disabled) {
+  background: var(--color-surface-2);
+  border-color: var(--color-border-strong);
+}
+
+.app-tour__hide {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  margin-top: 12px;
+  padding: 4px 0;
+  border: none;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.app-tour__hide:hover:not(:disabled) {
+  background: transparent;
+  color: var(--color-text);
+}
+
+@keyframes app-tour-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

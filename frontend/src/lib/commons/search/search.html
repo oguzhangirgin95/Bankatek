@@ -1,0 +1,50 @@
+<div class="app-search">
+  @if (label()) {
+    <label class="app-search__label" [attr.for]="id()">{{ label() }}</label>
+  }
+
+  <div class="app-search__box">
+    <svg class="app-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.5-3.5" />
+    </svg>
+
+    <input
+      class="app-search__field"
+      type="search"
+      autocomplete="off"
+      [attr.id]="id()"
+      [placeholder]="placeholder()"
+      [disabled]="isDisabled()"
+      [ngModel]="value()"
+      (ngModelChange)="type($event)"
+      (focus)="open.set(true)"
+      (keydown.enter)="submit()"
+      (keydown.escape)="clear()"
+    />
+
+    @if (value()) {
+      <button type="button" class="app-search__clear" title="Temizle" (click)="clear()">×</button>
+    }
+  </div>
+
+  @if (showResults()) {
+    <div class="app-search__backdrop" (click)="close()"></div>
+
+    <ul class="app-search__list">
+      @for (result of results(); track result.key) {
+        <li>
+          <button type="button" class="app-search__result" (click)="choose(result)">
+            <span class="app-search__text">{{ result.text }}</span>
+            @if (result.hint) {
+              <span class="app-search__hint">{{ result.hint }}</span>
+            }
+          </button>
+        </li>
+      } @empty {
+        <li class="app-search__empty">{{ emptyText() }}</li>
+      }
+    </ul>
+  }
+</div>

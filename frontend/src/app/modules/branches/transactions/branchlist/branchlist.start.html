@@ -1,0 +1,32 @@
+<h2>{{ labels().title }}</h2>
+
+@if (State.BranchAction) {
+  <app-info
+    variant="teal"
+    [message]="labels().carried + ': ' + State.BranchAction.label + ' - ' + State.BranchAction.branchName"
+  />
+}
+
+<div class="filters">
+  <app-select
+    id="cityId"
+    [label]="labels().city"
+    [placeholder]="labels().all"
+    [options]="State.CityList ?? []"
+    [ngModel]="State.Request.cityId"
+    (ngModelChange)="setFilter('cityId', $event)"
+  />
+</div>
+
+<div class="stats">
+  <app-statcard [label]="labels().branchCount" [value]="State.BranchWorkload?.branches?.length ?? 0" />
+  <app-statcard [label]="labels().totalTransfer" [value]="State.BranchWorkload?.totalTransferLoad ?? 0" />
+</div>
+
+<app-card [title]="(State.BranchWorkload?.cityName ?? '') + ' ' + labels().chartTitle">
+  <app-barchart [items]="State.BranchChart ?? []" />
+</app-card>
+
+<app-card [title]="labels().listTitle">
+  <app-grid [columns]="columns()" [rows]="State.BranchWorkload?.branches ?? []" [emptyText]="labels().empty" />
+</app-card>

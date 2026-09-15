@@ -1,0 +1,232 @@
+.app-menu {
+  display: flex;
+  align-items: center;
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--color-text);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  &__toggle:hover:not(:disabled) {
+    background: var(--color-surface-2);
+    border-color: var(--color-border-strong);
+  }
+
+  &__bars {
+    position: relative;
+    width: 18px;
+    height: 2px;
+    flex: none;
+    background: var(--color-accent);
+    box-shadow: 0 -6px 0 var(--color-accent), 0 6px 0 var(--color-accent);
+  }
+
+  &__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    z-index: 90;
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  &__panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 91;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: min(300px, 82vw);
+    padding: var(--space);
+    padding-top: calc(var(--space) + env(safe-area-inset-top));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border-strong);
+    transform: translateX(-100%);
+    transition: transform 220ms ease;
+  }
+
+  &__panel--open {
+    transform: none;
+  }
+
+  &__icon {
+    flex: none;
+    width: 20px;
+    height: 20px;
+  }
+
+  &__label {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__collapse {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+    padding: 0;
+    margin-bottom: 8px;
+    background: none;
+    border: 0;
+    border-radius: var(--radius);
+    cursor: pointer;
+  }
+
+  &__title {
+    padding: 0 12px 10px;
+    color: var(--color-muted);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    min-height: var(--touch);
+    padding: 0 14px;
+    border: none;
+    border-left: 4px solid transparent;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    background: transparent;
+    color: var(--color-muted);
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
+    letter-spacing: 0.3px;
+  }
+
+  &__item:hover:not(:disabled) {
+    background: var(--color-surface-2);
+    color: var(--color-text);
+    border-left-color: var(--color-border-strong);
+  }
+
+  &__item--active,
+  &__item--active:hover:not(:disabled) {
+    background: var(--color-accent-soft);
+    color: var(--color-text);
+    border-left-color: var(--color-accent);
+  }
+
+  &__arrow {
+    width: 0;
+    height: 0;
+    flex: none;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid currentColor;
+    transition: transform var(--transition);
+  }
+
+  &__item--open .app-menu__arrow {
+    transform: rotate(180deg);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 4px 0 4px 18px;
+  }
+
+  &__transaction {
+    min-height: 44px;
+    padding: 0 12px;
+    border: none;
+    border-left: 2px solid var(--color-border);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    background: transparent;
+    color: var(--color-muted);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+  }
+
+  &__transaction:hover:not(:disabled) {
+    background: var(--color-surface-2);
+    color: var(--color-text);
+    border-left-color: var(--color-border-strong);
+  }
+
+  &__transaction--active,
+  &__transaction--active:hover:not(:disabled) {
+    background: var(--color-accent-soft);
+    color: var(--color-text);
+    border-left-color: var(--color-accent);
+  }
+}
+
+// Masaustunde menu her zaman gorunur. Toggle onu gizlemez, daraltir:
+// dar halde adlar kirpilir, genis halde tam gorunur.
+
+// Masaustunde menu her zaman gorunur. Daraltilinca yalnizca ikonlar kalir,
+// genisleyince ikon ve yazi birlikte gorunur.
+@media (min-width: 1101px) {
+  .app-menu {
+    &__toggle,
+    &__backdrop {
+      display: none;
+    }
+
+    &__collapse {
+      display: flex;
+    }
+
+    &__panel {
+      width: 76px;
+      padding: var(--space) 12px;
+      transform: none;
+      transition: width var(--transition);
+    }
+
+    &__panel--open {
+      width: 260px;
+    }
+
+    &__item {
+      gap: 12px;
+      padding: 0 10px;
+    }
+
+    &__panel:not(.app-menu__panel--open) {
+      .app-menu__title,
+      .app-menu__label,
+      .app-menu__arrow,
+      .app-menu__list {
+        display: none;
+      }
+
+      .app-menu__item {
+        justify-content: center;
+        padding: 0;
+      }
+    }
+  }
+}

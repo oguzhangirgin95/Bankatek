@@ -1,0 +1,77 @@
+<div class="page-head">
+  <h2>Sayfa Oluşturucu</h2>
+
+  <div class="builder__actions">
+    <app-button label="Raporu al (PDF)" (clicked)="report()" />
+    <app-button label="Temizle" variant="outline" (clicked)="clear()" />
+  </div>
+</div>
+
+<div class="builder">
+  <aside class="builder__palette">
+    <span class="builder__title">Bileşenler</span>
+    <p class="builder__hint">Sağdaki alana sürükleyin</p>
+
+    @for (item of palette; track item.type) {
+      <div class="builder__chip" draggable="true" (dragstart)="dragFromPalette(item)">
+        {{ item.label }}
+      </div>
+    }
+  </aside>
+
+  <section
+    class="builder__canvas"
+    [class.builder__canvas--empty]="empty()"
+    (dragover)="over($event, -1)"
+    (drop)="drop($event, -1)"
+  >
+    @if (empty()) {
+      <p class="builder__empty">Buraya bileşen sürükleyin</p>
+    }
+
+    @for (block of blocks(); track block.id; let index = $index) {
+      <div
+        class="builder__slot"
+        [class.builder__slot--wide]="block.wide"
+        [class.builder__slot--target]="target() === index"
+        draggable="true"
+        (dragstart)="dragFromPage(index)"
+        (dragover)="over($event, index)"
+        (dragleave)="leave()"
+        (drop)="drop($event, index)"
+      >
+        <button type="button" class="builder__remove" title="Kaldır" (click)="remove(index)">×</button>
+
+        @switch (block.type) {
+          @case ('statcard') {
+            <app-statcard label="Toplam müşteri" [value]="128" hint="Bu ay" variant="success" />
+          }
+          @case ('info') {
+            <app-info message="Bütün ekipler sahada" variant="teal" />
+          }
+          @case ('progress') {
+            <app-progress label="Tamamlanan transfer" [value]="70" />
+          }
+          @case ('ringprogress') {
+            <app-ringprogress label="Transfer limiti" [value]="72" variant="success" />
+          }
+          @case ('list') {
+            <app-list title="Hesap" [items]="details" />
+          }
+          @case ('grid') {
+            <app-grid title="Şehir bazlı transfer" [columns]="columns" [rows]="rows" />
+          }
+          @case ('barchart') {
+            <app-barchart title="Şehir bazlı" [items]="chart" />
+          }
+          @case ('donutchart') {
+            <app-donutchart title="Dağılım" [items]="chart" />
+          }
+          @case ('map') {
+            <app-map title="Türkiye" [points]="points" />
+          }
+        }
+      </div>
+    }
+  </section>
+</div>

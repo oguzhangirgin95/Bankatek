@@ -1,0 +1,65 @@
+<h2>{{ labels().title }}</h2>
+
+<div class="filters">
+  <app-select
+    id="cityId"
+    [label]="labels().city"
+    [placeholder]="labels().all"
+    [options]="State.CityList ?? []"
+    [ngModel]="State.Request.cityId"
+    (ngModelChange)="setFilter('cityId', $event)"
+  />
+  <app-select
+    id="branchId"
+    [label]="labels().branch"
+    [placeholder]="labels().all"
+    [options]="State.BranchList ?? []"
+    [ngModel]="State.Request.branchId"
+    (ngModelChange)="setFilter('branchId', $event)"
+  />
+  <app-select
+    id="type"
+    [label]="labels().type"
+    [placeholder]="labels().all"
+    [options]="State.TypeList ?? []"
+    [ngModel]="State.Request.type"
+    (ngModelChange)="setFilter('type', $event)"
+  />
+  <app-select
+    id="status"
+    [label]="labels().status"
+    [placeholder]="labels().all"
+    [options]="statusList()"
+    [ngModel]="State.Request.status"
+    (ngModelChange)="setFilter('status', $event)"
+  />
+  <app-select
+    id="onlyOverLimit"
+    [label]="labels().limit"
+    [placeholder]="labels().all"
+    [options]="limitList()"
+    [ngModel]="State.Request.onlyOverLimit ? '1' : ''"
+    (ngModelChange)="setOverLimit($event)"
+  />
+  <app-button [label]="labels().clear" variant="outline" (clicked)="clearFilter()" />
+</div>
+
+<div class="panels">
+  <div class="stats">
+    <app-statcard [label]="labels().total" [value]="State.TotalCount ?? 0" />
+  </div>
+
+  <app-card [title]="labels().typeChartTitle">
+    <app-donutchart [items]="State.TypeChart ?? []" />
+  </app-card>
+</div>
+
+<app-card [title]="labels().listTitle">
+  <app-grid [columns]="columns()" [rows]="State.TransferList ?? []" [emptyText]="labels().empty" />
+  <app-pagination
+    [totalCount]="State.TotalCount ?? 0"
+    [pageNumber]="State.Request.pageNumber"
+    [pageSize]="State.Request.pageSize"
+    (pageNumberChange)="setPage($event)"
+  />
+</app-card>

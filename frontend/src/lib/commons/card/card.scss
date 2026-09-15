@@ -1,0 +1,30 @@
+.app-card {
+  height: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: calc(var(--space) * 1.25);
+
+  &__header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space);
+    padding-bottom: 12px;
+    margin-bottom: var(--space);
+    border-bottom: 1px solid var(--color-border);
+
+    h3 {
+      margin: 0;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+    }
+  }
+
+  &__subtitle {
+    margin-left: auto;
+    color: var(--color-muted);
+    font-size: 13px;
+    font-weight: 600;
+  }
+}

@@ -1,0 +1,118 @@
+.app-slider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &__arrow {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    padding: 0;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--color-muted);
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background var(--transition), color var(--transition);
+  }
+
+  &__arrow:hover {
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  &__window {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  &__track {
+    display: flex;
+    transition: transform 320ms ease;
+  }
+
+  &__cell {
+    flex: none;
+    padding: 4px;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    padding: var(--space);
+    text-align: left;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: border-color var(--transition), transform var(--transition);
+  }
+
+  &__card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  &__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--color-surface);
+    border-radius: var(--radius);
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  &__text {
+    font-size: 13px;
+    color: var(--color-muted);
+  }
+
+  &__dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    min-height: 0;
+    padding: 0;
+    background: var(--color-border-strong);
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  &__dot--active {
+    background: var(--color-accent);
+  }
+
+  &__empty {
+    margin: 0;
+    color: var(--color-muted);
+  }
+}

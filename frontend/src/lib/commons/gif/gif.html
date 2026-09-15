@@ -1,0 +1,4 @@
+@if (!failed()) {
+  <!-- lazy: GIF'ler büyük olabiliyor, ekrana gelmeden indirilmesin. -->
+  <img class="app-gif" [src]="src()" [alt]="alt()" loading="lazy" (error)="failed.set(true)" />
+}

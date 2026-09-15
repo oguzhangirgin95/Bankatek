@@ -1,0 +1,32 @@
+<div class="app-unity" [style.aspectRatio]="ratio()">
+  <!--
+    Çerçeve koşula bağlanmadan her zaman çiziliyor: sunucunun ürettiği ağaç ile
+    tarayıcınınki aynı kalsın ve adres doğrulanır doğrulanmaz yükleme başlasın.
+    Adres boşken tarayıcı boş bir belge açar, istek gitmez.
+  -->
+  <iframe
+    class="app-unity__frame"
+    #frame
+    [src]="source() ?? blank"
+    title="Unity"
+    (load)="loaded()"
+  ></iframe>
+
+  @if (error() || !ready()) {
+    <div class="app-unity__layer">
+      <div class="app-unity__state">
+        <svg class="app-unity__icon" viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M24 4 42 14v20L24 44 6 34V14z" />
+          <path d="M24 4v20m0 0 18-10m-18 10L6 14m18 10v20" />
+        </svg>
+
+        @if (error()) {
+          <p class="app-unity__title">{{ error() }}</p>
+          <p class="app-unity__hint">{{ labels().hint }}</p>
+        } @else {
+          <p class="app-unity__title">{{ labels().loading }}</p>
+        }
+      </div>
+    </div>
+  }
+</div>

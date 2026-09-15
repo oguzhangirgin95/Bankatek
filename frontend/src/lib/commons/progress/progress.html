@@ -1,0 +1,18 @@
+<div class="app-progress">
+  @if (label() || showValue()) {
+    <div class="app-progress__head">
+      <span>{{ label() }}</span>
+      @if (showValue()) {
+        <span class="app-progress__value">{{ value() }}</span>
+      }
+    </div>
+  }
+
+  <div class="app-progress__track">
+    <div
+      class="app-progress__bar"
+      [class]="'app-progress__bar app-progress__bar--' + variant()"
+      [style.width.%]="percent()"
+    ></div>
+  </div>
+</div>

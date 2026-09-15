@@ -1,0 +1,58 @@
+.app-documentview {
+  &__bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: var(--space);
+  }
+
+  /*
+   * Sayfa bilerek açık renkte: önizleme, yazdırma çıktısının aynısını
+   * göstermeli. Bu yüzden buradaki renkler temaya bağlı değil.
+   */
+  &__page {
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 24px;
+    background: #ffffff;
+    color: #111111;
+    border-radius: var(--radius);
+
+    h3 {
+      margin: 0 0 4px;
+      color: #111111;
+      font-size: 16px;
+    }
+
+    p {
+      margin: 0 0 16px;
+      color: #555555;
+      font-size: 12px;
+    }
+
+    table {
+      width: 100%;
+      min-width: 480px;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th,
+    td {
+      padding: 6px 8px;
+      border: 1px solid #cccccc;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #f2f2f2;
+      font-weight: 700;
+    }
+
+    td[colspan] {
+      color: #555555;
+      text-align: center;
+    }
+  }
+}

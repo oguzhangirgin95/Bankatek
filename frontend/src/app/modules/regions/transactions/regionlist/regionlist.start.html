@@ -1,0 +1,25 @@
+<h2>{{ labels().title }}</h2>
+
+<div class="stats">
+  <app-statcard [label]="labels().totalCustomer" [value]="State.MapStatistics?.totalCustomer ?? 0" />
+  <app-statcard [label]="labels().activeCustomer" [value]="State.MapStatistics?.activeCustomer ?? 0" variant="success" />
+  <app-statcard
+    [label]="labels().busiest"
+    [value]="State.MapStatistics?.busiestCityName ?? '-'"
+    [hint]="State.MapStatistics?.busiestCityActiveCustomer + ' aktif'"
+  />
+</div>
+
+<app-card [title]="labels().mapTitle">
+  <app-map [points]="State.MapPoints ?? []" [selectedId]="State.SelectedCityId" (pointClicked)="selectCity($event)" />
+</app-card>
+
+<app-card [title]="labels().listTitle" [subtitle]="labels().listHint">
+  <app-grid
+    [columns]="columns()"
+    [rows]="State.MapStatistics?.cities ?? []"
+    [emptyText]="labels().empty"
+    clickable
+    (rowClicked)="selectRow($event)"
+  />
+</app-card>

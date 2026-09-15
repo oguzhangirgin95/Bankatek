@@ -1,0 +1,7 @@
+<div class="app-spinner">
+  <span class="app-spinner__circle" [style.width.px]="size()" [style.height.px]="size()"></span>
+
+  @if (text()) {
+    <span class="app-spinner__text">{{ text() }}</span>
+  }
+</div>

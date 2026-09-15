@@ -1,0 +1,147 @@
+.app-chart {
+  h3 {
+    margin: 0 0 var(--space);
+    font-size: 15px;
+  }
+
+  &__svg {
+    display: block;
+    width: 100%;
+    overflow: visible;
+  }
+
+  &__svg--circular {
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
+  &__axis {
+    stroke: var(--color-border);
+    stroke-width: 0.5;
+  }
+
+  &__column,
+  &__slice {
+    cursor: pointer;
+    transition: opacity var(--transition);
+  }
+
+  &__column:hover,
+  &__slice:hover {
+    opacity: 0.8;
+  }
+
+  &__line {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  &__area {
+    fill: var(--color-accent-soft);
+    stroke: none;
+  }
+
+  &__total {
+    font-size: 12px;
+    font-weight: 700;
+    fill: var(--color-text);
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  &__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+
+  &__name {
+    flex: none;
+    width: 110px;
+    overflow: hidden;
+    font-size: 13px;
+    color: var(--color-muted);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__track {
+    flex: 1;
+    min-width: 0;
+    height: 10px;
+    background: var(--color-surface-2);
+    border-radius: 5px;
+  }
+
+  &__fill {
+    display: block;
+    height: 100%;
+    border-radius: 5px;
+    transition: width 320ms ease;
+  }
+
+  &__value {
+    flex: none;
+    min-width: 36px;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: right;
+  }
+
+  &__stack {
+    display: flex;
+    height: 18px;
+    overflow: hidden;
+    border-radius: 9px;
+  }
+
+  &__piece {
+    cursor: pointer;
+    transition: opacity var(--transition);
+  }
+
+  &__piece:hover {
+    opacity: 0.8;
+  }
+
+  &__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    margin: var(--space) 0 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--color-muted);
+      cursor: pointer;
+    }
+  }
+
+  &__dot {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  &__empty {
+    margin: 0;
+    color: var(--color-muted);
+  }
+}

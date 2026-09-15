@@ -1,0 +1,12 @@
+<nav class="app-tabs">
+  @for (tab of tabs(); track tab.id) {
+    <button
+      type="button"
+      class="app-tabs__tab"
+      [class.app-tabs__tab--active]="tab.id === active()"
+      (click)="active.set(tab.id)"
+    >
+      {{ tab.title }}
+    </button>
+  }
+</nav>

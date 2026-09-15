@@ -1,0 +1,24 @@
+<div class="field">
+  @if (label()) {
+    <label [attr.for]="id()">{{ label() }}</label>
+  }
+
+  <select
+    [attr.id]="id()"
+    [disabled]="isDisabled()"
+    [class.field-error]="!!getError(id())"
+    [ngModel]="value()"
+    (ngModelChange)="publish($event)"
+    (blur)="onBlur()"
+  >
+    @if (placeholder()) {
+      <option [value]="''">{{ placeholder() }}</option>
+    }
+
+    @for (option of options(); track option.value) {
+      <option [value]="option.value">{{ option.text }}</option>
+    }
+  </select>
+
+  <app-validation [id]="id()" />
+</div>

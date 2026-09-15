@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>bankatek</title>
+    <style>
+      html, body { margin: 0; height: 100%; overflow: hidden; background: #0b101e; }
+      #unity-canvas { display: block; width: 100%; height: 100%; }
+    </style>
+  </head>
+  <body>
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
+    <script src="Build/bankatek.loader.js"></script>
+    <script>
+      // Sahne, uygulamanin icinde bir cerceve olarak acilir. Uygulama ile
+      // konusma pencere mesajlariyla olur; uygulama tarafinda hic script yok.
+      var unityInstance = null;
+
+      createUnityInstance(document.querySelector("#unity-canvas"), {
+        arguments: [],
+        dataUrl: "Build/bankatek.data",
+        frameworkUrl: "Build/bankatek.framework.js",
+        codeUrl: "Build/bankatek.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Bankatek",
+        productName: "bankatek",
+        productVersion: "1.0",
+      }).then(function (instance) {
+        unityInstance = instance;
+        parent.postMessage({ ready: true }, "*");
+      }).catch(function (hata) {
+        console.error(hata);
+      });
+
+      // Uygulamadan gelen mesaji sahnedeki nesneye ilet.
+      window.addEventListener("message", function (olay) {
+        var veri = olay.data;
+
+        if (!unityInstance || !veri || !veri.objectName) {
+          return;
+        }
+
+        try {
+          unityInstance.SendMessage(veri.objectName, veri.methodName, String(veri.value));
+        } catch (hata) {
+          console.error(hata);
+        }
+      });
+
+      // Sahneden uygulamaya: Unity tarafindaki .jslib icinden
+      //   parent.postMessage({ message: sehirId }, "*");
+    </script>
+  </body>
+</html>

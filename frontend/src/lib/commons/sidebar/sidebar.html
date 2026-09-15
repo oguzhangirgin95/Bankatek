@@ -1,0 +1,40 @@
+<aside class="app-sidebar" [class.app-sidebar--closed]="!open()">
+  <button type="button" class="app-sidebar__burger" (click)="toggle()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav class="app-sidebar__nav">
+    @for (item of items(); track $index) {
+      @if (item.section) {
+        <span class="app-sidebar__section">{{ item.text }}</span>
+      } @else {
+        <button
+          type="button"
+          class="app-sidebar__item"
+          [class.app-sidebar__item--active]="!!item.path && item.path === active()"
+          [title]="item.text"
+          (click)="selected.emit(item.path ?? '')"
+        >
+          <svg class="app-sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path [attr.d]="icon(item.icon ?? '')" />
+          </svg>
+          <span class="app-sidebar__text">{{ item.text }}</span>
+        </button>
+      }
+    }
+  </nav>
+
+  @if (footer()) {
+    <button type="button" class="app-sidebar__item app-sidebar__out"
+      [title]="footer()" (click)="footerClicked.emit()">
+      <svg class="app-sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path [attr.d]="icon('logout')" />
+      </svg>
+      <span class="app-sidebar__text">{{ footer() }}</span>
+    </button>
+  }
+</aside>

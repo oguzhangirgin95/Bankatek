@@ -1,0 +1,27 @@
+<div class="app-detailcard">
+  @if (title() || items().length) {
+    <div class="app-detailcard__head">
+      @if (imageUrl()) {
+        <img class="app-detailcard__photo" [src]="imageUrl()" [alt]="title()" />
+      }
+
+      <div>
+        <h3>{{ title() }}</h3>
+        @if (subtitle()) {
+          <span class="app-detailcard__subtitle">{{ subtitle() }}</span>
+        }
+      </div>
+    </div>
+
+    @for (item of items(); track $index) {
+      <div class="app-detailcard__row">
+        <span class="app-detailcard__key">{{ item.key }}</span>
+        <span>{{ item.value }}</span>
+      </div>
+    }
+  } @else if (loading()) {
+    <app-skeleton [lines]="6" [height]="20" />
+  } @else {
+    <p class="app-detailcard__empty">{{ emptyText() }}</p>
+  }
+</div>

@@ -1,0 +1,21 @@
+<h2>{{ labels().title }}</h2>
+
+<div class="filters">
+  <app-select
+    id="reportType"
+    [label]="labels().type"
+    [placeholder]="labels().all"
+    [options]="State.TypeList ?? []"
+    [ngModel]="State.Request.reportType"
+    (ngModelChange)="setFilter('reportType', $event)"
+  />
+  <app-button [label]="labels().newReport" (clicked)="newReport()" />
+</div>
+
+<div class="stats">
+  <app-statcard [label]="labels().total" [value]="State.TotalCount ?? 0" />
+</div>
+
+<app-card [title]="labels().listTitle">
+  <app-grid [columns]="columns()" [rows]="State.ReportList ?? []" [emptyText]="labels().empty" />
+</app-card>

@@ -1,0 +1,112 @@
+.app-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 232px;
+  padding: 12px;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  transition: width var(--transition);
+}
+
+.app-sidebar--closed {
+  width: 72px;
+}
+
+.app-sidebar__burger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0 11px;
+  margin-bottom: 8px;
+  background: none;
+  border: 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+
+  span {
+    height: 2px;
+    background: var(--color-muted);
+    border-radius: 2px;
+  }
+
+  &:hover span {
+    background: var(--color-text);
+  }
+}
+
+.app-sidebar__nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app-sidebar__section {
+  padding: 16px 12px 4px;
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.app-sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+
+  &:hover {
+    color: var(--color-text);
+    background: var(--color-surface-2);
+  }
+}
+
+.app-sidebar__item--active {
+  color: var(--color-on-accent);
+  background: linear-gradient(135deg, var(--color-violet), var(--color-error));
+
+  &:hover {
+    color: var(--color-on-accent);
+    background: linear-gradient(135deg, var(--color-violet), var(--color-error));
+  }
+}
+
+.app-sidebar__icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+.app-sidebar__text {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.app-sidebar--closed .app-sidebar__text,
+.app-sidebar--closed .app-sidebar__section {
+  display: none;
+}
+
+.app-sidebar__out {
+  margin-top: auto;
+}

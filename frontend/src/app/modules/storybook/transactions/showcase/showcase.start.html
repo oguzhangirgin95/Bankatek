@@ -1,0 +1,253 @@
+<div class="page-head">
+  <h2>Storybook</h2>
+
+  <app-button label="Sayfa oluşturucu" variant="outline" (clicked)="goPagebuilder()" />
+</div>
+
+<div class="shell">
+  <app-sidebar
+    id="showcaseSidebar"
+    [items]="menu"
+    [active]="active()"
+    footer="Çıkış"
+    (selected)="active.set($event)"
+    (footerClicked)="pick('Çıkış')"
+  />
+
+  <div class="shell__main">
+    <div class="shell__header">
+      <span class="shell__currency">Website</span>
+      <app-theme />
+      <app-profilemenu
+        primary="Giriş yap veya hesap aç"
+        group="Ya da servisleri yönet"
+        [items]="profile"
+        (primaryClicked)="pick('Giriş')"
+        (selected)="pick($event)"
+      />
+    </div>
+
+    @if (message()) {
+      <app-info [message]="message()" variant="success" />
+    }
+  </div>
+</div>
+
+<app-ticker id="showcaseTicker" label="Son dakika" [items]="news" [seconds]="26" (itemClicked)="pick($event.text)" />
+
+<div class="items" id="showcaseCards">
+  <app-card title="Button">
+    <app-button label="Birincil" (clicked)="pick('Birincil')" />
+    <app-button label="İkincil" variant="secondary" />
+    <app-button label="Çerçeve" variant="outline" />
+    <app-button label="Pasif" [disabled]="true" />
+  </app-card>
+
+  <app-card title="Badge">
+    <app-badge text="Bilgi" />
+    <app-badge text="Başarılı" variant="success" />
+    <app-badge text="Uyarı" variant="warning" />
+    <app-badge text="Hata" variant="error" />
+  </app-card>
+
+  <app-card title="Info">
+    <app-info message="Bilgi mesajı" />
+    <app-info message="İşlem tamam" variant="success" />
+    <app-info message="Dikkat" variant="warning" />
+  </app-card>
+
+  <app-card title="Avatar">
+    <app-avatar name="Oğuzhan Girgin" />
+    <app-avatar name="Ayşe Yılmaz" [size]="32" />
+  </app-card>
+
+  <app-card title="Input">
+    <app-input id="name" label="Ad" [(ngModel)]="form.name" />
+  </app-card>
+
+  <app-card title="Search">
+    <app-search
+      id="city"
+      label="Şehir ara"
+      placeholder="Şehir adı yazın"
+      [results]="hits()"
+      (searched)="search($event)"
+      (selected)="pick($event.text)"
+    />
+  </app-card>
+
+  <app-card title="Select">
+    <app-select id="language" label="Dil" [options]="options" [(ngModel)]="form.language" />
+  </app-card>
+
+  <app-card title="Datepicker">
+    <app-datepicker id="date" label="Tarih" [(ngModel)]="form.date" />
+  </app-card>
+
+  <app-card title="Tabs">
+    <app-tabs [tabs]="tabList" [(active)]="tab" />
+    <p>Seçili sekme: {{ tab() }}</p>
+  </app-card>
+
+  <app-card title="Statcard">
+    <app-statcard label="Toplam" [value]="128" hint="Bu ay" />
+    <app-statcard label="Aktif" [value]="42" variant="success" (clicked)="pick('Aktif')" />
+  </app-card>
+
+  <app-card title="Progress">
+    <app-progress label="Tamamlanan" [value]="70" />
+    <app-progress label="Bekleyen" [value]="30" variant="warning" />
+  </app-card>
+
+  <app-card title="Spinner">
+    <app-spinner text="Yükleniyor" />
+  </app-card>
+
+  <app-card title="Skeleton">
+    <app-skeleton [lines]="3" />
+  </app-card>
+
+  <app-card title="List">
+    <app-list title="Hesap" [items]="details" />
+  </app-card>
+
+  <app-card title="Detailcard">
+    <app-detailcard title="TR34 0006 0000 0000 0010 01" subtitle="Kadıköy Şubesi" [items]="details" />
+  </app-card>
+
+  <app-card title="Grid">
+    <app-grid title="Şehirler" [columns]="columns" [rows]="rows" (rowClicked)="pick($event.name)" />
+  </app-card>
+
+  <app-card title="Genericlist">
+    <app-genericlist [config]="listConfig" [rows]="rows" />
+  </app-card>
+
+  <app-card title="Pagination">
+    <app-pagination [totalCount]="120" [pageSize]="20" [(pageNumber)]="page" />
+  </app-card>
+
+  <app-card title="Barchart">
+    <app-barchart title="Şehir bazlı" [items]="chart" (barClicked)="pick($event.label)" />
+  </app-card>
+
+  <app-card title="Donutchart">
+    <app-donutchart title="Dağılım" [items]="chart" />
+  </app-card>
+
+  <app-card title="Map">
+    <app-map title="Türkiye" [points]="points" (pointClicked)="pick($event.name)" />
+  </app-card>
+
+  <app-card title="Modal">
+    <app-button label="Aç" (clicked)="modalOpen.set(true)" />
+    <app-modal title="Örnek pencere" [(open)]="modalOpen">
+      <p>Pencere içeriği buraya gelir.</p>
+    </app-modal>
+  </app-card>
+
+  <app-card title="Tooltip">
+    <span class="hover" (mousemove)="showTooltip($event, 'İpucu metni')" (mouseleave)="hideTooltip()">
+      Üzerine gel
+    </span>
+    <app-tooltip [state]="tooltip()" />
+  </app-card>
+
+  <app-card title="Sidemodal">
+    <app-button label="Sağdan aç" (clicked)="sideOpen.set(true)" />
+    <app-sidemodal title="Havale detayı" [(open)]="sideOpen">
+      <app-list title="Hesap" [items]="details" />
+      <app-ringprogress label="Transfer limiti" [value]="72" variant="success" />
+    </app-sidemodal>
+  </app-card>
+
+  <app-card title="Ringprogress">
+    <div class="rings">
+      <app-ringprogress label="Tamamlanan" [value]="72" variant="success" />
+      <app-ringprogress label="Limit" [value]="38" variant="warning" [size]="100" />
+    </div>
+  </app-card>
+
+  <app-card title="Gif">
+    <app-gif src="/assets/para-transfer.svg" alt="Para transferi" />
+  </app-card>
+
+  <app-card title="Validation">
+    <app-input id="showcaseName" label="Ad" [(ngModel)]="State.ShowcaseName" />
+    <app-validation id="showcaseName" />
+    <app-button label="Doğrula" variant="outline" (clicked)="validate()" />
+  </app-card>
+
+  <app-card title="Tour">
+    <app-button label="Turu başlat" variant="outline" (clicked)="startTour()" />
+  </app-card>
+
+  <app-card title="WeatherInterceptor">
+    <app-button label="Hava durumunu getir" variant="outline" (clicked)="loadWeather()" />
+
+    @if (weather()) {
+      <app-info [message]="weather()" variant="teal" />
+    }
+
+    @if (State.weatherError) {
+      <app-info [message]="'weatherError: ' + State.weatherError" variant="warning" />
+    }
+
+    <app-list
+      title="Bu istek backend halkasına girmiyor"
+      [items]="[
+        { key: 'Sunucu', value: weatherOrigin },
+        { key: 'Oturum token ı', value: 'gönderilmiyor' },
+        { key: 'Yükleniyor sayacı', value: loading() ? 'çalışıyor' : 'durdu' },
+        { key: 'serviceError', value: serviceError() ?? 'temiz' }
+      ]"
+    />
+  </app-card>
+
+  <app-card title="Footer">
+    <app-footer />
+  </app-card>
+
+  <app-card title="Body">
+    <app-body>
+      <p>Ekran içeriği app-body içine gelir; servis hatası ve akış butonları burada çizilir.</p>
+    </app-body>
+  </app-card>
+
+</div>
+
+<app-card title="Menu">
+  <app-menu />
+</app-card>
+
+<app-card title="Documentview">
+  <app-documentview [config]="documentConfig" [rows]="rows" />
+</app-card>
+
+<app-card title="Header">
+  <app-header />
+</app-card>
+
+<app-card title="Unity">
+  <div class="unity">
+    <app-unity ratio="16 / 9" />
+  </div>
+</app-card>
+
+<app-card title="Chart">
+  <div class="charts">
+    @for (kind of chartTypes; track kind) {
+      <app-card [title]="kind">
+        <app-chart [type]="kind" [items]="chart" (itemClicked)="pick($event.label)" />
+      </app-card>
+    }
+  </div>
+</app-card>
+
+<app-card title="Slider">
+  <app-slider [items]="cards" [perView]="3" [(index)]="slide" (itemClicked)="pick($event.title)" />
+</app-card>
+
+<app-card title="Ticker">
+  <app-ticker label="Duyuru" [items]="news" [seconds]="18" (itemClicked)="pick($event.text)" />
+</app-card>

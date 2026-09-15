@@ -1,0 +1,7 @@
+@if (src()) {
+  <img class="app-avatar" [src]="src()" [alt]="name()" [style.width.px]="size()" [style.height.px]="size()" />
+} @else {
+  <span class="app-avatar app-avatar--text" [style.width.px]="size()" [style.height.px]="size()">
+    {{ initials() }}
+  </span>
+}

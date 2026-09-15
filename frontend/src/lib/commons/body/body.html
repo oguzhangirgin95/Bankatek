@@ -1,0 +1,24 @@
+<main class="app-body">
+  @if (serviceError()) {
+    <p class="error">{{ serviceError() }}</p>
+  }
+
+  <ng-content />
+
+  @if (!disableLayout()) {
+    <div class="buttons">
+      @if (showBackButton()) {
+        <button type="button" (click)="back()">{{ backText() }}</button>
+      }
+      @if (showContinueButton()) {
+        <button type="button" (click)="next()">{{ continueText() }}</button>
+      }
+
+      @for (button of buttons(); track $index) {
+        @if (isButtonVisible(button)) {
+          <button type="button" (click)="clickButton(button)">{{ button.label }}</button>
+        }
+      }
+    </div>
+  }
+</main>

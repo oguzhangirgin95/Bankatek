@@ -1,0 +1,76 @@
+<div class="page-head">
+  <h2><app-gif src="/assets/para-transfer.svg" />{{ labels().title }}</h2>
+
+  @if (State.MapStatistics?.busiestCityName) {
+    <span class="page-head__hint">
+      {{ labels().busiest }}: <b>{{ State.MapStatistics.busiestCityName }}</b>
+      ({{ State.MapStatistics.busiestCityActiveCustomer }})
+    </span>
+  }
+
+  <app-button [label]="labels().showcase" variant="outline" (clicked)="goShowcase()" />
+</div>
+
+<div class="filters">
+  <app-select
+    id="cityId"
+    [label]="labels().city"
+    [placeholder]="labels().all"
+    [options]="State.CityList ?? []"
+    [ngModel]="State.Request.cityId"
+    (ngModelChange)="setFilter('cityId', $event)"
+  />
+  <app-select
+    id="branchId"
+    [label]="labels().branch"
+    [placeholder]="labels().all"
+    [options]="State.BranchList ?? []"
+    [ngModel]="State.Request.branchId"
+    (ngModelChange)="setFilter('branchId', $event)"
+  />
+  <app-select
+    id="status"
+    [label]="labels().status"
+    [placeholder]="labels().all"
+    [options]="State.StatusList ?? []"
+    [ngModel]="State.Request.status"
+    (ngModelChange)="setFilter('status', $event)"
+  />
+  <app-datepicker id="dateTime" mode="datetime" [label]="labels().dateTime" [(ngModel)]="State.SelectedDate" />
+</div>
+
+<div class="stats" id="dashboardStats">
+  <app-statcard [label]="labels().totalCustomer" [value]="State.Summary?.totalCustomer ?? 0" clickable (clicked)="selectMetric({ titleKey: 'mapTotalTitle' })" />
+  <app-statcard [label]="labels().active" [value]="State.Summary?.active ?? 0" variant="success" clickable (clicked)="selectMetric({ titleKey: 'mapTotalActiveTitle', status: 'AKTIF', variant: 'success' })" />
+  <app-statcard [label]="labels().passive" [value]="State.Summary?.passive ?? 0" variant="teal" clickable (clicked)="selectMetric({ titleKey: 'mapTotalPassiveTitle', status: 'PASIF', variant: 'teal' })" />
+  <app-statcard [label]="labels().blocked" [value]="State.Summary?.blocked ?? 0" variant="warning" clickable (clicked)="selectMetric({ titleKey: 'mapTotalBlockedTitle', status: 'BLOKE', variant: 'warning' })" />
+  <app-statcard [label]="labels().followUp" [value]="State.Summary?.followUp ?? 0" variant="violet" clickable (clicked)="selectMetric({ titleKey: 'mapTotalFollowUpTitle', status: 'TAKIPTE', variant: 'violet' })" />
+  <app-statcard [label]="labels().overLimit" [value]="State.Summary?.overDailyLimit ?? 0" variant="error" clickable (clicked)="selectMetric({ titleKey: 'mapTotalOverlimitTitle', field: 'overLimitCustomer', variant: 'error' })" />
+</div>
+
+<div class="panels">
+  <app-card id="dashboardMap" [title]="mapTitle()" [subtitle]="labels().mapHint">
+    <app-unity
+      [data]="{ points: State.MapPoints ?? [], selectedId: State.Request.cityId, variant: State.MapMetric?.variant ?? '' }"
+      (message)="setFilter('cityId', $event)"
+    />
+  </app-card>
+
+  <app-card [title]="labels().statusChartTitle">
+    <app-donutchart [items]="State.StatusChart ?? []" />
+    <app-donutchart [title]="labels().limitChartTitle" [items]="State.LimitChart ?? []" />
+  </app-card>
+</div>
+
+<app-card
+  id="dashboardBranches"
+  [title]="(State.BranchWorkload?.cityName ?? '') + ' ' + labels().branchWorkloadTitle"
+  [subtitle]="branchActionText()"
+>
+  <app-barchart [items]="State.BranchChart ?? []" />
+  <app-genericlist [config]="branchListConfig()" [rows]="State.BranchWorkload?.branches ?? []" />
+</app-card>
+
+<app-card>
+  <app-documentview [config]="branchDocumentConfig()" [rows]="State.BranchWorkload?.branches ?? []" />
+</app-card>

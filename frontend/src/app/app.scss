@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+// Menu sol tarafta sabit duruyor; icerik onun genisligi kadar iceri alinir.
+@media (min-width: 1101px) {
+  :host {
+    padding-left: 76px;
+    transition: padding-left var(--transition);
+  }
+
+  :host-context(body.app-menu-open) {
+    padding-left: 260px;
+  }
+}

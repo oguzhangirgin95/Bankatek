@@ -1,0 +1,62 @@
+<div class="app-genericlist">
+  @if (config().title) {
+    <h3>{{ config().title }}</h3>
+  }
+
+  <table>
+    <thead>
+      <tr>
+        @for (column of config().columns; track column.field) {
+          <th>{{ column.title }}</th>
+        }
+        @if (actions().length) {
+          <th>{{ actionTitle() }}</th>
+        }
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (row of rows(); track $index) {
+        <tr>
+          @for (column of config().columns; track column.field) {
+            <td [attr.data-label]="column.title">
+              @if (column.type === 'badge') {
+                <app-badge [text]="getText(column, row)" [variant]="getVariant(column, row)" />
+              } @else {
+                {{ getText(column, row) }}
+              }
+            </td>
+          }
+
+          @if (actions().length) {
+            <td class="app-genericlist__actions" [attr.data-label]="actionTitle()">
+              @for (action of actions(); track action.key) {
+                @if (isVisible(action, row)) {
+                  <app-button
+                    [label]="action.label"
+                    [variant]="action.variant ?? 'primary'"
+                    (clicked)="action.click(row)"
+                  />
+                }
+              }
+            </td>
+          }
+        </tr>
+      } @empty {
+        @if (loading()) {
+          @for (line of [1, 2, 3, 4, 5]; track line) {
+            <tr>
+              @for (cell of cells(); track cell) {
+                <td><app-skeleton /></td>
+              }
+            </tr>
+          }
+        } @else {
+          <tr>
+            <td [attr.colspan]="columnCount()">{{ emptyText() }}</td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>

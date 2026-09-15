@@ -1,0 +1,40 @@
+<div class="app-documentview">
+  <div class="app-documentview__bar">
+    @for (format of formats(); track format) {
+      <app-button [label]="getFormatLabel(format)" variant="secondary" (clicked)="download(format)" />
+    }
+  </div>
+
+  <!-- Çıktı bu düğümden üretiliyor; önizleme ile PDF birebir aynı olsun diye. -->
+  <div class="app-documentview__page" #page>
+    <h3>{{ config().title }}</h3>
+
+    @if (config().description) {
+      <p>{{ config().description }}</p>
+    }
+
+    <table>
+      <thead>
+        <tr>
+          @for (column of config().columns; track column.field) {
+            <th>{{ column.title }}</th>
+          }
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (row of rows(); track $index) {
+          <tr>
+            @for (column of config().columns; track column.field) {
+              <td>{{ getText(column, row) }}</td>
+            }
+          </tr>
+        } @empty {
+          <tr>
+            <td [attr.colspan]="config().columns.length">{{ emptyText() }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

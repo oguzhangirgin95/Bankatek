@@ -1,0 +1,45 @@
+<div class="app-map" [class]="'app-map app-map--' + (variant() || 'accent')">
+  @if (title()) {
+    <h3>{{ title() }}</h3>
+  }
+
+  @if (points().length) {
+    <svg class="app-map__svg" [attr.viewBox]="viewBox" preserveAspectRatio="xMidYMid meet">
+      @for (province of provinces(); track province.name) {
+        <path
+          class="app-map__province"
+          [class.app-map__province--data]="!!province.point"
+          [class.app-map__province--selected]="isSelected(province)"
+          [attr.d]="province.path"
+          [attr.fill-opacity]="province.opacity"
+          (click)="select(province)"
+          (mousemove)="showTooltip(province, $event)"
+          (mouseleave)="hideTooltip()"
+        ></path>
+      }
+
+      @for (province of provinces(); track province.name) {
+        @if (province.point) {
+          <text class="app-map__label" [attr.x]="province.cx" [attr.y]="province.cy" text-anchor="middle">
+            <tspan class="app-map__value" [attr.x]="province.cx" dy="0">{{ province.point.value }}</tspan>
+            <tspan class="app-map__name" [attr.x]="province.cx" dy="13">{{ province.name }}</tspan>
+          </text>
+        }
+      }
+    </svg>
+
+    <div class="app-map__legend">
+      @for (item of legend(); track item.opacity) {
+        <span class="app-map__legend-item">
+          <i [style.opacity]="item.opacity"></i>{{ item.text }}
+        </span>
+      }
+    </div>
+  } @else if (loading()) {
+    <app-skeleton [lines]="1" [height]="300" />
+  } @else {
+    <p class="app-map__empty">{{ emptyText() }}</p>
+  }
+
+  <app-tooltip [state]="tooltip()" />
+</div>

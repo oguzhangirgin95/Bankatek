@@ -1,0 +1,16 @@
+<div class="app-ticker">
+  @if (label()) {
+    <span class="app-ticker__label">{{ label() }}</span>
+  }
+
+  <div class="app-ticker__window">
+    <div class="app-ticker__track" [class.app-ticker__track--paused]="paused()"
+      [style.animation-duration]="duration()">
+      @for (item of loop(); track $index) {
+        <button type="button" class="app-ticker__item" (click)="itemClicked.emit(item)">
+          {{ item.text }}
+        </button>
+      }
+    </div>
+  </div>
+</div>

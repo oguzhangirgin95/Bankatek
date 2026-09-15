@@ -1,0 +1,40 @@
+@if (items().length) {
+  <div class="app-slider">
+    <button type="button" class="app-slider__arrow" (click)="back()">‹</button>
+
+    <div class="app-slider__window">
+      <div class="app-slider__track" [style.transform]="offset()">
+        @for (item of items(); track $index) {
+          <div class="app-slider__cell" [style.width]="width()">
+            <button type="button" class="app-slider__card" (click)="itemClicked.emit(item)">
+              @if (item.imageUrl) {
+                <span class="app-slider__image">
+                  <img [src]="item.imageUrl" [alt]="item.title" />
+                </span>
+              }
+              <span class="app-slider__title">{{ item.title }}</span>
+              @if (item.text) {
+                <span class="app-slider__text">{{ item.text }}</span>
+              }
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+
+    <button type="button" class="app-slider__arrow" (click)="next()">›</button>
+  </div>
+
+  <div class="app-slider__dots">
+    @for (page of [].constructor(pages()); track $index) {
+      <button
+        type="button"
+        class="app-slider__dot"
+        [class.app-slider__dot--active]="$index === index()"
+        (click)="index.set($index)"
+      ></button>
+    }
+  </div>
+} @else {
+  <p class="app-slider__empty">{{ emptyText() }}</p>
+}

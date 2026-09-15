@@ -1,0 +1,14 @@
+@if (open()) {
+  <div class="app-sidemodal" (click)="open.set(false)">
+    <div class="app-sidemodal__panel" [style.width.px]="width()" (click)="$event.stopPropagation()">
+      <header class="app-sidemodal__header">
+        <h3>{{ title() }}</h3>
+        <button type="button" class="app-sidemodal__close" (click)="open.set(false)">×</button>
+      </header>
+
+      <div class="app-sidemodal__body">
+        <ng-content />
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,39 @@
+<div class="app-profilemenu">
+  <button type="button" class="app-profilemenu__button"
+    [class.app-profilemenu__button--open]="open()" (click)="toggle()">
+    <svg class="app-profilemenu__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path [attr.d]="icon('user')" />
+    </svg>
+  </button>
+
+  @if (open()) {
+    <div class="app-profilemenu__backdrop" (click)="close()"></div>
+
+    <div class="app-profilemenu__panel">
+      @if (primary()) {
+        <button type="button" class="app-profilemenu__primary" (click)="run()">
+          <svg class="app-profilemenu__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path [attr.d]="icon('user')" />
+          </svg>
+          {{ primary() }}
+        </button>
+      }
+
+      @if (group()) {
+        <span class="app-profilemenu__group">{{ group() }}</span>
+      }
+
+      @for (item of items(); track item.key) {
+        <button type="button" class="app-profilemenu__item" (click)="choose(item.key)">
+          <svg class="app-profilemenu__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path [attr.d]="icon(item.icon ?? '')" />
+          </svg>
+          {{ item.text }}
+        </button>
+      }
+    </div>
+  }
+</div>

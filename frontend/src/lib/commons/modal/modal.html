@@ -1,0 +1,14 @@
+@if (open()) {
+  <div class="app-modal" (click)="open.set(false)">
+    <div class="app-modal__panel" (click)="$event.stopPropagation()">
+      <header class="app-modal__header">
+        <h3>{{ title() }}</h3>
+        <button type="button" class="app-modal__close" (click)="open.set(false)">×</button>
+      </header>
+
+      <div class="app-modal__body">
+        <ng-content />
+      </div>
+    </div>
+  </div>
+}

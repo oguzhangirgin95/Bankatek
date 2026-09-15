@@ -1,0 +1,23 @@
+<div class="app-ringprogress" [attr.data-variant]="variant()" [style.width.px]="size()">
+  <div class="app-ringprogress__ring">
+    <svg class="app-ringprogress__svg" viewBox="0 0 100 100" aria-hidden="true">
+      <circle class="app-ringprogress__rail" cx="50" cy="50" [attr.r]="radius" />
+      <circle
+        class="app-ringprogress__bar"
+        cx="50"
+        cy="50"
+        [attr.r]="radius"
+        [attr.stroke-dasharray]="circumference"
+        [attr.stroke-dashoffset]="dashOffset()"
+      />
+    </svg>
+
+    @if (showValue()) {
+      <span class="app-ringprogress__value">{{ percent() }}%</span>
+    }
+  </div>
+
+  @if (label()) {
+    <span class="app-ringprogress__label">{{ label() }}</span>
+  }
+</div>

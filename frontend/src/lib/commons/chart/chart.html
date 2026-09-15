@@ -1,0 +1,129 @@
+<div class="app-chart">
+  @if (title()) {
+    <h3>{{ title() }}</h3>
+  }
+
+  @if (colored().length) {
+    @switch (type()) {
+      @case ('bar') {
+        <div class="app-chart__rows">
+          @for (item of colored(); track item.label) {
+            <div
+              class="app-chart__row"
+              (click)="itemClicked.emit(item)"
+              (mousemove)="showTooltip(item, $event)"
+              (mouseleave)="hideTooltip()"
+            >
+              <span class="app-chart__name">{{ item.label }}</span>
+              <span class="app-chart__track">
+                <span class="app-chart__fill" [style.width.%]="percent(item.value)" [style.background]="item.color"></span>
+              </span>
+              <span class="app-chart__value">{{ item.value }}</span>
+            </div>
+          }
+        </div>
+      }
+
+      @case ('stacked') {
+        <div class="app-chart__stack">
+          @for (segment of segments(); track segment.label) {
+            <span
+              class="app-chart__piece"
+              [style.width.%]="segment.width"
+              [style.background]="segment.color"
+              (click)="itemClicked.emit(segment)"
+              (mousemove)="showTooltip(segment, $event)"
+              (mouseleave)="hideTooltip()"
+            ></span>
+          }
+        </div>
+      }
+
+      @default {
+        <svg
+          class="app-chart__svg"
+          [attr.viewBox]="circular() ? '0 0 100 100' : '0 0 100 60'"
+          [class.app-chart__svg--circular]="circular()"
+          role="img"
+          [attr.aria-label]="title()"
+        >
+          @switch (type()) {
+            @case ('column') {
+              <line class="app-chart__axis" x1="0" y1="52" x2="100" y2="52" />
+
+              @for (column of columns(); track column.label) {
+                <rect
+                  class="app-chart__column"
+                  [attr.x]="column.x"
+                  [attr.y]="column.y"
+                  [attr.width]="column.width"
+                  [attr.height]="column.height"
+                  [attr.fill]="column.color"
+                  (click)="itemClicked.emit(column)"
+                  (mousemove)="showTooltip(column, $event)"
+                  (mouseleave)="hideTooltip()"
+                />
+              }
+            }
+
+            @case ('line') {
+              <line class="app-chart__axis" x1="0" y1="52" x2="100" y2="52" />
+              <polyline class="app-chart__line" [attr.points]="points()" />
+            }
+
+            @case ('area') {
+              <line class="app-chart__axis" x1="0" y1="52" x2="100" y2="52" />
+              <polygon class="app-chart__area" [attr.points]="areaPoints()" />
+              <polyline class="app-chart__line" [attr.points]="points()" />
+            }
+
+            @default {
+              @if (single()) {
+                <circle
+                  [attr.r]="42"
+                  cx="50"
+                  cy="50"
+                  [attr.fill]="type() === 'donut' ? 'none' : colored()[0].color"
+                  [attr.stroke]="type() === 'donut' ? colored()[0].color : 'none'"
+                  [attr.stroke-width]="type() === 'donut' ? 16 : 0"
+                />
+              } @else {
+                @for (slice of slices(); track slice.label) {
+                  <path
+                    class="app-chart__slice"
+                    [attr.d]="slice.path"
+                    [attr.fill]="slice.color"
+                    (click)="itemClicked.emit(slice)"
+                    (mousemove)="showTooltip(slice, $event)"
+                    (mouseleave)="hideTooltip()"
+                  />
+                }
+              }
+
+              @if (type() === 'donut') {
+                <text class="app-chart__total" x="50" y="50">{{ total() }}</text>
+              }
+            }
+          }
+        </svg>
+      }
+    }
+
+    @if (legend() && type() !== 'bar') {
+      <ul class="app-chart__legend">
+        @for (item of colored(); track item.label) {
+          <li (click)="itemClicked.emit(item)">
+            <span class="app-chart__dot" [style.background]="item.color"></span>
+            {{ item.label }} — {{ item.value }} (%{{ share(item.value) }})
+          </li>
+        }
+      </ul>
+    }
+  } @else if (loading()) {
+    <app-skeleton [lines]="4" [height]="24" />
+  } @else {
+    <p class="app-chart__empty">{{ emptyText() }}</p>
+  }
+
+  <app-tooltip [state]="tooltip()" />
+</div>

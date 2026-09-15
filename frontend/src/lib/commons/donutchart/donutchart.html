@@ -1,0 +1,44 @@
+<div class="app-donutchart">
+  @if (title()) {
+    <h3>{{ title() }}</h3>
+  }
+
+  @if (segments().length) {
+    <div class="app-donutchart__body">
+      <svg viewBox="0 0 100 100" class="app-donutchart__svg">
+        @for (segment of segments(); track segment.label) {
+          <circle
+            cx="50"
+            cy="50"
+            r="40"
+            fill="none"
+            stroke-width="14"
+            [style.stroke]="segment.color"
+            [attr.stroke-dasharray]="segment.dash"
+            [attr.stroke-dashoffset]="segment.offset"
+            transform="rotate(-90 50 50)"
+            class="app-donutchart__segment"
+            (mousemove)="showTooltip(segment, $event)"
+            (mouseleave)="hideTooltip()"
+          />
+        }
+        <text x="50" y="54" text-anchor="middle" class="app-donutchart__total">{{ total() }}</text>
+      </svg>
+
+      <ul class="app-donutchart__legend">
+        @for (segment of segments(); track segment.label) {
+          <li (mousemove)="showTooltip(segment, $event)" (mouseleave)="hideTooltip()">
+            <span class="app-donutchart__dot" [style.background]="segment.color"></span>
+            {{ segment.label }} — {{ segment.value }} (%{{ segment.percent }})
+          </li>
+        }
+      </ul>
+    </div>
+  } @else if (loading()) {
+    <app-skeleton [lines]="4" [height]="24" />
+  } @else {
+    <p class="app-donutchart__empty">{{ emptyText() }}</p>
+  }
+
+  <app-tooltip [state]="tooltip()" />
+</div>

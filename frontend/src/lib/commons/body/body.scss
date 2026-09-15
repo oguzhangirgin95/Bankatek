@@ -1,0 +1,23 @@
+:host {
+  display: flex;
+  flex: 1;
+}
+
+.app-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: calc(var(--space) * 1.5);
+  padding-left: max(calc(var(--space) * 1.5), env(safe-area-inset-left));
+  padding-right: max(calc(var(--space) * 1.5), env(safe-area-inset-right));
+}
+
+@media (max-width: 900px) {
+  .app-body {
+    padding: var(--space);
+    padding-bottom: calc(var(--space) + env(safe-area-inset-bottom));
+  }
+}

@@ -1,0 +1,35 @@
+<div class="app-theme">
+  <button type="button" class="app-theme__toggle" [title]="labels().theme" (click)="toggle()">
+    <span class="app-theme__dot" [style.background]="swatch(active())"></span>
+    <span class="app-theme__name">{{ active().name }}</span>
+  </button>
+
+  @if (open()) {
+    <div class="app-theme__backdrop" (click)="close()"></div>
+
+    <div class="app-theme__panel">
+      <div class="app-theme__head">
+        <span>{{ labels().theme }}</span>
+        <button type="button" class="app-theme__reset" [disabled]="isDefault()" (click)="reset()">
+          ↺ {{ labels().reset }}
+        </button>
+      </div>
+
+      <div class="app-theme__grid">
+        @for (palette of palettes; track palette.code) {
+          <button
+            type="button"
+            class="app-theme__item"
+            [class.app-theme__item--active]="palette.code === current()"
+            [title]="palette.name"
+            [attr.aria-label]="palette.name"
+            (click)="select(palette.code)"
+          >
+            <span class="app-theme__dot" [style.background]="swatch(palette)"></span>
+            <span class="app-theme__label">{{ palette.name }}</span>
+          </button>
+        }
+      </div>
+    </div>
+  }
+</div>

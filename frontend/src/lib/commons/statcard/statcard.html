@@ -1,0 +1,13 @@
+<div
+  class="app-statcard"
+  [class]="'app-statcard app-statcard--' + variant()"
+  [class.app-statcard--clickable]="clickable()"
+  (click)="clicked.emit()"
+>
+  <span class="app-statcard__value">{{ value() }}</span>
+  <span class="app-statcard__label">{{ label() }}</span>
+
+  @if (hint()) {
+    <span class="app-statcard__hint">{{ hint() }}</span>
+  }
+</div>

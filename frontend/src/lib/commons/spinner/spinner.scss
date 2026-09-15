@@ -1,0 +1,24 @@
+.app-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  &__circle {
+    display: inline-block;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: app-spin 0.8s linear infinite;
+  }
+
+  &__text {
+    color: var(--color-muted);
+    font-weight: 600;
+  }
+}
+
+@keyframes app-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

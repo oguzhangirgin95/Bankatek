@@ -1,0 +1,10 @@
+<button
+  class="app-button"
+  [class.app-button--secondary]="variant() === 'secondary'"
+  [class.app-button--outline]="variant() === 'outline'"
+  [type]="type()"
+  [disabled]="disabled()"
+  (click)="clicked.emit()"
+>
+  {{ label() }}<ng-content />
+</button>

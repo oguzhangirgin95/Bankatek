@@ -1,0 +1,43 @@
+<h2>{{ labels().title }}</h2>
+
+<app-card [title]="labels().formTitle" [subtitle]="labels().hint">
+  <div class="filters">
+    <app-select
+      id="cityId"
+      [label]="labels().city"
+      [placeholder]="labels().all"
+      [options]="State.CityList ?? []"
+      [ngModel]="State.Filter.cityId"
+      (ngModelChange)="setFilter('cityId', $event)"
+    />
+    <app-select
+      id="branchId"
+      [label]="labels().branch"
+      [placeholder]="labels().all"
+      [options]="State.BranchList ?? []"
+      [ngModel]="State.Filter.branchId"
+      (ngModelChange)="setFilter('branchId', $event)"
+    />
+  </div>
+
+  <div class="filters">
+    <app-select
+      id="customerId"
+      [label]="labels().customer"
+      [placeholder]="labels().all"
+      [options]="State.CustomerList ?? []"
+      [(ngModel)]="State.Request.customerId"
+    />
+    <app-select
+      id="type"
+      [label]="labels().type"
+      [placeholder]="labels().all"
+      [options]="State.TypeList ?? []"
+      [(ngModel)]="State.Request.type"
+    />
+    <app-input id="receiverName" [label]="labels().receiverName" [(ngModel)]="State.Request.receiverName" />
+    <app-input id="receiverIban" [label]="labels().receiverIban" [(ngModel)]="State.Request.receiverIban" />
+    <app-input id="amount" type="number" [label]="labels().amount" [(ngModel)]="State.Request.amount" />
+    <app-input id="description" [label]="labels().description" [(ngModel)]="State.Request.description" />
+  </div>
+</app-card>

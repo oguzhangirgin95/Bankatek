@@ -1,0 +1,17 @@
+<div class="field">
+  @if (label()) {
+    <label [attr.for]="id()">{{ label() }}</label>
+  }
+
+  <input
+    [attr.id]="id()"
+    [type]="type()"
+    [disabled]="isDisabled()"
+    [class.field-error]="!!getError(id())"
+    [ngModel]="value()"
+    (ngModelChange)="publish($event)"
+    (blur)="onBlur()"
+  />
+
+  <app-validation [id]="id()" />
+</div>

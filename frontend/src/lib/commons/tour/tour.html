@@ -1,0 +1,42 @@
+@if (tour.active()) {
+  <div class="app-tour">
+    @if (tour.rect(); as hole) {
+      <div
+        class="app-tour__hole"
+        [style.top.px]="hole.top"
+        [style.left.px]="hole.left"
+        [style.width.px]="hole.width"
+        [style.height.px]="hole.height"
+      ></div>
+    }
+
+    <div
+      class="app-tour__card"
+      [class.app-tour__card--top]="card().position === 'top'"
+      [class.app-tour__card--left]="card().position === 'left'"
+      [style.top.px]="card().top"
+      [style.left.px]="card().left"
+      [style.width.px]="card().width"
+      role="dialog"
+      aria-labelledby="app-tour-title"
+    >
+      <h3 id="app-tour-title" class="app-tour__title">{{ title() }}</h3>
+
+      <p class="app-tour__text">{{ text() }}</p>
+
+      <div class="app-tour__foot">
+        <span class="app-tour__count">{{ tour.index() + 1 }} / {{ tour.total() }}</span>
+
+        @if (tour.index() > 0) {
+          <button type="button" class="app-tour__back" (click)="tour.back()">{{ labels().back }}</button>
+        }
+
+        <button type="button" (click)="tour.next()">
+          {{ tour.isLast() ? labels().done : labels().next }}
+        </button>
+      </div>
+
+      <button type="button" class="app-tour__hide" (click)="tour.dismissAll()">{{ labels().hide }}</button>
+    </div>
+  </div>
+}

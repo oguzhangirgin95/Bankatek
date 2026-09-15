@@ -1,0 +1,80 @@
+<h2>{{ labels().title }}</h2>
+
+<div class="filters">
+  <app-select
+    id="cityId"
+    [label]="labels().city"
+    [placeholder]="labels().all"
+    [options]="State.CityList ?? []"
+    [ngModel]="State.Request.cityId"
+    (ngModelChange)="setFilter('cityId', $event)"
+  />
+  <app-select
+    id="branchId"
+    [label]="labels().branch"
+    [placeholder]="labels().all"
+    [options]="State.BranchList ?? []"
+    [ngModel]="State.Request.branchId"
+    (ngModelChange)="setFilter('branchId', $event)"
+  />
+  <app-select
+    id="type"
+    [label]="labels().type"
+    [placeholder]="labels().all"
+    [options]="State.TypeList ?? []"
+    [ngModel]="State.Request.type"
+    (ngModelChange)="setFilter('type', $event)"
+  />
+  <app-input
+    id="searchText"
+    [label]="labels().search"
+    [ngModel]="State.Request.searchText"
+    (ngModelChange)="setFilter('searchText', $event)"
+  />
+  <app-button [label]="labels().clear" variant="outline" (clicked)="clearFilter()" />
+</div>
+
+<div class="panels">
+  <div class="stats">
+    @for (type of State.TypeCounts ?? []; track type.name) {
+      <app-statcard [label]="type.name" [value]="type.count" />
+    }
+  </div>
+
+  <app-card [title]="labels().typeChartTitle">
+    <app-donutchart [items]="State.TypeChart ?? []" />
+  </app-card>
+</div>
+
+<app-card [title]="labels().listTitle" [subtitle]="labels().listHint">
+  <app-grid
+    [columns]="columns()"
+    [rows]="State.AccountList ?? []"
+    [emptyText]="labels().empty"
+    clickable
+    (rowClicked)="selectAccount($event)"
+  />
+  <app-pagination
+    [totalCount]="State.TotalCount ?? 0"
+    [pageNumber]="State.Request.pageNumber"
+    [pageSize]="State.Request.pageSize"
+    (pageNumberChange)="setPage($event)"
+  />
+</app-card>
+
+<app-modal
+  [open]="!!State.SelectedIban"
+  [title]="State.AccountDetail?.iban ?? labels().detailTitle"
+  (openChange)="closeDetail()"
+>
+  @if (State.AccountDetail?.found) {
+    <app-detailcard
+      [title]="State.AccountDetail?.iban"
+      [subtitle]="State.AccountDetail?.currency + ' ' + State.AccountDetail?.productName"
+      [imageUrl]="State.AccountDetail?.photoUrl"
+      [items]="State.AccountItems ?? []"
+    />
+  } @else {
+    <app-info [message]="labels().selectFirst" />
+  }
+</app-modal>

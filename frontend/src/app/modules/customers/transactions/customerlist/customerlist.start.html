@@ -1,0 +1,90 @@
+<h2>{{ labels().title }}</h2>
+
+<div class="filters">
+  <app-select
+    id="cityId"
+    [label]="labels().city"
+    [placeholder]="labels().all"
+    [options]="State.CityList ?? []"
+    [ngModel]="State.Request.cityId"
+    (ngModelChange)="setFilter('cityId', $event)"
+  />
+  <app-select
+    id="branchId"
+    [label]="labels().branch"
+    [placeholder]="labels().all"
+    [options]="State.BranchList ?? []"
+    [ngModel]="State.Request.branchId"
+    (ngModelChange)="setFilter('branchId', $event)"
+  />
+  <app-select
+    id="status"
+    [label]="labels().status"
+    [placeholder]="labels().all"
+    [options]="State.StatusList ?? []"
+    [ngModel]="State.Request.status"
+    (ngModelChange)="setFilter('status', $event)"
+  />
+  <app-input
+    id="searchText"
+    [label]="labels().search"
+    [ngModel]="State.Request.searchText"
+    (ngModelChange)="setFilter('searchText', $event)"
+  />
+  <app-button [label]="labels().clear" variant="outline" (clicked)="clearFilter()" />
+</div>
+
+<app-card [title]="labels().listTitle + ' (' + (State.TotalCount ?? 0) + ')'" [subtitle]="labels().listHint">
+  <app-grid
+    [columns]="columns()"
+    [rows]="State.CustomerList ?? []"
+    [emptyText]="labels().emptyList"
+    clickable
+    (rowClicked)="selectCustomer($event)"
+  />
+  <app-pagination
+    [totalCount]="State.TotalCount ?? 0"
+    [pageNumber]="State.Request.pageNumber"
+    [pageSize]="State.Request.pageSize"
+    (pageNumberChange)="setPage($event)"
+  />
+</app-card>
+
+<app-modal
+  [open]="!!State.SelectedCustomerId"
+  [title]="State.CustomerDetail?.fullName ?? labels().detailTitle"
+  (openChange)="closeDetail()"
+>
+  <app-detailcard
+    [title]="State.CustomerDetail?.fullName"
+    [subtitle]="State.CustomerDetail?.segment"
+    [imageUrl]="State.CustomerDetail?.photoUrl"
+  />
+
+  @if (State.CustomerDetail?.overDailyLimit) {
+    <app-info [message]="labels().overLimit" variant="error" />
+  }
+
+  <app-tabs [tabs]="tabs()" [(active)]="State.ActiveTab" />
+
+  @switch (State.ActiveTab) {
+    @case ('hesap') {
+      @if (State.AccountDetail?.found) {
+        <app-detailcard
+          [title]="State.AccountDetail?.iban"
+          [subtitle]="State.AccountDetail?.currency + ' ' + State.AccountDetail?.productName"
+          [imageUrl]="State.AccountDetail?.photoUrl"
+          [items]="State.AccountItems ?? []"
+        />
+      } @else {
+        <app-info [message]="labels().noAccount" variant="warning" />
+      }
+    }
+    @case ('transfer') {
+      <app-grid [columns]="transferColumns()" [rows]="State.TransferList ?? []" [emptyText]="labels().emptyTransfer" />
+    }
+    @default {
+      <app-list [items]="State.CustomerItems ?? []" />
+    }
+  }
+</app-modal>

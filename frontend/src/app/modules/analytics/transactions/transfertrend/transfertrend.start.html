@@ -1,0 +1,40 @@
+<h2>{{ labels().title }}</h2>
+
+<div class="filters">
+  <app-select
+    id="cityId"
+    [label]="labels().city"
+    [placeholder]="labels().all"
+    [options]="State.CityList ?? []"
+    [ngModel]="State.Request.cityId"
+    (ngModelChange)="setFilter('cityId', $event)"
+  />
+  <app-select
+    id="branchId"
+    [label]="labels().branch"
+    [placeholder]="labels().all"
+    [options]="State.BranchList ?? []"
+    [ngModel]="State.Request.branchId"
+    (ngModelChange)="setFilter('branchId', $event)"
+  />
+</div>
+
+<div class="stats">
+  <app-statcard [label]="labels().scope" [value]="State.Trend?.cityName ?? '-'" />
+  <app-statcard [label]="labels().totalTransfer" [value]="State.Trend?.totalTransferCount ?? 0" />
+  <app-statcard [label]="labels().averageTransfer" [value]="State.Trend?.averageTransferCount ?? 0" variant="success" />
+</div>
+
+<div class="panels">
+  <app-card [title]="labels().trendTitle">
+    <app-barchart [items]="State.TrendChart ?? []" />
+  </app-card>
+
+  <app-card [title]="labels().typeChartTitle">
+    <app-donutchart [items]="State.TypeChart ?? []" />
+  </app-card>
+</div>
+
+<app-card [title]="labels().trendTitle">
+  <app-grid [columns]="columns()" [rows]="State.Trend?.points ?? []" />
+</app-card>

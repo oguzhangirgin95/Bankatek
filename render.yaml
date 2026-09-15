@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: bankatek-frontend
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    envVars:
+      - key: FE_API_URL
+        value: /api
+      - key: FE_DEFAULT_LANGUAGE
+        value: tr
+      - key: FE_CRYPTO_KEY
+        sync: false
+      - key: FE_UNITY_URL
+        value: /unity/
+      - key: FE_KEYCLOAK_URL
+        value: ""
+      - key: FE_KEYCLOAK_REALM
+        value: bankatek
+      - key: FE_KEYCLOAK_CLIENT_ID
+        value: bankatek-frontend
+      - key: FE_KEYCLOAK_ORIGINS
+        sync: false
+      - key: FE_KEYCLOAK_LOGIN_THEME
+        value: bankatek
+      - key: FE_KEYCLOAK_LOCALES
+        value: tr,en
+      - key: FE_WEATHER_URL
+        value: https://api.open-meteo.com/

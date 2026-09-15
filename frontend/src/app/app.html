@@ -1,0 +1,13 @@
+@if (showHeader()) {
+  <app-header />
+}
+
+<app-body>
+  <router-outlet />
+</app-body>
+
+@if (showFooter()) {
+  <app-footer />
+}
+
+<app-tour />
