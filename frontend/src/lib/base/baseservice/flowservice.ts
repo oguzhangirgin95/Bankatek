@@ -17,6 +17,7 @@ import {
   ValidationRuleConfig,
 } from '../baseconfig/config';
 import { FeatureCode } from '../baseconfig/features';
+import { ModuleConfig } from '../baseconfig/moduleconfig';
 import { BaseService } from './baseservice';
 import { FeatureFlagService } from './featureflagservice';
 import { Validationservice } from './validationservice';
@@ -112,6 +113,14 @@ export class FlowService extends BaseService {
 
   /** Route verisinden okunan yapılandırma. */
   public readonly config = signal<FlowConfig | undefined>(undefined);
+
+  /**
+   * İçinde bulunulan modülün yapılandırması.
+   *
+   * Menü içeriğini bu belirler: transfers altındaki bir ekran ile customers
+   * altındaki bir ekran farklı gruplar görür.
+   */
+  public readonly moduleConfig = signal<ModuleConfig | undefined>(undefined);
 
   /** Yapılandırmadaki bütün adımlar. */
   public readonly steps = computed<FlowStep[]>(() =>
@@ -313,6 +322,25 @@ export class FlowService extends BaseService {
    * ekranın Request ve liste verileri yeni ekrana sızar. Bilerek taşımak
    * gerekiyorsa adım yapılandırmasındaki keepState bunu kapatır.
    */
+  /**
+   * Modül yapılandırmasını route ağacında yukarı doğru arar.
+   *
+   * Yapılandırma <modül>.routes.ts içinde transaction route'una konur, yani
+   * adımın kendisinde değil atasında durur. Burada Angular'ın veri devralma
+   * kuralına güvenmek yerine route tanımlarının kendi data alanı okunuyor;
+   * devralma stratejisi değişse de menü doğru modülü bulur.
+   */
+  private readModuleConfig(snapshot: ActivatedRouteSnapshot): ModuleConfig | undefined {
+    for (let current: ActivatedRouteSnapshot | null = snapshot; current; current = current.parent) {
+      const moduleConfig = current.routeConfig?.data?.['moduleConfig'] as ModuleConfig | undefined;
+      if (moduleConfig) {
+        return moduleConfig;
+      }
+    }
+
+    return undefined;
+  }
+
   private readRoute(snapshot: ActivatedRouteSnapshot): void {
     const config = snapshot.data['config'] as FlowConfig | undefined;
     const step = snapshot.routeConfig?.path ?? '';
@@ -341,6 +369,7 @@ export class FlowService extends BaseService {
     this.keepStateOnce = false;
 
     this.config.set(config);
+    this.moduleConfig.set(this.readModuleConfig(snapshot));
     this.transaction.set(transaction);
     this.currentStep.set(step);
 

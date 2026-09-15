@@ -50,6 +50,7 @@ npm test
 
 ```
 frontend/src/
+  app/modules/<modül>/<modül>.config.ts       modül menüsü
   app/modules/<modül>/transactions/<ekran>/   ekranlar (config, routes, start)
   lib/base/                                    akış, doğrulama, interceptor, guard
   lib/commons/                                 ortak bileşenler (grid, chart, modal, ...)
@@ -66,6 +67,35 @@ kullanır; ekran başına ayrı bileşen yazılmaz.
 
 Ekranlar veriye `lib/services/api/*Controller.service.ts` üzerinden erişir.
 Bu servisler gerçek bir OpenAPI istemcisi gibi HTTP isteği atar.
+
+## Modül menüleri
+
+Her modülün bir `<modül>.config.ts` dosyası vardır ve o modülün altındaki
+transaction'ları sayar. `<modül>.routes.ts` bu yapılandırmayı transaction
+route'una `moduleConfig` anahtarıyla bağlar; `FlowService` route ağacında
+yukarı doğru arayıp bulur.
+
+Menü bu yüzden ekrana göre değişir: `transfers` altındaki bir transaction
+açıkken menüde transfers modülünün bütün ekranları, `customers` altındaki bir
+transaction açıkken customers modülünün ekranları listelenir.
+
+```ts
+export const TransfersConfig: ModuleConfig = {
+  code: 'MENU_TRANSFERS',
+  title: 'Transferler',
+  transactions: [
+    { code: 'MENU_TRANSFERLIST', title: 'Transfer Takibi', path: '/transfers/transferlist/start' },
+    { code: 'MENU_TRANSFERCREATE', title: 'Transfer Oluştur', path: '/transfers/transfercreate/start' },
+  ],
+};
+```
+
+Başlıklar `code` ile çevrilir, karşılığı yoksa `title` gösterilir. `isEnable`
+verilirse bağlantı yalnızca o özellik bayrağı açıkken menüde yer alır.
+
+Panelin altındaki modül listesi bunun dışındadır: sunucudan (`/menu/list`)
+gelir ve modüller arası geçişi sağlar, yani kullanıcının yetkisi neyse menüde
+o modüller görünür.
 
 ## Veri katmanı
 

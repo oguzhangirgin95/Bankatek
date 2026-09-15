@@ -1,10 +1,10 @@
 <div class="app-menu">
   <button type="button" class="app-menu__toggle" (click)="toggleDrawer()">
     <span class="app-menu__bars"></span>
-    {{ activeText() }}
+    {{ title() }}
   </button>
 
-  @if (drawerOpen() || openCode()) {
+  @if (drawerOpen()) {
     <div class="app-menu__backdrop" (click)="closeAll()"></div>
   }
 
@@ -15,14 +15,28 @@
 
     <span class="app-menu__title">{{ title() }}</span>
 
-    @for (module of modules(); track module.code) {
-      <div class="app-menu__module">
+    <div class="app-menu__list">
+      @for (item of transactions(); track item.path) {
         <button
           type="button"
-          class="app-menu__item"
-          [class.app-menu__item--active]="isModuleActive(module)"
-          [class.app-menu__item--open]="openCode() === module.code"
-          (click)="toggleModule(module)"
+          class="app-menu__transaction"
+          [class.app-menu__transaction--active]="isActive(item.path)"
+          (click)="go(item.path)"
+        >
+          {{ item.text }}
+        </button>
+      }
+    </div>
+
+    @if (modules().length) {
+      <span class="app-menu__title app-menu__title--modules">{{ modulesTitle() }}</span>
+
+      @for (module of modules(); track module.code) {
+        <button
+          type="button"
+          class="app-menu__item app-menu__item--module"
+          [class.app-menu__item--active]="isActiveModule(module.code)"
+          (click)="go(module.path)"
           [title]="module.text"
         >
           <svg class="app-menu__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -30,24 +44,8 @@
             <path [attr.d]="icon(module.code)" />
           </svg>
           <span class="app-menu__label">{{ module.text }}</span>
-          <span class="app-menu__arrow"></span>
         </button>
-
-        @if (openCode() === module.code) {
-          <div class="app-menu__list">
-            @for (transaction of module.transactions; track transaction.path) {
-              <button
-                type="button"
-                class="app-menu__transaction"
-                [class.app-menu__transaction--active]="isActive(transaction.path)"
-                (click)="go(transaction.path)"
-              >
-                {{ transaction.text }}
-              </button>
-            }
-          </div>
-        }
-      </div>
+      }
     }
   </nav>
 </div>

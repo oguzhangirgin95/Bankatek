@@ -154,6 +154,10 @@ export const RESOURCES: Record<string, Record<string, string>> = {
     MENU_REPORTENTRY: 'Rapor Girişi',
     MENU_TRANSFERTREND: 'Transfer Analizi',
     MENU_PREFERENCES: 'Ayarlar',
+    MENU_MODULES: 'Modüller',
+    MENU_STORYBOOK: 'Bileşenler',
+    MENU_SHOWCASE: 'Bileşen Vitrini',
+    MENU_PAGEBUILDER: 'Sayfa Kurucu',
   },
   dashboard: {
     DASHBOARD_TITLE: 'Bankacılık İzleme Panosu',

@@ -103,6 +103,14 @@
     letter-spacing: 1px;
   }
 
+  // Modul gecis listesi panelin altina yapisir; uzerindeki cizgi onu modulun
+  // kendi menusunden ayirir.
+  &__title--modules {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-border);
+  }
+
   &__item {
     display: flex;
     align-items: center;
@@ -135,25 +143,11 @@
     border-left-color: var(--color-accent);
   }
 
-  &__arrow {
-    width: 0;
-    height: 0;
-    flex: none;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid currentColor;
-    transition: transform var(--transition);
-  }
-
-  &__item--open .app-menu__arrow {
-    transform: rotate(180deg);
-  }
-
   &__list {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding: 4px 0 4px 18px;
+    padding: 4px 0;
   }
 
   &__transaction {
@@ -218,7 +212,6 @@
     &__panel:not(.app-menu__panel--open) {
       .app-menu__title,
       .app-menu__label,
-      .app-menu__arrow,
       .app-menu__list {
         display: none;
       }

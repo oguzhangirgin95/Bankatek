@@ -1,28 +1,35 @@
 import { Component, DOCUMENT, DestroyRef, computed, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BaseComponent } from '@lib/base/basecomponent/basecomponent';
+import { FeatureCode } from '@lib/base/baseconfig/features';
 
-/** Modül altındaki tek bir ekran. */
-interface MenuTransaction {
+/** Menüdeki tek bir ekran bağlantısı. */
+interface MenuLink {
   /** Gidilecek adres. */
   path: string;
   /** Menüde görünen ad. */
   text: string;
 }
 
-/** Menüdeki üst seviye başlık ve altındaki ekranlar. */
+/** Modüller arası geçiş listesindeki tek bir modül. */
 interface MenuModule {
-  /** Modül kodu; hem kaynak anahtarı hem de açık modülü ayırt etmek için kullanılır. */
+  /** Modül kodu; içinde bulunulan modülü işaretlemek ve ikonu seçmek için. */
   code: string;
-  /** Menüde görünen başlık. */
+  /** Menüde görünen ad. */
   text: string;
-  /** Modülün altındaki ekranlar, gösterilecek sırayla. */
-  transactions: MenuTransaction[];
+  /** Modüle girilince açılacak ilk ekran. */
+  path: string;
 }
 
 /**
- * Ana gezinme menüsü. İçeriği sabit değil, sunucudan gelir (FlowService.menu),
- * dolayısıyla kullanıcının yetkisine göre değişebilir.
+ * Ana gezinme menüsü.
+ *
+ * İçerik iki kaynaktan gelir. Üstteki liste içinde bulunulan modülün
+ * yapılandırmasından (<modül>.config.ts) okunur ve o modülün bütün
+ * transaction'larını gösterir; dolayısıyla transfers altındaki bir ekranla
+ * customers altındaki bir ekran farklı menü görür. Alttaki modül listesi ise
+ * sunucudan gelir (FlowService.menu), yani kullanıcının yetkisine göre değişir
+ * ve modüller arası geçişi sağlar.
  *
  * Geniş ekranda şerit, dar ekranda çekmece olarak çalışır; Escape ikisini de
  * kapatır.
@@ -58,39 +65,45 @@ export class Menu extends BaseComponent {
 
   private readonly document = inject(DOCUMENT);
 
-  /** Hiçbir modül açık değilken gösterilen başlık. */
-  readonly title = computed(() => this.getResource('MENU_TITLE', 'Menü'));
+  /** İçinde bulunulan modülün yapılandırması. */
+  private readonly moduleConfig = this.flowService.moduleConfig;
 
   /**
-   * Modüller ve altlarındaki ekranlar.
+   * Panelin başlığı: içinde bulunulan modülün adı.
    *
-   * Başlıklar kaynak anahtarlarıyla çevrilir; karşılığı yoksa sunucunun
-   * gönderdiği metin olduğu gibi kullanılır.
+   * Modül yapılandırması henüz okunmadıysa (ilk çizim, tanımsız adres) genel
+   * menü başlığına düşülür.
    */
+  readonly title = computed(() => {
+    const config = this.moduleConfig();
+
+    return config ? this.getResource(config.code, config.title) : this.getResource('MENU_TITLE', 'Menü');
+  });
+
+  /** Modül geçiş listesinin başlığı. */
+  readonly modulesTitle = computed(() => this.getResource('MENU_MODULES', 'Modüller'));
+
+  /** İçinde bulunulan modülün bütün ekranları; hepsi birden açık durur. */
+  readonly transactions = computed<MenuLink[]>(() =>
+    (this.moduleConfig()?.transactions ?? [])
+      .filter((item) => this.isEnabled(item.isEnable))
+      .map((item) => ({ path: item.path, text: this.getResource(item.code, item.title) })),
+  );
+
+  /** Modüller arası geçiş listesi; sunucudan gelen menüden kurulur. */
   readonly modules = computed<MenuModule[]>(() =>
-    this.flowService.menu().map((module) => ({
-      code: module.code ?? '',
-      text: this.getResource(module.code ?? '', module.title ?? ''),
-      transactions: (module.children ?? []).map((transaction) => ({
-        path: transaction.path ?? '',
-        text: this.getResource(transaction.code ?? '', transaction.title ?? ''),
-      })),
-    })),
+    this.flowService
+      .menu()
+      .map((module) => ({
+        code: module.code ?? '',
+        text: this.getResource(module.code ?? '', module.title ?? ''),
+        path: module.children?.[0]?.path ?? '',
+      }))
+      .filter((module) => module.path !== ''),
   );
 
   /** Dar ekranda çekmecenin açık olup olmadığı. */
   readonly drawerOpen = signal(false);
-
-  /** Açık olan modülün kodu. Boş metin "hiçbiri açık değil" demek. */
-  readonly openCode = signal('');
-
-  /** Bulunduğumuz ekranı içeren modül. */
-  readonly activeModule = computed(
-    () => this.modules().find((module) => module.transactions.some((item) => this.isActive(item.path))),
-  );
-
-  /** Dar ekranda başlık yerine, içinde bulunduğumuz modülün adı gösterilir. */
-  readonly activeText = computed(() => this.activeModule()?.text ?? this.title());
 
   /** Menü içeriğini yükler ve çekmece açıkken gövde sınıfını yönetir. */
   constructor() {
@@ -115,28 +128,18 @@ export class Menu extends BaseComponent {
     return this.flowService.url() === path;
   }
 
-  /** Modül, içinde bulunduğumuz ekranı barındırıyor mu. */
-  isModuleActive(module: MenuModule): boolean {
-    return this.activeModule()?.code === module.code;
+  /** Modül geçiş listesinde içinde bulunduğumuz modül mü. */
+  isActiveModule(code: string): boolean {
+    return this.moduleConfig()?.code === code;
   }
 
   /** Dar ekrandaki çekmeceyi açar ya da kapatır. */
   toggleDrawer(): void {
     this.drawerOpen.update((value) => !value);
-    this.openCode.set('');
   }
 
-  /**
-   * Modülü açar; aynı modüle tekrar basılırsa kapatır. Tek bir kod tutulduğu
-   * için aynı anda yalnızca bir modül açık kalır.
-   */
-  toggleModule(module: MenuModule): void {
-    this.openCode.update((code) => (code === module.code ? '' : module.code));
-  }
-
-  /** Açık olan her şeyi kapatır. Escape ve gezinme sonrası çağrılır. */
+  /** Çekmeceyi kapatır. Escape, arka plan tıklaması ve gezinme sonrası çağrılır. */
   closeAll(): void {
-    this.openCode.set('');
     this.drawerOpen.set(false);
   }
 
@@ -144,5 +147,10 @@ export class Menu extends BaseComponent {
   go(path: string): void {
     this.closeAll();
     this.router.navigateByUrl(path);
+  }
+
+  /** Yapılandırmadaki isEnable alanının karşılığı. Boş bırakılmışsa koşul yok demektir. */
+  private isEnabled(code: FeatureCode | undefined): boolean {
+    return !code || this.isEnableFeature(code);
   }
 }
