@@ -16,6 +16,8 @@ import { Tour } from '@lib/commons/tour/tour';
     // Modulun rengi burada tanimlanir; header, menu ve arka plan katmani
     // devralarak kullanir. Modul yapilandirmasi yoksa temanin vurgusu gecerli.
     '[style.--color-module]': 'moduleColor()',
+    // Menusuz ekranda soldaki serit icin birakilan bosluk kaldirilir.
+    '[class.app-no-menu]': '!showMenu()',
   },
 })
 export class App extends BaseComponent implements OnInit {

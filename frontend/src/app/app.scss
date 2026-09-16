@@ -53,6 +53,11 @@ app-footer {
   :host-context(body.app-menu-open) {
     padding-left: 260px;
   }
+
+  // Menusu gizlenen ekranda (pano) serit yok, bosluk da birakilmaz.
+  :host(.app-no-menu) {
+    padding-left: 0;
+  }
 }
 
 // Hareket azaltma isteginde animasyonlu gorsel dusuyor, modulun rengi kaliyor.

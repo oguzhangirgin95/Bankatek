@@ -47,6 +47,8 @@ export abstract class BaseComponent {
 
   public readonly showFooter = this.flowService.showFooter;
 
+  public readonly showMenu = this.flowService.showMenu;
+
   /** Devam eden bir HTTP isteği var mı. Global yükleniyor göstergesi bunu okur. */
   public readonly loading = this.flowService.loading;
 

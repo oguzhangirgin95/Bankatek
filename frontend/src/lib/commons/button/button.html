@@ -1,5 +1,6 @@
 <button
   class="app-button"
+  [class]="cssClass()"
   [class.app-button--secondary]="variant() === 'secondary'"
   [class.app-button--outline]="variant() === 'outline'"
   [type]="type()"

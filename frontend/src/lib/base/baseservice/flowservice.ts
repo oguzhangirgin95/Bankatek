@@ -152,6 +152,9 @@ export class FlowService extends BaseService {
 
   public readonly showFooter = computed<boolean>(() => this.currentStepConfig()?.showFooter !== false);
 
+  /** Menü de varsayılan olarak görünür; yalnızca açıkça false verilirse gizlenir. */
+  public readonly showMenu = computed<boolean>(() => this.currentStepConfig()?.showMenu !== false);
+
   /** Kullanıcı "devam"a basana kadar hata gösterilmez; form açılır açılmaz kızarmaz. */
   private readonly validated = signal(false);
 

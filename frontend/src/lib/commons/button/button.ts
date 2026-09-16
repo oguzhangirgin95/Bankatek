@@ -27,6 +27,14 @@ export class Button extends BaseComponent {
   /** Pasif buton tıklanamaz ve soluk görünür. */
   readonly disabled = input<boolean>(false);
 
+  /**
+   * Butona eklenecek ek sınıflar, boşlukla ayrılarak verilir.
+   *
+   * Variant sınıflarının yerini almaz, yanlarına eklenir. Sınıf butonun
+   * kendisine konduğu için stili global stilde ya da ::ng-deep ile yazılmalı.
+   */
+  readonly cssClass = input<string>('');
+
   /** Tıklama. Pasif butonda tarayıcı zaten olay üretmez. */
   readonly clicked = output<void>();
 }

@@ -5,7 +5,7 @@
     <span class="app-header__title">{{ labels().home }}</span>
   </button>
 
-  @if (ready() && isLoggedIn()) {
+  @if (ready() && isLoggedIn() && showMenu()) {
     <app-menu />
   }
 

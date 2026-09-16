@@ -122,6 +122,8 @@ export interface FlowStep {
   showHeader?: boolean;
   /** Alt bant gizlensin mi. Yalnızca açıkça false verilirse gizlenir. */
   showFooter?: boolean;
+  /** Menü gizlensin mi. Yalnızca açıkça false verilirse gizlenir. */
+  showMenu?: boolean;
   /** Adım açılırken otomatik çağrılacak servis. */
   service?: ServiceConfig;
   /** True ise header, footer ve menü gizlenir; giriş ekranı bunu kullanıyor. */
