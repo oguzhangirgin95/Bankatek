@@ -7,14 +7,25 @@ import { BaseComponent } from '@lib/base/basecomponent/basecomponent';
  *
  * Görünümü variant belirler; renkler global stilden geldiği için burada
  * renk tanımı yoktur.
+ *
+ * host'ta id null'a çekiliyor çünkü id'nin asıl sahibi içerideki <button>
+ * elemanı; aksi halde hem sarmalayıcıda hem butonda aynı id olur ve id'ye
+ * göre yazılan stil ya da tur hedefi yanlış elemanı bulur.
  */
 @Component({
   selector: 'app-button',
+  host: { '[attr.id]': 'null' },
   imports: [],
   templateUrl: './button.html',
   styleUrl: './button.scss',
 })
 export class Button extends BaseComponent {
+  /**
+   * Butonun kimliği; içteki <button> elemanına konur. Yalnızca bu butona özel
+   * stil (#id) ya da tanıtım turu hedefi için kullanılır. Boşsa id yazılmaz.
+   */
+  readonly id = input<string>('');
+
   /** Buton yazısı. İçerik ng-content ile de verilebilir. */
   readonly label = input<string>('');
 

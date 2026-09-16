@@ -235,6 +235,20 @@ app-card {
   margin-bottom: 0;
 }
 
+/* Yalnızca tek bir butona özel stil, butonun id'sine göre yazılır. id
+   içteki <button>'a konduğu için kural burada duruyor; kapsüllenmiş stil alt
+   bileşenin içine işlemiyor. id seçicisi variant kurallarından güçlü olduğu
+   için ek sınıf gerekmez. */
+#showcaseDangerButton {
+  background: var(--color-error);
+  border-color: var(--color-error);
+  color: var(--color-bg);
+}
+
+#showcaseDangerButton:hover:not(:disabled) {
+  filter: brightness(0.9);
+}
+
 /* Liste satırlarındaki işlem butonları formdakilerden küçük olmalı. Kural
    burada duruyor çünkü kapsüllenmiş stil alt bileşenin içine işlemiyor. */
 .app-genericlist__actions .app-button {

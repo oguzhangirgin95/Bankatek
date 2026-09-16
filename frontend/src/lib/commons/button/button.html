@@ -1,4 +1,5 @@
 <button
+  [attr.id]="id() || null"
   class="app-button"
   [class]="cssClass()"
   [class.app-button--secondary]="variant() === 'secondary'"
