@@ -2,6 +2,16 @@ import { Component, DOCUMENT, DestroyRef, computed, effect, inject, signal } fro
 import { Router } from '@angular/router';
 import { BaseComponent } from '@lib/base/basecomponent/basecomponent';
 import { FeatureCode } from '@lib/base/baseconfig/features';
+import { ModuleConfig } from '@lib/base/baseconfig/moduleconfig';
+import { AccountsConfig } from '../../../app/modules/accounts/accounts.config';
+import { AnalyticsConfig } from '../../../app/modules/analytics/analytics.config';
+import { BranchesConfig } from '../../../app/modules/branches/branches.config';
+import { CustomersConfig } from '../../../app/modules/customers/customers.config';
+import { MonitoringConfig } from '../../../app/modules/monitoring/monitoring.config';
+import { RegionsConfig } from '../../../app/modules/regions/regions.config';
+import { ReportsConfig } from '../../../app/modules/reports/reports.config';
+import { SettingsConfig } from '../../../app/modules/settings/settings.config';
+import { TransfersConfig } from '../../../app/modules/transfers/transfers.config';
 
 /** Menüdeki tek bir ekran bağlantısı. */
 interface MenuLink {
@@ -27,9 +37,8 @@ interface MenuModule {
  * İçerik iki kaynaktan gelir. Üstteki liste içinde bulunulan modülün
  * yapılandırmasından (<modül>.config.ts) okunur ve o modülün bütün
  * transaction'larını gösterir; dolayısıyla transfers altındaki bir ekranla
- * customers altındaki bir ekran farklı menü görür. Alttaki modül listesi ise
- * sunucudan gelir (FlowService.menu), yani kullanıcının yetkisine göre değişir
- * ve modüller arası geçişi sağlar.
+ * customers altındaki bir ekran farklı menü görür. Alttaki modül listesi de
+ * modül yapılandırmalarından (MODULES) kurulur ve modüller arası geçişi sağlar.
  *
  * Geniş ekranda şerit, dar ekranda çekmece olarak çalışır; Escape ikisini de
  * kapatır.
@@ -50,6 +59,19 @@ const ICONS: Record<string, string> = {
 
 /** Karsiligi olmayan modul icin kullanilan yedek ikon. */
 const FALLBACK_ICON = 'M4 6h16M4 12h16M4 18h16';
+
+/** Modul gecis listesindeki moduller, menude gosterilecek sirayla. */
+const MODULES: ModuleConfig[] = [
+  MonitoringConfig,
+  CustomersConfig,
+  AccountsConfig,
+  TransfersConfig,
+  RegionsConfig,
+  BranchesConfig,
+  ReportsConfig,
+  AnalyticsConfig,
+  SettingsConfig,
+];
 
 @Component({
   selector: 'app-menu',
@@ -90,14 +112,13 @@ export class Menu extends BaseComponent {
       .map((item) => ({ path: item.path, text: this.getResource(item.code, item.title) })),
   );
 
-  /** Modüller arası geçiş listesi; sunucudan gelen menüden kurulur. */
+  /** Modüller arası geçiş listesi; modül yapılandırmalarından kurulur. */
   readonly modules = computed<MenuModule[]>(() =>
-    this.flowService
-      .menu()
+    MODULES
       .map((module) => ({
-        code: module.code ?? '',
-        text: this.getResource(module.code ?? '', module.title ?? ''),
-        path: module.children?.[0]?.path ?? '',
+        code: module.code,
+        text: this.getResource(module.code, module.title),
+        path: module.transactions[0]?.path ?? '',
       }))
       .filter((module) => module.path !== ''),
   );

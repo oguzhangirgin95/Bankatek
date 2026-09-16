@@ -140,12 +140,14 @@ describe('Menu', () => {
     expect(fixture.componentInstance.title()).toBe('Müşteriler');
   });
 
-  it('modul gecis listesi sunucudan gelir ve modulle degismez', async () => {
-    expect(moduleTexts()).toEqual(['Müşteriler', 'Transferler']);
+  it('modul gecis listesi configten gelir ve modulle degismez', async () => {
+    const modules = ['İzleme', 'Müşteriler', 'Hesaplar', 'Transferler', 'Bölgeler', 'Şubeler', 'Raporlar', 'Analiz', 'Ayarlar'];
+
+    expect(moduleTexts()).toEqual(modules);
 
     await goTo('/customers/customerlist/start');
 
-    expect(moduleTexts()).toEqual(['Müşteriler', 'Transferler']);
+    expect(moduleTexts()).toEqual(modules);
   });
 
   it('gecis listesinde icinde bulunulan modul isaretlenir', async () => {
