@@ -2,6 +2,7 @@ import { Directive, inject } from '@angular/core';
 import { FlowButton } from '../baseconfig/config';
 import { FeatureCode } from '../baseconfig/features';
 import { CryptologyService } from '../baseservice/cryptologyservice';
+import { DeviceService } from '../baseservice/deviceservice';
 import { FeatureFlagService } from '../baseservice/featureflagservice';
 import { FlowService } from '../baseservice/flowservice';
 import { ThemeService } from '../baseservice/themeservice';
@@ -26,6 +27,11 @@ export abstract class BaseComponent {
   protected readonly themeService = inject(ThemeService);
 
   protected readonly featureFlagService = inject(FeatureFlagService);
+
+  protected readonly deviceService = inject(DeviceService);
+
+  /** Cihaz mobilse true; ekran daraldığında ya da telefon çevrildiğinde güncellenir. */
+  public readonly isMobile = this.deviceService.isMobile;
 
   /** Ekranlar arasında paylaşılan durum. Hem okuma hem yazma reaktiftir. */
   public readonly State = this.flowService.State;

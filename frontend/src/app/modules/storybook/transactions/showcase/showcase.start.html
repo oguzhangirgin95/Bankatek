@@ -223,6 +223,10 @@
     />
   </app-card>
 
+  <app-card title="Device">
+    <app-info [message]="isMobile() ? 'Mobil' : 'Masaüstü'" [variant]="isMobile() ? 'warning' : 'success'" />
+  </app-card>
+
   <app-card title="Footer">
     <app-footer />
   </app-card>
