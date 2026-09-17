@@ -1,0 +1,28 @@
+.app-row {
+  --column: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space);
+  margin-bottom: var(--space);
+}
+
+// app-column etiketi kutu çizmediği için satırdaki hücresi içteki div'dir.
+// Öğe --column kadar pay kaplar; bir payı 200px'in altına düşecekse alt
+// satıra iner, dar ekranda bu yüzden kendiliğinden alt alta olur.
+.app-row > *,
+.app-row > app-column > .app-column {
+  flex: var(--column) 1 0;
+  min-width: min(100%, calc(200px * var(--column)));
+}
+
+// row verildiyse satır o kadar paya bölünür, sığmayan alt satıra geçer.
+// Aradaki boşluk büyüme payından karşılandığı için satırların sütunları hizalı kalır.
+.app-row--split > *,
+.app-row--split > app-column > .app-column {
+  flex-basis: calc(100% / var(--row) * var(--column) - var(--space));
+}
+
+// İç içe yerleşimde aralığı dıştakinin gap'i verir.
+.app-row > * > :is(.app-row, .app-column) {
+  margin-bottom: 0;
+}

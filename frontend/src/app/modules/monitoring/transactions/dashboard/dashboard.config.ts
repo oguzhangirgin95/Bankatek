@@ -6,7 +6,7 @@ export const DashboardConfig: FlowConfig = {
       {
         step: 'start',
         validation: [],
-        showMenu: false,
+        showMenu: true,
         tour: [
           {
             id: 'cityId',

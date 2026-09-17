@@ -1,0 +1,17 @@
+// Etiket kutu çizmez, hücre içteki div olur; column değeri de o div'de
+// durduğu için satır kuralı onu doğrudan okuyabiliyor.
+app-column {
+  display: contents;
+}
+
+.app-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space);
+  margin-bottom: var(--space);
+}
+
+// İç içe yerleşimde aralığı dıştakinin gap'i verir.
+.app-column > * > :is(.app-row, .app-column) {
+  margin-bottom: 0;
+}

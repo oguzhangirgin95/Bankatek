@@ -235,6 +235,25 @@
 
 </div>
 
+<app-card title="Row / Column">
+  <app-row row="3">
+    <app-column column="2">
+      <app-card title="column=2">Satırın 3 payından 2'sini kaplar.</app-card>
+      <app-card title="column">İçindekileri alt alta dizer.</app-card>
+    </app-column>
+    <app-card title="1 pay">Kalan pay.</app-card>
+    <app-card title="1 pay">3 pay dolunca alt satıra geçer.</app-card>
+    <app-card title="1 pay">Sütunlar üst satırla hizalı.</app-card>
+    <app-card title="1 pay">Dar ekranda alt alta iner.</app-card>
+  </app-row>
+
+  <app-row>
+    <app-button label="Kaydet" />
+    <app-button label="Vazgeç" variant="outline" />
+    <app-button label="Sil" variant="secondary" />
+  </app-row>
+</app-card>
+
 <app-card title="Menu">
   <app-menu />
 </app-card>

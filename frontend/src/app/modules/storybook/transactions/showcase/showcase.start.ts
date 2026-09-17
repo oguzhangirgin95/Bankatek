@@ -12,6 +12,7 @@ import { Barchart, ChartItem } from '@lib/commons/barchart/barchart';
 import { Button } from '@lib/commons/button/button';
 import { Card } from '@lib/commons/card/card';
 import { Chart, ChartType } from '@lib/commons/chart/chart';
+import { Column } from '@lib/commons/column/column';
 import { Datepicker } from '@lib/commons/datepicker/datepicker';
 import { Detailcard } from '@lib/commons/detailcard/detailcard';
 import { DocumentViewConfig, Documentview } from '@lib/commons/documentview/documentview';
@@ -31,6 +32,7 @@ import { Pagination } from '@lib/commons/pagination/pagination';
 import { Profilemenu, ProfileItem } from '@lib/commons/profilemenu/profilemenu';
 import { Progress } from '@lib/commons/progress/progress';
 import { Ringprogress } from '@lib/commons/ringprogress/ringprogress';
+import { Row } from '@lib/commons/row/row';
 import { Search, SearchResult } from '@lib/commons/search/search';
 import { Select, SelectOption } from '@lib/commons/select/select';
 import { Sidebar, SidebarItem } from '@lib/commons/sidebar/sidebar';
@@ -51,9 +53,9 @@ const ANKARA = { latitude: 39.93, longitude: 32.86 };
 @Component({
   imports: [
     Addnewtransaction, Avatar, Badge, Barchart, Body, Button, Card, Datepicker, Detailcard,
-    Chart, Documentview, Donutchart, Footer, FormsModule, Genericlist, Gif, Grid,
+    Chart, Column, Documentview, Donutchart, Footer, FormsModule, Genericlist, Gif, Grid,
     Header, Info, Input, List, Map, Menu, Modal, Pagination, Profilemenu,
-    Progress, Ringprogress, Search, Select, Sidebar, Sidemodal, Skeleton, Slider,
+    Progress, Ringprogress, Row, Search, Select, Sidebar, Sidemodal, Skeleton, Slider,
     Spinner, Statcard, Tabs, Theme, Ticker, Tooltip, Unity, Validation,
   ],
   templateUrl: './showcase.start.html',
