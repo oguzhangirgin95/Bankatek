@@ -74,9 +74,12 @@ export class KeycloakService {
    *
    * prompt: 'login' → Keycloak'ta açık bir oturum olsa bile şifre yeniden
    * sorulur; sayfa her yenilendiğinde giriş ekranı gelir.
+   *
+   * Girişten sonra kök adrese (dashboard) dönülür. Verilmeseydi yenilenen
+   * ekrana dönülürdü; State bellekte tutulduğu için o ekran boş açılıyordu.
    */
   public login(): Promise<void> {
-    return this.client?.login({ prompt: 'login' }) ?? Promise.resolve();
+    return this.client?.login({ prompt: 'login', redirectUri: `${window.location.origin}/` }) ?? Promise.resolve();
   }
 
   /** Keycloak oturumunu kapatır ve uygulamanın köküne döner. */
