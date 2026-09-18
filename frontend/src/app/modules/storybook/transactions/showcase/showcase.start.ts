@@ -118,6 +118,10 @@ export class ShowcaseStart extends BaseComponent {
   readonly rows = [
     { name: 'Ankara', count: 42, status: 'Aktif' },
     { name: 'İstanbul', count: 35, status: 'Pasif' },
+    { name: 'İzmir', count: 23, status: 'Aktif' },
+    { name: 'Bursa', count: 18, status: 'Aktif' },
+    { name: 'Antalya', count: 14, status: 'Pasif' },
+    { name: 'Adana', count: 11, status: 'Aktif' },
   ];
 
   readonly points: MapPoint[] = [

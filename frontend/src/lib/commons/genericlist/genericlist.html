@@ -16,7 +16,7 @@
     </thead>
 
     <tbody>
-      @for (row of rows(); track $index) {
+      @for (row of visibleRows(); track $index) {
         <tr>
           @for (column of config().columns; track column.field) {
             <td [attr.data-label]="column.title">
@@ -59,4 +59,13 @@
       }
     </tbody>
   </table>
+
+  @if (paged()) {
+    <app-pagination
+      [totalCount]="total()"
+      [pageSize]="pageSize()"
+      [pageNumber]="activePage()"
+      (pageNumberChange)="pageNumber.set($event)"
+    />
+  }
 </div>

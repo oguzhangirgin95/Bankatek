@@ -1,9 +1,10 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, model, numberAttribute } from '@angular/core';
 import { FlowButtonVariant } from '@lib/base/baseconfig/config';
 import { BaseComponent } from '@lib/base/basecomponent/basecomponent';
 import { Badge } from '../badge/badge';
 import { Button } from '../button/button';
 import { InfoVariant } from '../info/info';
+import { Pagination } from '../pagination/pagination';
 import { Skeleton } from '../skeleton/skeleton';
 
 /** Tablodaki bir sütun. */
@@ -53,12 +54,22 @@ export interface GenericListConfig {
  *
  * Hangi sütunların, hangi işlem butonlarının çıkacağını ve butona basılınca
  * ne olacağını ekran belirler; bileşen yalnızca verilen config'i çizer ve
- * tıklanan butonun kendi metodunu çağırır. Kendi içinde veri çekmez ve durum
- * tutmaz, böylece her transaction aynı bileşeni kendi config'i ile kullanır.
+ * tıklanan butonun kendi metodunu çağırır. Kendi içinde veri çekmez, böylece
+ * her transaction aynı bileşeni kendi config'i ile kullanır.
+ *
+ * Sayfalama şeridi listenin içindedir: `pageSize` verildiğinde tablonun altına
+ * kendiliğinden çizilir, ekranın ayrıca app-pagination yerleştirmesi gerekmez.
+ * İki türlü çalışır ve hangisinin geçerli olduğunu `totalCount` belirler:
+ *
+ * - `totalCount` verilirse satırların sunucuda sayfalandığı varsayılır; liste
+ *   eline geleni çizer, sayfa değişimini `pageNumber` ile ekrana bildirir.
+ * - `totalCount` verilmezse liste elindeki satırları kendi böler; verinin
+ *   tamamı zaten bellekte olan küçük listeler için ekranın dilimleme kodu
+ *   yazmasına gerek kalmaz.
  */
 @Component({
   selector: 'app-genericlist',
-  imports: [Badge, Button, Skeleton],
+  imports: [Badge, Button, Pagination, Skeleton],
   templateUrl: './genericlist.html',
   styleUrl: './genericlist.scss',
 })
@@ -68,6 +79,55 @@ export class Genericlist extends BaseComponent {
 
   /** Satırlar. Sunucudan geldiği gibi verilir. */
   readonly rows = input<any[]>([]);
+
+  /** Sayfa başına kayıt. 0 verilirse sayfalama şeridi hiç çizilmez. */
+  readonly pageSize = input(0, { transform: numberAttribute });
+
+  /**
+   * Filtreye uyan toplam kayıt sayısı; sayfadaki kayıt sayısı değil.
+   *
+   * Verilmesi aynı zamanda "satırları ben sayfaladım" demektir; verilmezse
+   * bölme işini liste üstlenir.
+   */
+  readonly totalCount = input(0, { transform: numberAttribute });
+
+  /** Görüntülenen sayfa, 1'den başlar. Sayfaya tıklanınca buradan geri yazılır. */
+  readonly pageNumber = model<number>(1);
+
+  /** Sayfalama şeridi çizilecek mi. */
+  readonly paged = computed<boolean>(() => this.pageSize() > 0);
+
+  /** Satırları listenin kendisi mi bölüyor. */
+  private readonly clientPaged = computed<boolean>(() => this.paged() && this.totalCount() <= 0);
+
+  /** Şeride yazılan toplam: sunucu sayfalıyorsa onun sayısı, değilse elimizdeki satırlar. */
+  readonly total = computed<number>(() => (this.clientPaged() ? this.rows().length : this.totalCount()));
+
+  /**
+   * Şeride verilen sayfa.
+   *
+   * Liste kendi böldüğünde satır sayısı azalabiliyor (filtre daralınca) ve açık
+   * sayfa listenin dışında kalabiliyor; boş sayfa göstermek yerine son sayfaya
+   * çekiliyor. Sunucu sayfaladığında sayfanın sahibi ekran, ona karışılmıyor.
+   */
+  readonly activePage = computed<number>(() => {
+    if (!this.clientPaged()) {
+      return this.pageNumber();
+    }
+
+    return Math.min(this.pageNumber(), Math.max(1, Math.ceil(this.rows().length / this.pageSize())));
+  });
+
+  /** Ekrana çizilen satırlar. Sunucu sayfaladığında satırların tamamı çizilir. */
+  readonly visibleRows = computed<any[]>(() => {
+    if (!this.clientPaged()) {
+      return this.rows();
+    }
+
+    const start = (this.activePage() - 1) * this.pageSize();
+
+    return this.rows().slice(start, start + this.pageSize());
+  });
 
   /** İşlem sütunu yalnızca en az bir buton tanımlıysa çizilir. */
   readonly actions = computed(() => this.config().actions ?? []);

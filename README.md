@@ -91,6 +91,33 @@ sekmelerdeki gibi yana kayar. Uzun bir başlık iki satırda kesilir, tamamı
 Ekranlar veriye `lib/services/api/*Controller.service.ts` üzerinden erişir.
 Bu servisler gerçek bir OpenAPI istemcisi gibi HTTP isteği atar.
 
+### Liste ve sayfalama
+
+`lib/commons/genericlist` sayfalama şeridini kendi içinde taşır: `pageSize`
+verildiğinde tablonun altına kendiliğinden çizilir, ekranın ayrıca
+`app-pagination` yerleştirmesi gerekmez. Hangi türlü çalıştığını `totalCount`
+belirler:
+
+```html
+<!-- Sunucu sayfalıyor: liste eline geleni çizer, sayfa değişimini bildirir -->
+<app-genericlist
+  [config]="listConfig"
+  [rows]="State.CustomerList ?? []"
+  [totalCount]="State.TotalCount ?? 0"
+  [pageSize]="State.Request.pageSize"
+  [pageNumber]="State.Request.pageNumber"
+  (pageNumberChange)="setPage($event)"
+/>
+
+<!-- Veri zaten bellekte: liste satırları kendi böler -->
+<app-genericlist [config]="listConfig" [rows]="rows" [pageSize]="10" />
+```
+
+`totalCount` verilmediğinde liste elindeki satırları kendi dilimler, yani
+küçük listeler için ekranın dilimleme kodu yazmasına gerek kalmaz. Filtre
+daralıp satır sayısı azaldığında açık sayfa listenin dışında kalabiliyor; boş
+sayfa göstermek yerine son sayfaya çekilir.
+
 ### Dosya yükleme
 
 `lib/commons/fileupload`, PDF, Excel, Word ve görsel gibi dosyaların
