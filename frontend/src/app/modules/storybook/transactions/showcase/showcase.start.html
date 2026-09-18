@@ -239,6 +239,12 @@
 
 </div>
 
+<app-card title="Step">
+  <app-step [steps]="stepList" [active]="stepActive()" />
+
+  <app-button label="Sonraki adım" variant="outline" (clicked)="nextStep()" />
+</app-card>
+
 <app-card title="Row / Column">
   <app-row row="3">
     <app-column column="2">

@@ -168,7 +168,7 @@ export class FlowService extends BaseService {
     const rules = step.validation.filter((rule) => this.isFeatureOn(rule.isEnable));
     const errors = this.validationService.validate(rules, (rule) => this.ruleValue(rule));
 
-    return errors.map((error) => ({ id: error.id, message: this.ruleMessage(error.message) }));
+    return errors.map((error) => ({ id: error.id, message: this.resolveText(error.message) }));
   });
 
   /** Yapılandırmadaki isEnable alanının karşılığı. Boş bırakılmışsa koşul yok demektir. */
@@ -198,16 +198,19 @@ export class FlowService extends BaseService {
   }
 
   /**
-   * Hata mesajını çözer. 'ANAHTAR|varsayılan metin' biçimi kaynaktan çeviri
-   * almayı sağlar; ayraç yoksa metin olduğu gibi gösterilir.
+   * Yapılandırmadan gelen metni çözer. 'ANAHTAR|varsayılan metin' biçimi
+   * kaynaktan çeviri almayı sağlar; ayraç yoksa metin olduğu gibi gösterilir.
+   *
+   * Doğrulama mesajı, adım başlığı ve tur metinleri aynı biçimi kullandığı
+   * için çözüm tek yerde duruyor.
    */
-  private ruleMessage(message: string): string {
-    const index = message.indexOf('|');
+  public resolveText(text: string): string {
+    const index = text.indexOf('|');
     if (index < 0) {
-      return message;
+      return text;
     }
 
-    return this.getResource(message.slice(0, index).trim(), message.slice(index + 1).trim());
+    return this.getResource(text.slice(0, index).trim(), text.slice(index + 1).trim());
   }
 
   /** Doğrulama geçerse sonraki adıma geçer. Son adımdaysak hiçbir şey olmaz. */

@@ -112,6 +112,13 @@ export interface TourStepConfig {
 export interface FlowStep {
   /** Route path'i, örneğin 'start'. */
   step: string;
+  /**
+   * Adım şeridinde yazan başlık. 'ANAHTAR|varsayılan metin' biçimi desteklenir.
+   *
+   * Verilmezse şerit sıra numarasına düşer; tek adımlı akışlarda şerit hiç
+   * çizilmediği için başlık da gerekmez.
+   */
+  title?: string;
   /** Bu adımda uygulanacak doğrulama kuralları. Kural yoksa boş dizi verilir. */
   validation: ValidationRuleConfig[];
   /** İleri butonu gösterilsin mi. Verilmezse gösterilmez. */

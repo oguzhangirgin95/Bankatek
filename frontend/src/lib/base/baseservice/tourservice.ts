@@ -131,11 +131,9 @@ export class TourService {
     this.open();
   }
 
-  /** 'ANAHTAR|varsayılan metin' biçimini çözer; kaynaklar FlowService'te durur. */
+  /** 'ANAHTAR|varsayılan metin' biçimini çözer; biçim FlowService'te tanımlı. */
   public label(text: string): string {
-    const at = text.indexOf('|');
-
-    return at < 0 ? text : this.flowService.getResource(text.slice(0, at).trim(), text.slice(at + 1).trim());
+    return this.flowService.resolveText(text);
   }
 
   /** Ekran değişti: tur görülmemişse baştan kurulur. */

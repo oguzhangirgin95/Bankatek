@@ -41,6 +41,7 @@ import { Skeleton } from '@lib/commons/skeleton/skeleton';
 import { Slider, SliderItem } from '@lib/commons/slider/slider';
 import { Spinner } from '@lib/commons/spinner/spinner';
 import { Statcard } from '@lib/commons/statcard/statcard';
+import { Step, StepItem } from '@lib/commons/step/step';
 import { Tabs, TabItem } from '@lib/commons/tabs/tabs';
 import { Theme } from '@lib/commons/theme/theme';
 import { Ticker, TickerItem } from '@lib/commons/ticker/ticker';
@@ -56,7 +57,7 @@ const ANKARA = { latitude: 39.93, longitude: 32.86 };
     Chart, Column, Documentview, Donutchart, Footer, FormsModule, Genericlist, Gif, Grid,
     Header, Info, Input, List, Map, Menu, Modal, Pagination, Profilemenu,
     Progress, Ringprogress, Row, Search, Select, Sidebar, Sidemodal, Skeleton, Slider,
-    Spinner, Statcard, Tabs, Theme, Ticker, Tooltip, Unity, Validation,
+    Spinner, Statcard, Step, Tabs, Theme, Ticker, Tooltip, Unity, Validation,
   ],
   templateUrl: './showcase.start.html',
   styleUrl: './showcase.scss',
@@ -98,6 +99,12 @@ export class ShowcaseStart extends BaseComponent {
   readonly tabList: TabItem[] = [
     { id: 'one', title: 'Genel' },
     { id: 'two', title: 'Detay' },
+  ];
+
+  readonly stepList: StepItem[] = [
+    { id: 'form', title: 'Bilgiler' },
+    { id: 'confirm', title: 'Onay' },
+    { id: 'result', title: 'Sonuç' },
   ];
 
   readonly columns: GridColumn[] = [
@@ -157,6 +164,7 @@ export class ShowcaseStart extends BaseComponent {
 
   readonly active = signal('dashboard');
   readonly tab = signal('one');
+  readonly stepActive = signal('form');
   readonly page = signal(1);
   readonly modalOpen = signal(false);
   readonly sideOpen = signal(false);
@@ -192,6 +200,13 @@ export class ShowcaseStart extends BaseComponent {
     firstValueFrom(this.weatherService.current(ANKARA.latitude, ANKARA.longitude))
       .then((current) => this.weather.set(`Ankara: ${current.temperature} °C`))
       .catch(() => this.weather.set(''));
+  }
+
+  /** Şeridin hallerini görebilmek için sıradaki adıma geçer, sonda başa döner. */
+  nextStep(): void {
+    const at = this.stepList.findIndex((step) => step.id === this.stepActive());
+
+    this.stepActive.set(this.stepList[(at + 1) % this.stepList.length].id);
   }
 
   goPagebuilder(): void {

@@ -1,4 +1,8 @@
 <main class="app-body">
+  @if (!disableLayout()) {
+    <app-step />
+  }
+
   @if (serviceError()) {
     <p class="error">{{ serviceError() }}</p>
   }

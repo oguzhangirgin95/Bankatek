@@ -1,0 +1,35 @@
+@if (visible()) {
+  <nav class="app-step" [attr.aria-label]="label()">
+    <ol class="app-step__list">
+      @for (item of items(); track item.id) {
+        <li
+          class="app-step__item"
+          [class.app-step__item--done]="item.state === 'done'"
+          [class.app-step__item--active]="item.state === 'active'"
+          [attr.aria-current]="item.state === 'active' ? 'step' : null"
+        >
+          <!-- Önceki adımın işaretine uzanan çizgi. Kendi hücresinde durduğu
+               için ilk adımda hiç çizilmiyor. -->
+          <span class="app-step__rail" aria-hidden="true"></span>
+
+          <span class="app-step__marker">
+            @if (item.state === 'done') {
+              <svg class="app-step__check" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 13l4 4L19 7" />
+              </svg>
+            } @else {
+              {{ item.order }}
+            }
+          </span>
+
+          <span class="app-step__title" [attr.title]="item.title">{{ item.title }}</span>
+
+          <!-- Sıra ve hal metni: geçilmiş adımda numaranın yerini tik aldığı
+               için ikisi de yalnızca burada yazıyor. -->
+          <span class="app-step__state">{{ item.stateText }}</span>
+        </li>
+      }
+    </ol>
+  </nav>
+}

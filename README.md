@@ -65,6 +65,29 @@ butonları tanımlar, `<ekran>.routes.ts` adımları route'a bağlar,
 adımları `lib/base/basecomponent/commonconfirm|commonexecute` bileşenlerini
 kullanır; ekran başına ayrı bileşen yazılmaz.
 
+### Adım şeridi
+
+Çok adımlı akışlarda gövdenin üstünde bir adım şeridi (`lib/commons/step`)
+çizilir: hangi adımların olduğunu ve hangisinde bulunulduğunu akış
+yapılandırmasından okur, dolayısıyla ekranda hiçbir şey yazmak gerekmez. Adım
+başlığı `FlowStep.title` alanından gelir ve doğrulama mesajlarındaki gibi
+`ANAHTAR | varsayılan metin` biçimini destekler; verilmezse şerit sıra
+numarasına düşer. Tek adımlı transaction'larda şerit hiç görünmez.
+
+```ts
+{ step: 'confirm', title: 'TRANSFERCREATE_STEP_CONFIRM | Onay', validation: [] }
+```
+
+Geçilen adımlar tik işareti ve modülün rengiyle işaretlenir, bulunulan adım
+doldurulur, sıradakiler soluk kalır. Şerit tıklanabilir değildir: sonuç
+adımından geri dönüş yapılandırmada kapatılıyor ve onay adımı açılırken
+servisini yeniden çağırıyor, gezinme ileri/geri butonlarında kalır.
+
+Hücreler eşit genişliktedir ve 96px'in altına inmez; sığmadıklarında şerit
+sekmelerdeki gibi yana kayar. Uzun bir başlık iki satırda kesilir, tamamı
+`title` ile görünür. Ekran okuyucu her adımda sırayı ve hali duyar
+("Adım 2, bu adımda"), çünkü tik işareti ve renkler sessizdir.
+
 Ekranlar veriye `lib/services/api/*Controller.service.ts` üzerinden erişir.
 Bu servisler gerçek bir OpenAPI istemcisi gibi HTTP isteği atar.
 

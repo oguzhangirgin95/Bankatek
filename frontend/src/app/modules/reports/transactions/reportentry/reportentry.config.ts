@@ -6,6 +6,7 @@ export const ReportEntryConfig: FlowConfig = {
     steps: [
       {
         step: 'start',
+        title: 'REPORTENTRY_STEP_SCOPE | Kapsam',
         showContinueButton: true,
         showBackButton: false,
         validation: [
@@ -25,6 +26,7 @@ export const ReportEntryConfig: FlowConfig = {
       },
       {
         step: 'confirm',
+        title: 'REPORTENTRY_STEP_CONFIRM | Onay',
         showContinueButton: true,
         showBackButton: true,
         validation: [],
@@ -36,6 +38,7 @@ export const ReportEntryConfig: FlowConfig = {
       },
       {
         step: 'execute',
+        title: 'REPORTENTRY_STEP_RESULT | Sonuç',
         showContinueButton: false,
         showBackButton: false,
         validation: [],

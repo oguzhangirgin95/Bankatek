@@ -1,0 +1,156 @@
+:host {
+  display: block;
+}
+
+.app-step {
+  // İşaretin çapı tek yerde duruyor; çizginin dikey yeri bundan hesaplanıyor,
+  // yoksa çap değiştiğinde çizgi işaretin ortasından kayar.
+  --app-step-marker: 32px;
+
+  margin-bottom: var(--space);
+  padding: calc(var(--space) * 1.25) var(--space);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+
+  // Adım sayısı çok olan bir akışta hücreler dar ekrana sığmayabilir; şerit
+  // sekmelerde olduğu gibi yana kayar, çubuğu gizleniyor. Dikey boşluk
+  // bulunulan işaretin halkasına yer açıyor, yoksa kayma kutusu onu kırpardı.
+  &__list {
+    display: flex;
+    margin: 0;
+    padding: 5px 0;
+    list-style: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  &__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  // Hücreler eşit genişlikte olmalı: çizgi kendi hücresinin solundan bir önceki
+  // hücrenin ortasına uzanıyor, bu hesap ancak paylar eşitken doğru çıkar.
+  // Hepsi aynı taban ve aynı büyüme payını aldığı için eşit kalıyorlar.
+  //
+  // Daralma kapalı: hücre tabanın altına inebilseydi işaret kendi hücresinden
+  // taşar, kaydırma da hiç devreye girmezdi. Aradaki boşluğu gap yerine
+  // padding veriyor, yoksa çizgi boşluk kadar kayar.
+  &__item {
+    position: relative;
+    display: flex;
+    flex: 1 0 96px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 0 6px;
+    text-align: center;
+  }
+
+  // Çizgi hücresinin solundan bir öncekinin ortasına uzanır, yani komşu
+  // hücrenin işaretinin üstüne taşar. Kendi hücresinin işaretinin altında
+  // kalması yetmiyor; sıralamayı z-index veriyor, yoksa sonraki hücrenin
+  // çizgisi önceki işaretin ortasından geçiyor.
+  &__rail {
+    position: absolute;
+    top: calc(var(--app-step-marker) / 2 - 1px);
+    right: 50%;
+    left: -50%;
+    z-index: 0;
+    height: 2px;
+    background: var(--color-border);
+    transition: background var(--transition);
+  }
+
+  &__item:first-child &__rail {
+    display: none;
+  }
+
+  &__marker {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: var(--app-step-marker);
+    height: var(--app-step-marker);
+    border: 2px solid var(--color-border-strong);
+    border-radius: 50%;
+    background: var(--color-surface-2);
+    color: var(--color-muted);
+    font-size: 13px;
+    font-weight: 700;
+    transition: background var(--transition), border-color var(--transition), color var(--transition),
+      box-shadow var(--transition);
+  }
+
+  &__check {
+    width: 16px;
+    height: 16px;
+  }
+
+  // Uzun bir başlık iki satırda kesiliyor: hücreler eşit yükseklikte kalsın ve
+  // tek bir uzun başlık şeridi üç katına çıkarmasın diye. Tamamı fareyle
+  // üzerine gelince title ile görünüyor.
+  &__title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    color: var(--color-muted);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+
+  // Geçilen adımların rengi içinde bulunulan modülün rengi; şerit ilerledikçe
+  // modülün rengi doluyor. Yeşil kullanılmıyor, çünkü şerit işlemin başarısını
+  // değil nerede olunduğunu anlatıyor.
+  &__item--done &__rail,
+  &__item--active &__rail {
+    background: var(--color-module, var(--color-accent));
+  }
+
+  &__item--done &__marker {
+    border-color: var(--color-module, var(--color-accent));
+    color: var(--color-module, var(--color-accent));
+  }
+
+  // Modül renklerinin hepsi parlak; sayı koyu zemin rengiyle okunuyor. Halka
+  // da temanın vurgusundan değil modülün renginden türetiliyor, sabit mavi bir
+  // halka turuncu işaretin çevresinde yabancı duruyordu.
+  &__item--active &__marker {
+    border-color: var(--color-module, var(--color-accent));
+    background: var(--color-module, var(--color-accent));
+    color: var(--color-bg);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-module, var(--color-accent)) 26%, transparent);
+  }
+
+  &__item--active &__title {
+    color: var(--color-text);
+  }
+
+  // Hal metni yalnızca ekran okuyucu için; tik işareti ve renk sessiz kalıyor.
+  // Görünürde yer kaplamıyor ama erişilebilirlik ağacında duruyor.
+  &__state {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-step__marker,
+  .app-step__rail {
+    transition: none;
+  }
+}

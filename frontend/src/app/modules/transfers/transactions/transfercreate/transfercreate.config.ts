@@ -6,6 +6,7 @@ export const TransfercreateConfig: FlowConfig = {
     steps: [
       {
         step: 'start',
+        title: 'TRANSFERCREATE_STEP_FORM | Bilgiler',
         showContinueButton: true,
         showBackButton: false,
         validation: [
@@ -44,6 +45,7 @@ export const TransfercreateConfig: FlowConfig = {
       },
       {
         step: 'confirm',
+        title: 'TRANSFERCREATE_STEP_CONFIRM | Onay',
         showContinueButton: true,
         showBackButton: true,
         validation: [],
@@ -55,6 +57,7 @@ export const TransfercreateConfig: FlowConfig = {
       },
       {
         step: 'execute',
+        title: 'TRANSFERCREATE_STEP_RESULT | Sonuç',
         showContinueButton: false,
         showBackButton: false,
         validation: [],
