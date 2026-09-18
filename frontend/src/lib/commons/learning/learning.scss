@@ -1,0 +1,150 @@
+:host {
+  display: inline-flex;
+}
+
+// Buton ölçüleri profilemenu ve bildirim ile aynı; üst şeritte yan yana
+// durdukları için biri diğerinden büyük görünmemeli.
+.app-learning__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  color: var(--color-muted);
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+
+  &:hover {
+    color: var(--color-text);
+    background: var(--color-surface-2);
+  }
+}
+
+.app-learning__button--open {
+  color: var(--color-text);
+  background: var(--color-surface-2);
+}
+
+.app-learning__icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+.app-learning__screen {
+  margin: 0 0 4px;
+  color: var(--color-module, var(--color-accent));
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.app-learning__hint,
+.app-learning__empty {
+  margin: 0 0 var(--space);
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.app-learning__empty {
+  margin-bottom: 6px;
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.app-learning__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 var(--space);
+  padding: 0;
+  list-style: none;
+}
+
+.app-learning__stop {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px;
+  color: var(--color-text);
+  text-align: left;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition);
+
+  &:hover:not(:disabled) {
+    background: var(--color-surface-2);
+    border-color: var(--color-module, var(--color-accent));
+  }
+}
+
+.app-learning__order {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 50%;
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.app-learning__stop:hover .app-learning__order {
+  border-color: var(--color-module, var(--color-accent));
+  color: var(--color-module, var(--color-accent));
+}
+
+.app-learning__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.app-learning__name {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  overflow-wrap: anywhere;
+}
+
+.app-learning__text {
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.app-learning__restart {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+// İkincil eylem; turu başlatan butonlarla yarışmasın diye çerçeveli duruyor.
+.app-learning__reopen {
+  width: 100%;
+  color: var(--color-muted);
+  background: transparent;
+  border-color: var(--color-border);
+
+  &:hover:not(:disabled) {
+    color: var(--color-text);
+    background: var(--color-surface-2);
+    border-color: var(--color-border-strong);
+  }
+}

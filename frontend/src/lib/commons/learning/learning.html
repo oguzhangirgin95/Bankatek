@@ -1,0 +1,44 @@
+<button
+  type="button"
+  class="app-learning__button"
+  [class.app-learning__button--open]="open()"
+  [title]="labels().button"
+  (click)="toggle()"
+>
+  <svg class="app-learning__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01" />
+  </svg>
+</button>
+
+<app-sidemodal [title]="labels().title" [(open)]="open">
+  @if (screen()) {
+    <p class="app-learning__screen">{{ screen() }}</p>
+  }
+
+  @if (stops().length === 0) {
+    <p class="app-learning__empty">{{ labels().empty }}</p>
+    <p class="app-learning__hint">{{ labels().emptyHint }}</p>
+  } @else {
+    <p class="app-learning__hint">{{ labels().hint }}</p>
+
+    <ol class="app-learning__list">
+      @for (stop of stops(); track stop.order) {
+        <li>
+          <button type="button" class="app-learning__stop" (click)="startFrom(stop.order - 1)">
+            <span class="app-learning__order">{{ stop.order }}</span>
+
+            <span class="app-learning__body">
+              <span class="app-learning__name">{{ stop.title }}</span>
+              <span class="app-learning__text">{{ stop.text }}</span>
+            </span>
+          </button>
+        </li>
+      }
+    </ol>
+
+    <button type="button" class="app-learning__restart" (click)="startFrom(0)">{{ labels().restart }}</button>
+  }
+
+  <button type="button" class="app-learning__reopen" (click)="reopen()">{{ labels().reopen }}</button>
+</app-sidemodal>

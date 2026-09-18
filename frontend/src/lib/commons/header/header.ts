@@ -2,17 +2,25 @@ import { Component, afterNextRender, computed, inject, signal } from '@angular/c
 import { Router } from '@angular/router';
 import { BaseComponent } from '@lib/base/basecomponent/basecomponent';
 import { Button } from '../button/button';
+import { Learning } from '../learning/learning';
 import { Menu } from '../menu/menu';
+import { Notification } from '../notification/notification';
 import { Theme } from '../theme/theme';
 import { KeycloakService } from '@lib/base/baseservice/keycloakservice';
 
 /** "Pano" butonunun gittiği ekran. */
 const HOME = '/monitoring/dashboard/start';
 
-/** Üst şerit: menü, pano kısayolu, tema seçimi, kullanıcı adı ve çıkış. */
+/**
+ * Üst şerit: menü, pano kısayolu, tema seçimi, bildirimler, bilgilendirme,
+ * kullanıcı adı ve çıkış.
+ *
+ * Bildirim ve bilgilendirme yalnızca oturum açıkken çizilir; ikisi de
+ * kullanıcıya özel olduğu için sunucu tarafında bilinmiyor.
+ */
 @Component({
   selector: 'app-header',
-  imports: [Button, Menu, Theme],
+  imports: [Button, Learning, Menu, Notification, Theme],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

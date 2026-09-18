@@ -72,3 +72,15 @@ app-ticker {
   gap: var(--space);
   align-items: start;
 }
+
+/* Üst şeride ait bileşenler vitrinde kart içinde duruyor; kendi zeminlerini
+   burada alıyorlar, yoksa kartın üstünde renksiz kalıyorlar. */
+.chrome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px var(--space);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}

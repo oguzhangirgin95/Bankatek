@@ -9,6 +9,28 @@ export const TransfercreateConfig: FlowConfig = {
         title: 'TRANSFERCREATE_STEP_FORM | Bilgiler',
         showContinueButton: true,
         showBackButton: false,
+        tour: [
+          {
+            id: 'customerId',
+            title: 'TOUR_TRANSFERCREATE_CUSTOMER_TITLE|Gönderen müşteriyi seçin',
+            text: 'TOUR_TRANSFERCREATE_CUSTOMER_TEXT|Üstteki şehir ve şube seçimi bu listeyi daraltır; kalabalık portföyde müşteriyi aramak yerine şubesinden bulabilirsiniz.',
+          },
+          {
+            id: 'type',
+            title: 'TOUR_TRANSFERCREATE_TYPE_TITLE|Tipi tutara göre seçin',
+            text: 'TOUR_TRANSFERCREATE_TYPE_TEXT|FAST anlık ama üst sınırı vardır, EFT gün içinde kapanır, SWIFT yurt dışına gider. Seçim ücreti ve süreyi belirler.',
+          },
+          {
+            id: 'receiverIban',
+            title: 'TOUR_TRANSFERCREATE_IBAN_TITLE|IBAN doğrulanır',
+            text: 'TOUR_TRANSFERCREATE_IBAN_TEXT|TR ile başlayan 26 karakter beklenir. Eksik girilirse devam ederken uyarı alırsınız, onay ekranına geçilmez.',
+          },
+          {
+            id: 'amount',
+            title: 'TOUR_TRANSFERCREATE_AMOUNT_TITLE|Limit onay adımında denetlenir',
+            text: 'TOUR_TRANSFERCREATE_AMOUNT_TEXT|Tutarı yazıp devam edin; müşterinin günlük limiti aşılıyorsa bunu onay ekranında görür, işlemi oradan geri çevirebilirsiniz.',
+          },
+        ],
         validation: [
           {
             id: 'customerId',

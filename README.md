@@ -91,6 +91,45 @@ sekmelerdeki gibi yana kayar. Uzun bir başlık iki satırda kesilir, tamamı
 Ekranlar veriye `lib/services/api/*Controller.service.ts` üzerinden erişir.
 Bu servisler gerçek bir OpenAPI istemcisi gibi HTTP isteği atar.
 
+### Üst şerit
+
+Üst şeritte oturum açıkken iki bileşen daha durur.
+
+**Bildirimler** (`lib/commons/notification`): zil, okunmamış sayısını rozetle
+gösterir; panel açıldığında kayıtlar listelenir. İçerik uydurma değil,
+ekranlardaki veriden beslenir — bekleyen bir transfer, limitini aşan bir
+müşteri, oluşturulmuş bir rapor. Bir bildirime tıklamak onu okundu işaretler
+ve tanımlıysa ilgili ekrana götürür, yani bildirim bir bilgi değil kısayoldur.
+Okundu işaretleme oturum boyunca kalıcıdır (`/notification/read`).
+
+**Bilgilendirme** (`lib/commons/learning`): soru işareti, sağdan açılan bir
+panelde bulunulan ekranın tanıtım turunu durak durak listeler. Bir durağa
+tıklamak turu o duraktan başlatır; tur daha önce görülmüş ya da kapatılmış
+olsa bile açılır, çünkü kullanıcı bunu açıkça istemiştir. Ekranın turu yoksa
+panel bunu söyler. "İpuçlarını yeniden aç" bütün ekranlarda gizlenmiş turları
+geri getirir.
+
+### Tanıtım turu
+
+Tur, ekranın `<ekran>.config.ts` dosyasındaki `tour` dizisinden gelir. Her
+durak bir `id` ile ekrandaki elemanı bulur, başlık ve metin
+`ANAHTAR|varsayılan metin` biçimini destekler:
+
+```ts
+tour: [
+  {
+    id: 'receiverIban',
+    title: 'TOUR_TRANSFERCREATE_IBAN_TITLE|IBAN doğrulanır',
+    text: 'TOUR_TRANSFERCREATE_IBAN_TEXT|TR ile başlayan 26 karakter beklenir.',
+  },
+]
+```
+
+`id` ekranda gerçekten bulunmalı; bulunamayan hedefte durak sekiz saniye
+bekleyip atlanır. Turu olan ekranlar: Pano, Transfer Oluştur, Transfer Takibi,
+Müşteri Listesi, Rapor Girişi ve Bileşenler. Tur ilk girişte kendiliğinden
+açılır, bir kez görüldükten sonra yalnızca bilgilendirme panelinden çağrılır.
+
 ## Modül yapılandırması
 
 Her modülün bir `<modül>.config.ts` dosyası vardır: altındaki transaction'ları,
@@ -171,6 +210,7 @@ içinde üretilir:
 - Müşteri başına bir hesap: IBAN, ürün, para birimi, bakiye
 - ~1.500 transfer: Havale / EFT / FAST / SWIFT / Otomatik Ödeme
 - Menü, ekran metinleri, raporlar ve kullanıcı ayarları
+- 14 bildirim: transfer, limit, rapor ve sistem duyurusu; ilk beşi okunmamış
 
 Üretim deterministiktir: aynı kayıt her açılışta aynı değerleri alır. Transfer
 oluşturma ve rapor girişi akışları veriyi oturum boyunca gerçekten günceller.

@@ -36,11 +36,19 @@
 }
 
 // Header, govde ve footer arka planin uzerinde kalmali.
+//
+// z-index verilmiyor: verildigi anda ucu de kendi yigin baglamini kurar ve
+// icindeki acilir katmanlar disari cikamaz. Header'in menusu, tema listesi,
+// bildirim paneli ve bilgilendirme cekmecesi boyle davrandiginda govdenin
+// kartlarinin altinda kaliyordu; z-index olcegi (20, 50, 100, 200, 300) ancak
+// hepsi ayni baglamda oldugunda calisiyor.
+//
+// Arka plan katmani z-index 0 tasidigi ve DOM'da once durdugu icin yine altta
+// kalir.
 app-header,
 app-body,
 app-footer {
   position: relative;
-  z-index: 1;
 }
 
 // Menu sol tarafta sabit duruyor; icerik onun genisligi kadar iceri alinir.

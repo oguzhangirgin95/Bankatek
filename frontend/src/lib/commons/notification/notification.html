@@ -1,0 +1,68 @@
+<div class="app-notification">
+  <button
+    type="button"
+    class="app-notification__button"
+    [class.app-notification__button--open]="open()"
+    [title]="labels().title"
+    (click)="toggle()"
+  >
+    <svg class="app-notification__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" />
+    </svg>
+
+    @if (unread() > 0) {
+      <span class="app-notification__badge">{{ badge() }}</span>
+      <span class="app-notification__hidden">{{ unread() }} {{ labels().unread }}</span>
+    }
+  </button>
+
+  @if (open()) {
+    <div class="app-notification__backdrop" (click)="close()"></div>
+
+    <div class="app-notification__panel">
+      <div class="app-notification__head">
+        <span class="app-notification__heading">{{ labels().title }}</span>
+
+        @if (unread() > 0) {
+          <button type="button" class="app-notification__readall" (click)="readAll()">{{ labels().readAll }}</button>
+        }
+      </div>
+
+      @if (items().length === 0) {
+        <p class="app-notification__empty">{{ labels().empty }}</p>
+      }
+
+      <div class="app-notification__list">
+        @for (item of items(); track item.id) {
+          <button
+            type="button"
+            class="app-notification__item"
+            [class.app-notification__item--unread]="item.read !== true"
+            (click)="choose(item)"
+          >
+            <span class="app-notification__mark">
+              <svg class="app-notification__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path [attr.d]="icon(item.kind ?? '')" />
+              </svg>
+            </span>
+
+            <span class="app-notification__body">
+              <span class="app-notification__row">
+                <span class="app-notification__name">{{ item.title }}</span>
+                <!-- Okunmamışlık yalnızca renkle anlatılmasın diye noktası da var. -->
+                @if (item.read !== true) {
+                  <span class="app-notification__dot" [title]="labels().unread"></span>
+                }
+              </span>
+
+              <span class="app-notification__text">{{ item.text }}</span>
+              <span class="app-notification__date">{{ item.date }}</span>
+            </span>
+          </button>
+        }
+      </div>
+    </div>
+  }
+</div>

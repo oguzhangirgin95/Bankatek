@@ -70,6 +70,16 @@ export interface MockReport {
   createdDate: string;
 }
 
+export interface MockNotification {
+  id: string;
+  title: string;
+  text: string;
+  kind: string;
+  date: string;
+  read: boolean;
+  path: string;
+}
+
 export const STATUS_NAMES: Record<string, string> = {
   AKTIF: 'Aktif',
   PASIF: 'Pasif',
@@ -336,3 +346,117 @@ export function branchName(branchId: string | undefined): string {
 export function isOverDailyLimit(customer: MockCustomer): boolean {
   return customer.dailyTransferCount > customer.dailyTransferLimit;
 }
+
+/**
+ * Verinin dayandığı gün.
+ *
+ * Mock veri deterministik olduğu için "bugün" diye bir şey yok; tarih üreten
+ * her yer bu güne göre konuşuyor, yoksa liste her açılışta kayardı.
+ */
+export const REFERENCE_DATE = '2026-09-15';
+
+const CURRENCY_SYMBOLS: Record<string, string> = { TRY: 'TL', USD: 'USD', EUR: 'EUR', XAU: 'gr' };
+
+/** Tutarı ekranda okunduğu gibi yazar: binlik nokta, kuruş virgül, sonda birim. */
+export function formatMoney(value: number, currency = 'TRY'): string {
+  const fixed = Math.abs(value).toFixed(2);
+  const parts = fixed.split('.');
+  const grouped = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const sign = value < 0 ? '-' : '';
+
+  return `${sign}${grouped},${parts[1]} ${CURRENCY_SYMBOLS[currency] ?? currency}`;
+}
+
+/**
+ * Bildirim zamanları, en yeniden en eskiye.
+ *
+ * Saatler tek tek yazılı: aradaki boşluklar (aynı gün birkaç saat, sonra
+ * önceki günler) listeye gerçekçi bir ritim veriyor ve üretim deterministik
+ * kalıyor.
+ */
+const NOTIFICATION_TIMES = [
+  '2026-09-15 16:42', '2026-09-15 15:10', '2026-09-15 13:05', '2026-09-15 11:48',
+  '2026-09-15 09:30', '2026-09-14 17:22', '2026-09-14 15:06', '2026-09-14 10:41',
+  '2026-09-13 16:18', '2026-09-13 12:03', '2026-09-12 15:55', '2026-09-12 09:14',
+  '2026-09-11 16:30', '2026-09-11 11:07',
+];
+
+/** Sırayla dolaşılan bildirim türleri; listede tek tür üst üste yığılmasın diye. */
+const NOTIFICATION_KINDS = ['transfer', 'limit', 'report', 'transfer', 'system'];
+
+/** Türe göre tıklanınca gidilecek ekran. Duyurunun gideceği bir ekran yok. */
+const NOTIFICATION_PATHS: Record<string, string> = {
+  transfer: '/transfers/transferlist/start',
+  limit: '/customers/customerlist/start',
+  report: '/reports/reportlist/start',
+  system: '',
+};
+
+/** Sistem duyuruları; tek gerçek veriye bağlanmayan tür bu. */
+const SYSTEM_NOTICES = [
+  { title: 'Planlı bakım', text: 'FAST altyapısı pazar 02:00-04:00 arasında kapalı olacak, gönderimler sonrasında kuyruktan işlenir.' },
+  { title: 'Yeni sürüm', text: 'Rapor girişine şube kırılımı eklendi; kapsam seçiminde şubeyi boş bırakırsanız şehrin tamamı raporlanır.' },
+  { title: 'Limit kuralı değişti', text: 'Günlük transfer limiti aşımında işlem artık reddedilmiyor, onaya düşüyor.' },
+];
+
+/**
+ * Üst şeritteki bildirimler.
+ *
+ * İçerik uydurulmuyor, ekranlardaki veriden besleniyor: bekleyen bir transfer,
+ * limiti aşan bir müşteri, oluşturulmuş bir rapor. Böylece bildirime tıklayıp
+ * gidilen ekranda gerçekten o kayıt duruyor.
+ *
+ * İlk beşi okunmamış; menünün rozetli hali varsayılan olarak görünsün diye.
+ */
+function buildNotifications(): MockNotification[] {
+  const waiting = TRANSFERS.filter((transfer) => transfer.status === 'BEKLEMEDE');
+  const done = TRANSFERS.filter((transfer) => transfer.status === 'TAMAMLANDI');
+  const overLimit = CUSTOMERS.filter(isOverDailyLimit);
+
+  return NOTIFICATION_TIMES.map((date, index) => {
+    const kind = NOTIFICATION_KINDS[index % NOTIFICATION_KINDS.length];
+    const read = index >= 5;
+    const base = { id: `NTF-${String(index + 1).padStart(3, '0')}`, kind, date, read, path: NOTIFICATION_PATHS[kind] };
+
+    if (kind === 'limit') {
+      const customer = overLimit[index % overLimit.length];
+
+      return {
+        ...base,
+        title: 'Günlük limit aşıldı',
+        text: `${customer.fullName} bugün ${customer.dailyTransferCount} transfer yaptı, günlük limiti ${customer.dailyTransferLimit}.`,
+      };
+    }
+
+    if (kind === 'report') {
+      const report = REPORTS[index % REPORTS.length];
+
+      return {
+        ...base,
+        title: 'Rapor hazır',
+        text: `${report.reportName} (${report.reportNo}) oluşturuldu; ${report.customerCount} müşteri ve ${report.transferCount} transfer kapsandı.`,
+      };
+    }
+
+    if (kind === 'system') {
+      const notice = SYSTEM_NOTICES[index % SYSTEM_NOTICES.length];
+
+      return { ...base, title: notice.title, text: notice.text };
+    }
+
+    // Çift sıradaki transfer bildirimi onay bekleyen, tek sıradaki tamamlanan
+    // bir işlemden geliyor; ikisi de aynı listede görünsün diye.
+    const pending = index % 2 === 0;
+    const transfer = pending ? waiting[index % waiting.length] : done[index % done.length];
+
+    return {
+      ...base,
+      title: pending ? 'Transfer onayınızı bekliyor' : 'Transfer tamamlandı',
+      text: `${transfer.receiverName} alıcısına ${formatMoney(transfer.amount)} tutarındaki ${TRANSFER_TYPE_NAMES[transfer.type]} ${
+        pending ? 'işlemi onay bekliyor' : 'işlemi gerçekleşti'
+      }.`,
+    };
+  });
+}
+
+export const NOTIFICATIONS: MockNotification[] = buildNotifications();

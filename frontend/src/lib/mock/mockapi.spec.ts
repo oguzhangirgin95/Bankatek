@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { MOCK_HANDLERS } from './mockapi';
-import { CITIES, CUSTOMERS } from './mockdata';
+import { CITIES, CUSTOMERS, NOTIFICATIONS } from './mockdata';
 
 function call(endpoint: string, body: unknown = {}): any {
   const handler = MOCK_HANDLERS[endpoint];
@@ -117,6 +117,42 @@ describe('Mock uclari', () => {
 
     expect(executed.success).toBe(true);
     expect(call('/reportentry/list', {}).totalCount).toBe(countBefore + 1);
+  });
+
+  it('bildirim listesi okunmamis sayisini ve butun kayitlari doner', () => {
+    const response = call('/notification/list');
+
+    expect(response.items).toHaveLength(NOTIFICATIONS.length);
+    expect(response.totalCount).toBe(NOTIFICATIONS.length);
+    expect(response.unreadCount).toBe(NOTIFICATIONS.filter((item) => !item.read).length);
+    expect(response.items.every((item: any) => item.title && item.text && item.date)).toBe(true);
+  });
+
+  it('bildirim listesi yalnizca okunmamislari suzebilir', () => {
+    const response = call('/notification/list', { onlyUnread: true });
+
+    expect(response.items.every((item: any) => item.read === false)).toBe(true);
+    expect(response.items).toHaveLength(response.unreadCount);
+  });
+
+  it('bildirim okundu isaretlemesi oturum boyunca kalir', () => {
+    const target = NOTIFICATIONS.find((item) => !item.read);
+    const before = call('/notification/list').unreadCount;
+
+    const response = call('/notification/read', { id: target?.id });
+
+    expect(response.success).toBe(true);
+    expect(response.unreadCount).toBe(before - 1);
+    expect(call('/notification/list').unreadCount).toBe(before - 1);
+  });
+
+  it('bilinmeyen bildirim icin success=false doner', () => {
+    expect(call('/notification/read', { id: 'yok' }).success).toBe(false);
+  });
+
+  it('tumunu okundu isaretleme sayaci sifirlar', () => {
+    expect(call('/notification/read', { all: true }).unreadCount).toBe(0);
+    expect(call('/notification/list').unreadCount).toBe(0);
   });
 
   it('ekran metinleri transaction yolunun son parcasindan bulunur', () => {

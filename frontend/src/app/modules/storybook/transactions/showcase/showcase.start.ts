@@ -27,7 +27,9 @@ import { Input } from '@lib/commons/input/input';
 import { List, ListItem } from '@lib/commons/list/list';
 import { Map, MapPoint } from '@lib/commons/map/map';
 import { Menu } from '@lib/commons/menu/menu';
+import { Learning } from '@lib/commons/learning/learning';
 import { Modal } from '@lib/commons/modal/modal';
+import { Notification } from '@lib/commons/notification/notification';
 import { Pagination } from '@lib/commons/pagination/pagination';
 import { Profilemenu, ProfileItem } from '@lib/commons/profilemenu/profilemenu';
 import { Progress } from '@lib/commons/progress/progress';
@@ -55,7 +57,7 @@ const ANKARA = { latitude: 39.93, longitude: 32.86 };
   imports: [
     Addnewtransaction, Avatar, Badge, Barchart, Body, Button, Card, Datepicker, Detailcard,
     Chart, Column, Documentview, Donutchart, Footer, FormsModule, Genericlist, Gif, Grid,
-    Header, Info, Input, List, Map, Menu, Modal, Pagination, Profilemenu,
+    Header, Info, Input, Learning, List, Map, Menu, Modal, Notification, Pagination, Profilemenu,
     Progress, Ringprogress, Row, Search, Select, Sidebar, Sidemodal, Skeleton, Slider,
     Spinner, Statcard, Step, Tabs, Theme, Ticker, Tooltip, Unity, Validation,
   ],

@@ -1,0 +1,239 @@
+.app-notification {
+  position: relative;
+  display: inline-flex;
+}
+
+// Buton ölçüleri profilemenu ile aynı; üst şeritte yan yana duruyorlar ve
+// biri diğerinden büyük görünmemeli.
+.app-notification__button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  color: var(--color-muted);
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+
+  &:hover {
+    color: var(--color-text);
+    background: var(--color-surface-2);
+  }
+}
+
+.app-notification__button--open {
+  color: var(--color-text);
+  background: var(--color-surface-2);
+}
+
+// Rozet zilin sağ üstüne oturur; sayı iki karaktere çıkabildiği için genişliği
+// sabit değil, en küçük ölçüsü yuvarlak kalmasına yetiyor.
+.app-notification__badge {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: var(--color-error);
+  border: 2px solid var(--color-surface);
+  border-radius: 999px;
+  color: var(--color-bg);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 14px;
+  text-align: center;
+}
+
+.app-notification__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+}
+
+.app-notification__panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 21;
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+  max-width: calc(100vw - 2 * var(--space));
+  padding: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.app-notification__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 8px 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.app-notification__heading {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.app-notification__readall {
+  flex: none;
+  min-height: 28px;
+  padding: 0 10px;
+  color: var(--color-accent);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+}
+
+.app-notification__empty {
+  margin: 0;
+  padding: 24px 8px;
+  color: var(--color-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+// Liste uzayınca panel ekranı taşırmasın; kaydırma listede kalıyor ki başlık
+// ve "tümünü okundu işaretle" yerinde dursun.
+.app-notification__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: min(420px, 60dvh);
+  margin-top: 8px;
+  overflow-y: auto;
+}
+
+// Daralma kapalı: liste sınırlı yükseklikte sütun yönlü bir flex kutusu, satır
+// daralabilseydi içeriğinden kısa kalıp alttakinin üstüne taşardı. Sığmayan
+// satırlar daralarak değil listeyi kaydırarak çözülüyor.
+.app-notification__item {
+  display: flex;
+  flex: none;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px;
+  color: var(--color-text);
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition);
+
+  &:hover {
+    background: var(--color-surface-2);
+  }
+}
+
+.app-notification__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  color: var(--color-muted);
+}
+
+.app-notification__body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.app-notification__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-notification__name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-muted);
+  overflow-wrap: anywhere;
+}
+
+.app-notification__dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  background: var(--color-error);
+  border-radius: 50%;
+}
+
+.app-notification__text {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--color-muted);
+  overflow-wrap: anywhere;
+}
+
+.app-notification__date {
+  color: var(--color-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+// Okunmamış satır öne çıkar: başlık ve metin tam renkte, ikon modülün
+// renginde. Okunmuşlar soluk kalıp arka plana çekilir.
+.app-notification__item--unread {
+  .app-notification__name,
+  .app-notification__text {
+    color: var(--color-text);
+  }
+
+  .app-notification__mark {
+    border-color: var(--color-module, var(--color-accent));
+    color: var(--color-module, var(--color-accent));
+  }
+}
+
+.app-notification__icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+// Rozetteki sayı kısaltılmış olabiliyor; ekran okuyucu tam sayıyı buradan alır.
+.app-notification__hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+

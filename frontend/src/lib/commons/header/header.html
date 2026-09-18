@@ -12,6 +12,8 @@
   <app-theme />
 
   @if (ready() && isLoggedIn()) {
+    <app-notification />
+    <app-learning />
     <span class="app-header__user">{{ username() }}</span>
     <app-button [label]="labels().logout" variant="outline" (clicked)="logout()" />
   }

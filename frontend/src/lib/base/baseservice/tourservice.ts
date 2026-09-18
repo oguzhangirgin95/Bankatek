@@ -47,7 +47,13 @@ export class TourService {
 
   private readonly measured = signal<TourRect | undefined>(undefined, { equal: same });
 
-  private readonly steps = computed<TourStepConfig[]>(() => this.flowService.currentStepConfig()?.tour ?? []);
+  /**
+   * Bulunulan adımın durakları.
+   *
+   * Öğrenme paneli turu başlatmadan önce ne anlatılacağını listeleyebilsin
+   * diye dışarı açık; turu yöneten hâlâ bu servis.
+   */
+  public readonly stops = computed<TourStepConfig[]>(() => this.flowService.currentStepConfig()?.tour ?? []);
 
   /** Turun kimliği: '<transaction>|<adım>'. */
   private readonly key = computed<string>(
@@ -58,9 +64,9 @@ export class TourService {
 
   public readonly rect = this.measured.asReadonly();
 
-  public readonly step = computed<TourStepConfig | undefined>(() => this.steps()[this.current()]);
+  public readonly step = computed<TourStepConfig | undefined>(() => this.stops()[this.current()]);
 
-  public readonly total = computed<number>(() => this.steps().length);
+  public readonly total = computed<number>(() => this.stops().length);
 
   public readonly active = computed<boolean>(() => this.step() !== undefined);
 
@@ -84,7 +90,7 @@ export class TourService {
 
     effect(() => {
       this.key();
-      this.steps();
+      this.stops();
 
       untracked(() => this.open());
     });
@@ -94,6 +100,26 @@ export class TourService {
   public enable(): void {
     this.started = true;
     this.open();
+  }
+
+  /**
+   * Turu istenen duraktan başlatır.
+   *
+   * enable()'dan farkı 'görüldü' kaydına bakmaması: kullanıcı turu öğrenme
+   * panelinden açıkça istediğinde daha önce kapatmış olması engel değil.
+   * Ekran kurulmuş sayılıyor, yoksa adım değişmeden çalışan effect araya
+   * girip yeni açılan turu kapatırdı.
+   */
+  public start(index = 0): void {
+    const total = this.stops().length;
+    if (!this.document.defaultView || total === 0) {
+      return;
+    }
+
+    this.started = true;
+    this.opened = this.key();
+
+    this.show(Math.min(Math.max(index, 0), total - 1));
   }
 
   /** Sıradaki durak; son duraktaysa turu bitirir. */
@@ -147,7 +173,7 @@ export class TourService {
     this.stop();
 
     const seen = this.seen();
-    if (this.steps().length > 0 && !seen.includes(ALL) && !seen.includes(key)) {
+    if (this.stops().length > 0 && !seen.includes(ALL) && !seen.includes(key)) {
       this.show(0);
     }
   }

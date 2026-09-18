@@ -6,6 +6,8 @@ import {
   CUSTOMERS,
   MockCustomer,
   MockTransfer,
+  NOTIFICATIONS,
+  REFERENCE_DATE,
   REPORTS,
   REPORT_TYPE_NAMES,
   STATUS_NAMES,
@@ -15,11 +17,10 @@ import {
   branchName,
   buildIban,
   cityName,
+  formatMoney,
   isOverDailyLimit,
 } from './mockdata';
 import { MENU, resourcesFor } from './mockresources';
-
-const REFERENCE_DATE = '2026-09-15';
 
 const SETTINGS = {
   language: 'tr',
@@ -34,17 +35,6 @@ function hasText(value: unknown): boolean {
 
 function money(value: number): number {
   return Math.round(value * 100) / 100;
-}
-
-const CURRENCY_SYMBOLS: Record<string, string> = { TRY: 'TL', USD: 'USD', EUR: 'EUR', XAU: 'gr' };
-
-function formatMoney(value: number, currency = 'TRY'): string {
-  const fixed = Math.abs(value).toFixed(2);
-  const parts = fixed.split('.');
-  const grouped = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  const sign = value < 0 ? '-' : '';
-
-  return `${sign}${grouped},${parts[1]} ${CURRENCY_SYMBOLS[currency] ?? currency}`;
 }
 
 function paged<T>(rows: T[], pageNumber: unknown, pageSize: unknown): { rows: T[]; pageNumber: number; pageSize: number } {
@@ -655,6 +645,40 @@ function reportEntryExecute(body: any) {
   };
 }
 
+/** Okunmamış bildirim sayısı; hem liste hem okundu işaretleme bunu döner. */
+function unreadCount(): number {
+  return NOTIFICATIONS.filter((notification) => !notification.read).length;
+}
+
+function notificationList(body: any) {
+  const rows = body?.onlyUnread === true ? NOTIFICATIONS.filter((notification) => !notification.read) : NOTIFICATIONS;
+
+  return { items: rows, unreadCount: unreadCount(), totalCount: rows.length };
+}
+
+/**
+ * Okundu işaretler. 'all' verilirse listenin tamamı, verilmezse tek kayıt.
+ *
+ * Kayıt gerçekten değiştiriliyor; menü kapanıp açıldığında ya da başka bir
+ * ekrandan dönüldüğünde aynı bildirim yeniden okunmamış görünmesin diye.
+ */
+function notificationRead(body: any) {
+  if (body?.all === true) {
+    NOTIFICATIONS.forEach((notification) => (notification.read = true));
+
+    return { success: true, unreadCount: 0, message: 'Bütün bildirimler okundu işaretlendi.' };
+  }
+
+  const found = NOTIFICATIONS.find((notification) => notification.id === String(body?.id ?? ''));
+  if (!found) {
+    return { success: false, unreadCount: unreadCount(), message: 'Bildirim bulunamadı.' };
+  }
+
+  found.read = true;
+
+  return { success: true, unreadCount: unreadCount(), message: 'Bildirim okundu işaretlendi.' };
+}
+
 export const MOCK_HANDLERS: Record<string, (body: any) => unknown> = {
   '/customer/list': customerList,
   '/customer/detail': customerDetail,
@@ -730,6 +754,9 @@ export const MOCK_HANDLERS: Record<string, (body: any) => unknown> = {
   '/resource/get': (body: any) => ({ resources: resourcesFor(String(body?.transactionName ?? '')) }),
 
   '/menu/list': () => ({ items: MENU, totalCount: MENU.length }),
+
+  '/notification/list': notificationList,
+  '/notification/read': notificationRead,
 
   '/setting/get': () => ({ success: true, ...SETTINGS, message: '' }),
   '/setting/save': (body: any) => {
