@@ -1,0 +1,79 @@
+<div class="field app-fileupload">
+  @if (label()) {
+    <label [attr.for]="id()">{{ label() }}</label>
+  }
+
+  <!-- Alanın kendisi buton: sürükleyemeyen ya da fare kullanmayan da
+       klavyeyle seçiciyi açabilsin diye. -->
+  <button
+    type="button"
+    class="app-fileupload__zone"
+    [class.app-fileupload__zone--over]="over()"
+    [class.app-fileupload__zone--error]="!!getError(id())"
+    [disabled]="isDisabled()"
+    (click)="browse()"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave()"
+    (drop)="onDrop($event)"
+  >
+    <svg class="app-fileupload__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 16V4M7 9l5-5 5 5M3 16v2a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3v-2" />
+    </svg>
+
+    <span class="app-fileupload__lines">
+      <span class="app-fileupload__drop">{{ labels().drop }}</span>
+      <span class="app-fileupload__browse">{{ labels().browse }}</span>
+    </span>
+  </button>
+
+  <input
+    #picker
+    type="file"
+    class="app-fileupload__picker"
+    [attr.id]="id()"
+    [accept]="accept()"
+    [multiple]="multiple()"
+    [disabled]="isDisabled()"
+    (change)="onPicked($event)"
+  />
+
+  <p class="app-fileupload__hint">{{ hint() }}</p>
+
+  @if (rejected().length) {
+    <ul class="app-fileupload__rejected">
+      @for (item of rejected(); track $index) {
+        <li>{{ item.name }} — {{ item.reason }}</li>
+      }
+    </ul>
+  }
+
+  @if (files().length) {
+    <ul class="app-fileupload__list">
+      @for (item of files(); track item.name + item.bytes) {
+        <li class="app-fileupload__item">
+          <span class="app-fileupload__badge" [class]="'app-fileupload__badge app-fileupload__badge--' + kind(item.extension)">
+            {{ item.extension || '?' }}
+          </span>
+
+          <span class="app-fileupload__body">
+            <span class="app-fileupload__name">{{ item.name }}</span>
+            <span class="app-fileupload__size">{{ size(item.bytes) }}</span>
+          </span>
+
+          <button
+            type="button"
+            class="app-fileupload__remove"
+            [title]="labels().remove"
+            [disabled]="isDisabled()"
+            (click)="remove($index)"
+          >
+            ×
+          </button>
+        </li>
+      }
+    </ul>
+  }
+
+  <app-validation [id]="id()" />
+</div>

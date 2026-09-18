@@ -229,14 +229,15 @@ export class TourService {
   }
 
   /**
-   * Durağın hedefi. app-input ve app-select id'yi içerideki alana verdiği için
-   * ışık etiketi de içine alsın diye sarmalayıcıya çıkılıyor; henüz çizilmemiş
-   * eleman sıfır yükseklikte durduğundan yok sayılır.
+   * Durağın hedefi. app-input, app-select ve app-fileupload id'yi içerideki
+   * alana verdiği için ışık etiketi de içine alsın diye sarmalayıcıya
+   * çıkılıyor; henüz çizilmemiş eleman sıfır yükseklikte durduğundan yok
+   * sayılır. Dosya alanında bu şart: id'yi taşıyan seçici hiç görünmüyor.
    */
   private find(): HTMLElement | null {
     const step = this.step();
     const found = step ? this.document.getElementById(step.id) : null;
-    const element = found?.closest<HTMLElement>('app-input, app-select') ?? found;
+    const element = found?.closest<HTMLElement>('app-input, app-select, app-fileupload') ?? found;
 
     return element && element.getBoundingClientRect().height > 0 ? element : null;
   }

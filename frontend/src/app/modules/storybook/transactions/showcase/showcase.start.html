@@ -239,6 +239,14 @@
 
 </div>
 
+<app-card title="Fileupload">
+  <app-fileupload id="showcaseFiles" label="Belgeler" [(ngModel)]="form.documents" />
+
+  @if (form.documents.length) {
+    <p>{{ form.documents.length }} dosya seçildi; ekran bunları servise kendi gönderir.</p>
+  }
+</app-card>
+
 <app-card title="Notification / Learning">
   <p>Üst şeritteki iki bileşen: zil okunmamış bildirimleri listeler, soru işareti bulunulan ekranın turunu yan panelde açar.</p>
 

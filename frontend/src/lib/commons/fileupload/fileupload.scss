@@ -1,0 +1,202 @@
+.app-fileupload {
+  // Gizli seçici. Alanın kendisi butonla açılıyor, bu eleman yalnızca
+  // tarayıcının dosya penceresini taşıyor.
+  &__picker {
+    display: none;
+  }
+
+  // Kesikli çerçeve alanın bırakma bölgesi olduğunu söylüyor. Genel button
+  // kuralı dolu bir vurgu zemini verdiği için hepsi burada geri alınıyor.
+  &__zone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+    min-height: 104px;
+    padding: var(--space);
+    background: var(--color-surface-2);
+    border: 2px dashed var(--color-border-strong);
+    border-radius: var(--radius);
+    color: var(--color-muted);
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--transition), background var(--transition), color var(--transition);
+  }
+
+  &__zone:hover:not(:disabled) {
+    background: var(--color-surface-2);
+    border-color: var(--color-module, var(--color-accent));
+    color: var(--color-text);
+  }
+
+  // Sürükleme sırasında bırakmanın işe yarayacağı belli olmalı.
+  &__zone--over {
+    background: var(--color-surface);
+    border-color: var(--color-module, var(--color-accent));
+    border-style: solid;
+    color: var(--color-text);
+  }
+
+  &__zone--error {
+    border-color: var(--color-error);
+  }
+
+  &__zone:disabled {
+    cursor: default;
+  }
+
+  &__icon {
+    flex: none;
+    width: 30px;
+    height: 30px;
+  }
+
+  &__lines {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__drop {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  &__browse {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-muted);
+  }
+
+  &__hint {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    overflow-wrap: anywhere;
+  }
+
+  &__rejected {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--color-error);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+  }
+
+  // Rozette uzantının kendisi yazıyor; her tür için ayrı çizim tutmak yerine
+  // tanınan türler renkle, tanınmayanlar nötr zeminle ayrılıyor.
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 42px;
+    height: 34px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: 6px;
+    color: var(--color-muted);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    overflow: hidden;
+  }
+
+  &__badge--pdf {
+    border-color: var(--color-error);
+    color: var(--color-error);
+  }
+
+  &__badge--sheet {
+    border-color: var(--color-success);
+    color: var(--color-success);
+  }
+
+  &__badge--word {
+    border-color: var(--color-info);
+    color: var(--color-info);
+  }
+
+  &__badge--image {
+    border-color: var(--color-violet);
+    color: var(--color-violet);
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: 13px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+
+  &__size {
+    color: var(--color-muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  &__remove {
+    flex: none;
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    min-height: 32px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    color: var(--color-muted);
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  &__remove:hover:not(:disabled) {
+    background: var(--color-error);
+    border-color: var(--color-error);
+    color: var(--color-bg);
+  }
+}
+
+@media (max-width: 700px) {
+  .app-fileupload__zone {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}

@@ -91,6 +91,32 @@ sekmelerdeki gibi yana kayar. Uzun bir başlık iki satırda kesilir, tamamı
 Ekranlar veriye `lib/services/api/*Controller.service.ts` üzerinden erişir.
 Bu servisler gerçek bir OpenAPI istemcisi gibi HTTP isteği atar.
 
+### Dosya yükleme
+
+`lib/commons/fileupload`, PDF, Excel, Word ve görsel gibi dosyaların
+seçilebildiği alandır. Dosyalar sürüklenip bırakılarak ya da alana tıklanıp
+seçilerek eklenir; tür, boyut, adet ve tekrar denetimini geçemeyenler listeye
+girmez ve sebebiyle birlikte altta yazılır.
+
+Input ve Select gibi `ControlValueAccessor` uygular, yani ngModel ile bağlanır
+ve yapılandırmadaki `Required` kuralı boş listeyi yakalar:
+
+```html
+<app-fileupload id="documents" label="Belgeler" accept=".pdf,.xlsx" [maxSize]="10" [(ngModel)]="State.Request.documents" />
+```
+
+| Girdi | Varsayılan | Anlamı |
+| --- | --- | --- |
+| `accept` | `.pdf,.xlsx,.xls,.csv,.doc,.docx,.png,.jpg,.jpeg` | Kabul edilen uzantılar |
+| `multiple` | `true` | Birden çok dosya seçilebilir mi |
+| `maxSize` | `10` | Dosya başına üst sınır, MB |
+| `maxCount` | `5` | En fazla kaç dosya; `0` sınırsız |
+
+Değer `UploadFile[]`'dır ve her kaydın içinde tarayıcıdan gelen asıl `File`
+nesnesi durur. Dosyaları sunucuya göndermek bileşenin işi değildir: hangi uca,
+hangi gövdeyle gideceğine ekran karar verir — diğer ekranların servis
+çağrılarını kendi yapması gibi.
+
 ### Üst şerit
 
 Üst şeritte oturum açıkken iki bileşen daha durur.

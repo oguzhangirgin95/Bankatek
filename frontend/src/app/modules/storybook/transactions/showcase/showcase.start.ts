@@ -17,6 +17,7 @@ import { Datepicker } from '@lib/commons/datepicker/datepicker';
 import { Detailcard } from '@lib/commons/detailcard/detailcard';
 import { DocumentViewConfig, Documentview } from '@lib/commons/documentview/documentview';
 import { Donutchart } from '@lib/commons/donutchart/donutchart';
+import { Fileupload, UploadFile } from '@lib/commons/fileupload/fileupload';
 import { Footer } from '@lib/commons/footer/footer';
 import { Genericlist, GenericListConfig } from '@lib/commons/genericlist/genericlist';
 import { Gif } from '@lib/commons/gif/gif';
@@ -56,7 +57,7 @@ const ANKARA = { latitude: 39.93, longitude: 32.86 };
 @Component({
   imports: [
     Addnewtransaction, Avatar, Badge, Barchart, Body, Button, Card, Datepicker, Detailcard,
-    Chart, Column, Documentview, Donutchart, Footer, FormsModule, Genericlist, Gif, Grid,
+    Chart, Column, Documentview, Donutchart, Fileupload, Footer, FormsModule, Genericlist, Gif, Grid,
     Header, Info, Input, Learning, List, Map, Menu, Modal, Notification, Pagination, Profilemenu,
     Progress, Ringprogress, Row, Search, Select, Sidebar, Sidemodal, Skeleton, Slider,
     Spinner, Statcard, Step, Tabs, Theme, Ticker, Tooltip, Unity, Validation,
@@ -174,7 +175,7 @@ export class ShowcaseStart extends BaseComponent {
   readonly tooltip = signal<TooltipState>(TOOLTIP_HIDDEN);
   readonly message = signal('');
 
-  readonly form = { name: '', language: 'tr', date: '' };
+  readonly form = { name: '', language: 'tr', date: '', documents: [] as UploadFile[] };
 
   readonly weatherOrigin = WEATHER_BASE_PATH;
 
