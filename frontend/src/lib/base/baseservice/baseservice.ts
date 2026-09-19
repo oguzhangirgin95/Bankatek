@@ -1,7 +1,7 @@
 import { Injectable, Signal, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { MenuControllerService } from '@lib/services/api/menuController.service';
-import { ResourceControllerService } from '@lib/services/api/resourceController.service';
+import { ResourceService } from '../resource.service';
 import { MenuItemModel } from '@lib/services/model/menuItemModel';
 
 /** Sarmalayıcı proxy'den içindeki asıl nesneye ulaşmak için kullanılan anahtar. */
@@ -24,7 +24,7 @@ const RAW = Symbol('raw');
   providedIn: 'root',
 })
 export abstract class BaseService {
-  private readonly resourceControllerService = inject(ResourceControllerService);
+  private readonly resourceService = inject(ResourceService);
 
   private readonly menuControllerService = inject(MenuControllerService);
 
@@ -196,7 +196,7 @@ export abstract class BaseService {
     // İstek başlamadan işaretlenir; aynı anda gelen ikinci çağrı da elenir.
     this.loadedResources.add(group);
 
-    firstValueFrom(this.resourceControllerService.get({ transactionName: group }))
+    firstValueFrom(this.resourceService.get({ transactionName: group }))
       .then((response) => {
         // Gelen liste anahtar/değer nesnesine çevrilip mevcutların üzerine eklenir;
         // böylece 'general' grubu ile ekrana özel grup birlikte yaşayabilir.
