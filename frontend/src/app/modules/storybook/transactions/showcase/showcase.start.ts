@@ -19,6 +19,7 @@ import { DocumentViewConfig, Documentview } from '@lib/commons/documentview/docu
 import { Donutchart } from '@lib/commons/donutchart/donutchart';
 import { Fileupload, UploadFile } from '@lib/commons/fileupload/fileupload';
 import { Footer } from '@lib/commons/footer/footer';
+import { GeoMarker, Geomap } from '@lib/commons/geomap/geomap';
 import { Genericlist, GenericListConfig } from '@lib/commons/genericlist/genericlist';
 import { Gif } from '@lib/commons/gif/gif';
 import { Grid, GridColumn } from '@lib/commons/grid/grid';
@@ -57,7 +58,7 @@ const ANKARA = { latitude: 39.93, longitude: 32.86 };
 @Component({
   imports: [
     Addnewtransaction, Avatar, Badge, Barchart, Body, Button, Card, Datepicker, Detailcard,
-    Chart, Column, Documentview, Donutchart, Fileupload, Footer, FormsModule, Genericlist, Gif, Grid,
+    Chart, Column, Documentview, Donutchart, Fileupload, Footer, FormsModule, Genericlist, Geomap, Gif, Grid,
     Header, Info, Input, Learning, List, Map, Menu, Modal, Notification, Pagination, Profilemenu,
     Progress, Ringprogress, Row, Search, Select, Sidebar, Sidemodal, Skeleton, Slider,
     Spinner, Statcard, Step, Tabs, Theme, Ticker, Tooltip, Unity, Validation,
@@ -227,6 +228,13 @@ export class ShowcaseStart extends BaseComponent {
   validate(): void {
     this.validateCurrentStep();
   }
+
+  /** Sokak haritasındaki örnek işaretler. */
+  readonly branches: GeoMarker[] = [
+    { id: 'ist', latitude: 41.0082, longitude: 28.9784, label: 'İstanbul Merkez' },
+    { id: 'ank', latitude: 39.9334, longitude: 32.8597, label: 'Ankara Kızılay', variant: 'success' },
+    { id: 'izm', latitude: 38.4237, longitude: 27.1428, label: 'İzmir Konak', variant: 'warning' },
+  ];
 
   pick(value: string): void {
     this.message.set(value + ' seçildi');

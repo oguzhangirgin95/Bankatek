@@ -50,9 +50,15 @@
 
 <div class="panels">
   <app-card id="dashboardMap" [title]="mapTitle()" [subtitle]="labels().mapHint">
-    <app-unity
-      [data]="{ points: State.MapPoints ?? [], selectedId: State.Request.cityId, variant: State.MapMetric?.variant ?? '' }"
-      (message)="setFilter('cityId', $event)"
+    <app-geomap
+      [markers]="cityMarkers()"
+      [regions]="cityRegions()"
+      [regionSource]="provinces"
+      [regionVariant]="State.MapMetric?.variant ?? ''"
+      [selectedId]="State.Request.cityId"
+      ratio="16 / 9"
+      (markerClicked)="setFilter('cityId', $event.id)"
+      (regionClicked)="setFilter('cityId', $event.id)"
     />
   </app-card>
 

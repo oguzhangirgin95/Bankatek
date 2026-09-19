@@ -1,0 +1,27 @@
+app-card {
+  margin-bottom: var(--space);
+}
+
+/*
+ * Haritanın altındaki alanlar: adres geniş, koordinatlar dar.
+ * Dar ekranda alt alta iniyorlar.
+ */
+.picked {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: var(--space);
+  margin-top: var(--space);
+}
+
+@media (max-width: 720px) {
+  .picked {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Kopyala butonu listenin altında, sağa yaslı. */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space);
+}

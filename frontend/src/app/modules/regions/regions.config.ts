@@ -10,5 +10,6 @@ export const RegionsConfig: ModuleConfig = {
   background: '/assets/modules/harita.svg',
   transactions: [
     { code: 'MENU_REGIONLIST', title: 'Şehirler', path: '/regions/regionlist/start' },
+    { code: 'MENU_ADDRESSSEARCH', title: 'Adres Arama', path: '/regions/addresssearch/start' },
   ],
 };

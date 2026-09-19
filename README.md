@@ -40,6 +40,7 @@ npm test
 | `/transfers/transfercreate/start` | Transfer Oluştur | Üç adımlı akış: form → onay → sonuç |
 | `/branches/branchlist/start` | Şube Yoğunluğu | Şube bazında kanal kırılımı ve yoğunluk yüzdesi |
 | `/regions/regionlist/start` | Şehir Bazlı Dağılım | Harita ve şehir tablosu |
+| `/regions/addresssearch/start` | Adres Arama | Sokak seviyesinde harita, adres arama ve koordinat |
 | `/analytics/transfertrend/start` | Transfer Analizi | Günlük trend ve kanal dağılımı |
 | `/reports/reportlist/start` | Raporlar | Oluşturulmuş raporlar |
 | `/reports/reportentry/start` | Rapor Girişi | Kapsam seçimi → onay → sonuç |
@@ -283,9 +284,31 @@ gerekmez.
 | `apiUrl` | İstek öneki; mock katmanı bu önekle gelen istekleri karşılar |
 | `defaultLanguage` | Varsayılan dil |
 | `cryptoKey` | İstemci tarafı şifreleme anahtarı (32 karakter) |
-| `unityUrl` | Panodaki 3B harita çıktısının adresi |
+| `unityUrl` | Unity WebGL çıktısının adresi; yalnızca bileşen vitrininde |
+| `mapTilesUrl` | Vektör karo arşivi; boş bırakılırsa sokak haritası kapanır |
+| `mapGlyphsUrl` | Harita etiketlerinin yazı tipi adresi |
+| `mapSpriteUrl` | Harita ikon atlası; kullanılmıyor, boş kalmalı |
+| `geocodeUrl` | Adres arama sunucusu; boş bırakılırsa adres özellikleri kapanır |
 | `keycloakUrl` | Boş bırakılırsa oturum açma atlanır (demo modu) |
 | `weatherUrl` | Vitrindeki hava durumu servisi |
+
+## Harita
+
+İki ayrı harita var. `lib/commons/map` elle çizilmiş bir SVG'dir, illeri
+değerlerine göre boyar ve hiçbir kuruluma ihtiyaç duymaz. `lib/commons/geomap`
+ise sokak seviyesinde gerçek haritadır: MapLibre GL JS, kurum içinden servis
+edilen vektör karo arşivi ve adres için Nominatim. Tamamı çevrimdışı çalışır,
+internete çıkmaz.
+
+Panodaki şehir haritası da `geomap` kullanır: iller merkez koordinatlarına
+işaretlenir, işarete tıklamak panoyu o şehre filtreler. Servis şehir
+istatistiklerini SVG kutusuna ait `x`/`y` ile gönderdiği için gerçek
+koordinatlar `lib/commons/geomap/turkey-cities.ts` içinde durur — 81 ilin
+merkezi.
+
+Sokak haritası **isteğe bağlıdır**: `mapTilesUrl` boşken harita yerine bilgi
+metni çıkar, `geocodeUrl` boşken adres arama kapanır, uygulamanın geri kalanı
+etkilenmez. Veri üretimi ve servislerin kurulumu `maps/README.md` içinde.
 
 ## Oturum
 

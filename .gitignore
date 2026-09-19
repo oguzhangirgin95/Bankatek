@@ -1,2 +1,6 @@
 # Yerel Keycloak dagitimi (bin/lib/data). Tema ve kurulum betigi keycloak/ altinda.
 .keycloak/
+
+# Uretilen harita verisi (karo arsivi, OSM cikarimi, yazi tipleri).
+# Uretimi maps/setup.ps1 yapar; ayrintilar maps/README.md.
+.maps/

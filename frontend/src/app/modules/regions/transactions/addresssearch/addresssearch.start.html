@@ -1,0 +1,71 @@
+<h2>{{ labels().title }}</h2>
+
+<app-card [title]="labels().searchTitle" [subtitle]="labels().searchHint">
+  <!--
+    Değer iki yönlü bağlı: kullanıcı yazabildiği gibi haritadan seçilen adres
+    de kutuya yazılıyor. app-search dışarıdan gelen değeri olay tetiklemeden
+    yazdığı için bu yazma yeni bir arama başlatmıyor.
+  -->
+  <app-search
+    id="address"
+    [label]="labels().searchLabel"
+    [placeholder]="labels().searchPlaceholder"
+    [results]="results()"
+    [emptyText]="labels().searchEmpty"
+    [minLength]="3"
+    [disabled]="!enabled"
+    [(ngModel)]="State.Query"
+    (searched)="search($event)"
+    (selected)="choose($event)"
+  />
+
+  @if (!enabled) {
+    <app-info [message]="labels().disabled" variant="warning" />
+  }
+
+  @if (State.AddressNotice) {
+    <app-info [message]="State.AddressNotice" variant="info" />
+  }
+</app-card>
+
+<app-card [title]="labels().mapTitle" [subtitle]="labels().mapHint">
+  <!--
+    Konum seçme adres servisine bağlanmadı: koordinat tıklamanın kendisinden
+    geliyor, servis yalnızca adres metnini ekliyor.
+  -->
+  <!--
+    İl sınırları yalnızca boyama için değil: tıklanan noktanın hangi ilde
+    olduğu bu poligonlardan okunuyor. Boyanacak bölge verilmediği için dolgu
+    görünmez, sınır çizgisi de yakınlaşınca kayboluyor.
+  -->
+  <app-geomap
+    [markers]="markers()"
+    [regionSource]="provinces"
+    [selectedId]="State.Selected?.id ?? ''"
+    [fit]="State.Fit ?? null"
+    [picking]="true"
+    ratio="21 / 9"
+    (picked)="pick($event)"
+  />
+
+  <!--
+    Haritada tıklanan nokta doğrudan bu alanlara yazılıyor. Enlem ve boylam
+    tıklamanın kendisinden geldiği için adres servisi kapalı olsa da dolar;
+    adres alanı ise servis yanıt verdiğinde tamamlanır.
+  -->
+  <div class="picked">
+    <app-input id="pickedAddress" [label]="labels().addressField" [(ngModel)]="State.Address" />
+    <app-input id="pickedLatitude" [label]="labels().latitude" [(ngModel)]="State.Latitude" />
+    <app-input id="pickedLongitude" [label]="labels().longitude" [(ngModel)]="State.Longitude" />
+  </div>
+</app-card>
+
+<app-card [title]="labels().detailTitle">
+  <app-list [items]="details()" [emptyText]="labels().detailEmpty" />
+
+  @if (position()) {
+    <div class="actions">
+      <app-button [label]="labels().copy" variant="outline" (clicked)="copy()" />
+    </div>
+  }
+</app-card>

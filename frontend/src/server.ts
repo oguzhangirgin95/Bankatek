@@ -37,14 +37,33 @@ function originOf(address: string): string {
   }
 }
 
-const externalOrigins = [originOf(environment.keycloak.url), originOf(environment.weather.url)]
+const externalOrigins = [
+  originOf(environment.keycloak.url),
+  originOf(environment.weather.url),
+  originOf(environment.map.tiles),
+  originOf(environment.map.glyphs),
+  originOf(environment.map.sprite),
+  originOf(environment.geocode.url),
+]
   .filter((origin) => origin !== '')
+  // Karo, yazi tipi ve ikon genelde ayni sunucudan geliyor; ayni koken listede
+  // birden fazla kez yer almasin.
+  .filter((origin, index, list) => list.indexOf(origin) === index)
   .join(' ');
 
 function contentSecurityPolicy(nonce: string): string {
   return [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}'`,
+    // MapLibre karo cozumlemesini worker'da yapiyor ve worker'i blob olarak
+    // uretiyor. 'worker-src' hic verilmezse tarayici 'script-src'e dusuyor, o
+    // da blob'a izin vermedigi icin harita hic acilmiyor.
+    //
+    // Blob'u tamamen disarida birakmanin yolu maplibre-gl'in 'csp' derlemesi
+    // ve setWorkerUrl(): worker ayri bir dosyadan gelir. Bu, worker dosyasinin
+    // dagitimda dogru yoldan servis edilmesine bagli oldugu icin tercih
+    // edilmedi; blob worker'in actigi alan zaten script-src ile sinirli.
+    "worker-src 'self' blob:",
     `style-src 'self' 'nonce-${nonce}'`,
     `style-src-elem 'self' 'nonce-${nonce}'`,
     // Angular [style.x] baglamalarini SSR'da style ozniteligi olarak basiyor;

@@ -158,6 +158,10 @@
     <app-map title="Türkiye" [points]="points" (pointClicked)="pick($event.name)" />
   </app-card>
 
+  <app-card title="Geomap">
+    <app-geomap [markers]="branches" (markerClicked)="pick($event.label ?? '')" />
+  </app-card>
+
   <app-card title="Modal">
     <app-button label="Aç" (clicked)="modalOpen.set(true)" />
     <app-modal title="Örnek pencere" [(open)]="modalOpen">

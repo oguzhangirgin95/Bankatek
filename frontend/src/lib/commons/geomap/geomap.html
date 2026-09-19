@@ -1,0 +1,30 @@
+<div class="app-geomap" [style.aspectRatio]="ratio()" [class.app-geomap--picking]="picking()">
+  <!--
+    Tuval koşula bağlanmadan her zaman çiziliyor: sunucunun ürettiği ağaç ile
+    tarayıcınınki aynı kalsın ve MapLibre kurulduğunda bağlanacağı öğeyi hazır
+    bulsun. Harita kurulmazsa boş bir kutu olarak kalır, üstünü durum katmanı
+    kapatır.
+  -->
+  <div class="app-geomap__canvas" #host></div>
+
+  @if (!configured || error() || !ready()) {
+    <div class="app-geomap__layer">
+      <div class="app-geomap__state">
+        <svg class="app-geomap__icon" viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M6 12 18 8l12 4 12-4v28l-12 4-12-4-12 4z" />
+          <path d="M18 8v28m12-24v28" />
+        </svg>
+
+        @if (!configured) {
+          <p class="app-geomap__title">{{ labels().missing }}</p>
+          <p class="app-geomap__hint">{{ labels().missingHint }}</p>
+        } @else if (error()) {
+          <p class="app-geomap__title">{{ error() }}</p>
+          <p class="app-geomap__hint">{{ labels().failedHint }}</p>
+        } @else {
+          <p class="app-geomap__title">{{ labels().loading }}</p>
+        }
+      </div>
+    </div>
+  }
+</div>

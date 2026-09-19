@@ -21,7 +21,10 @@ import { Gif } from '@lib/commons/gif/gif';
 import { InfoVariant } from '@lib/commons/info/info';
 import { Select } from '@lib/commons/select/select';
 import { Statcard } from '@lib/commons/statcard/statcard';
-import { Unity } from '@lib/commons/unity/unity';
+import { environment } from '@env/environment';
+import { GeoMarker, GeoRegion, Geomap } from '@lib/commons/geomap/geomap';
+import { TURKEY_CITIES } from '@lib/commons/geomap/turkey-cities';
+import { MapPoint } from '@lib/commons/map/map';
 
 const STATUS_VARIANT: Record<string, string> = {
   AKTIF: 'success',
@@ -31,7 +34,7 @@ const STATUS_VARIANT: Record<string, string> = {
 };
 
 @Component({
-  imports: [Barchart, Button, Card, Datepicker, Documentview, Donutchart, FormsModule, Genericlist, Gif, Select, Statcard, Unity],
+  imports: [Barchart, Button, Card, Datepicker, Documentview, Donutchart, FormsModule, Genericlist, Geomap, Gif, Select, Statcard],
   templateUrl: './dashboard.start.html',
   styleUrl: './dashboard.scss',
 })
@@ -221,6 +224,55 @@ export class DashboardStart extends BaseComponent implements OnInit {
       })
       .catch((error) => console.error('Summary:', error));
   }
+
+  /** İl sınırlarının adresi; boyanacak alanlar buradan okunuyor. */
+  readonly provinces = environment.map.provinces;
+
+  /**
+   * Boyanacak iller.
+   *
+   * İşaretlerin aksine koordinat aranmıyor: sınır geometrisi plaka koduyla
+   * eşleştiği için servisten gelen kimlik doğrudan yetiyor.
+   */
+  readonly cityRegions = computed<GeoRegion[]>(() =>
+    ((this.State.MapPoints ?? []) as MapPoint[]).map((point) => ({ id: point.id, value: point.value })),
+  );
+
+  /**
+   * Şehir istatistiklerini harita işaretine çevirir.
+   *
+   * Servisin gönderdiği `x`/`y` SVG haritasının görüntü kutusuna ait, coğrafi
+   * koordinat değil; sokak haritası için plaka kodundan gerçek konum aranıyor.
+   * Tabloda karşılığı olmayan bir kod gelirse o şehir hiç çizilmiyor: yanlış
+   * yere işaret koymaktansa eksik bırakmak daha doğru.
+   *
+   * Renk seçili ölçütten geliyor, böylece üstteki kartlardan biri tıklandığında
+   * harita da o ölçütün rengine dönüyor.
+   */
+  readonly cityMarkers = computed<GeoMarker[]>(() => {
+    const variant = this.State.MapMetric?.variant ?? '';
+
+    return ((this.State.MapPoints ?? []) as MapPoint[]).flatMap((point) => {
+      const location = TURKEY_CITIES[point.id];
+
+      if (!location) {
+        return [];
+      }
+
+      return [
+        {
+          id: point.id,
+          latitude: location.latitude,
+          longitude: location.longitude,
+          label: `${point.name}: ${point.value}`,
+          // Sayı işaretin üstüne yazılıyor; değeri görmek için her şehrin
+          // üzerine gelmek gerekmesin.
+          text: String(point.value),
+          variant,
+        },
+      ];
+    });
+  });
 
   getMapStatistics() {
     const metric = this.State.MapMetric;

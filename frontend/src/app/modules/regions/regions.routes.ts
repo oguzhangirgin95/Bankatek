@@ -7,4 +7,9 @@ export const routes: Routes = [
         loadChildren: () => import('./transactions/regionlist/regionlist.routes').then((m) => m.routes),
         data: { moduleConfig: RegionsConfig },
     },
+    {
+        path: 'addresssearch',
+        loadChildren: () => import('./transactions/addresssearch/addresssearch.routes').then((m) => m.routes),
+        data: { moduleConfig: RegionsConfig },
+    },
 ];

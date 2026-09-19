@@ -1,0 +1,232 @@
+/*
+ * MapLibre'in kendi stili: denetimler, ölçek çubuğu ve kaynak satırı.
+ *
+ * Uzantı bilerek yazılmadı. Uzantılı yazılsaydı Sass bunu satır içine almak
+ * yerine çıktıya bir CSS '@import' kuralı koyar, tarayıcı dosyayı ayrıca
+ * indirmeye çalışırdı; kapalı ağda tek paket halinde gitmesi gerekiyor.
+ *
+ * Global stil listesine (angular.json) de konabilirdi ama oradan her sayfaya
+ * inerdi. Burada durunca yalnızca harita açan ekranlarla birlikte yükleniyor.
+ * Karşılığında bu dosya 68 kB üçüncü taraf CSS taşıyor; angular.json'daki
+ * 'anyComponentStyle' bütçesinin hata sınırı bu yüzden yükseltildi, uyarı
+ * sınırı ise 4 kB'de bırakıldı: bu dosya her derlemede uyarı olarak görünmeye
+ * devam ediyor, sessizce büyümüyor.
+ */
+@use 'maplibre-gl/dist/maplibre-gl';
+
+.app-geomap {
+  /*
+   * Yer, yükseklik yerine oranla ayrılıyor; gerekçesi app-unity ile aynı.
+   * Kutunun boyu sunucuda da tarayıcıda da aynı hesaplanır, harita yüklenirken
+   * sayfa zıplamaz.
+   */
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+
+  &__canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Konum seçme kipinde imleç artıya dönüyor; tıklamanın bir karşılığı var. */
+  &--picking &__canvas {
+    cursor: crosshair;
+  }
+
+  /* Yükleme ve hata, tuvali DOM'dan çıkarmadan üstüne biniyor. */
+  &__layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: calc(var(--space) * 1.5);
+    background: var(--color-surface);
+  }
+
+  &__state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: min(280px, 100%);
+    text-align: center;
+  }
+
+  &__icon {
+    width: 44px;
+    height: 44px;
+    fill: none;
+    stroke: var(--color-border-strong);
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+  }
+
+  &__title {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  &__hint {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 12px;
+    opacity: 0.7;
+  }
+}
+
+/*
+ * İşaretler.
+ *
+ * Bunlar şablonda değil, bileşenin JavaScript'inde üretilip MapLibre'in
+ * katmanına ekleniyor; bu yüzden seçiciler '.app-geomap' içine yazılamıyor.
+ * Damla biçimi tek bir kutunun bir köşesi yuvarlatılmadan döndürülmesiyle
+ * çiziliyor, ayrı bir SVG gerekmiyor.
+ */
+.app-geomap__pin {
+  --pin-color: var(--color-accent);
+
+  /*
+   * Genel 'button' kuralının sıfırlanması.
+   *
+   * styles.scss her butona min-height, yatay padding, kenarlık ve zemin
+   * veriyor; bunlar dokunma hedefi için doğru ama harita işareti buton
+   * görünmemeli. Özellikle min-height: işaret 18px yüksekliğe ayarlanmış olsa
+   * da dokunma yüksekliği kadar uzayıp ince bir dilime dönüşüyordu.
+   *
+   * 'transform' burada bilerek yok: MapLibre işareti konumlandırmak için o
+   * özelliği satır içi yazıyor, buradan verilen her değer eziliyor. Vurgu ve
+   * seçim bu yüzden boyut ve gölgeyle anlatılıyor.
+   */
+  min-height: 0;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  line-height: 0;
+  cursor: pointer;
+  transition: filter 120ms ease;
+
+  &:hover {
+    filter: brightness(1.15);
+  }
+
+  /* Damlanın gövdesi ve ortasındaki delik. */
+  .app-geomap__pin-body {
+    fill: var(--pin-color);
+    stroke: var(--color-on-accent);
+    stroke-width: 1.6;
+  }
+
+  .app-geomap__pin-eye {
+    fill: var(--color-on-accent);
+  }
+
+  /* Sayı taşıyan işaret: yuvarlak rozet. */
+  &--badge {
+    display: grid;
+    place-items: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 7px;
+    border: 2px solid var(--color-on-accent);
+    border-radius: 999px;
+    background: var(--pin-color);
+    color: var(--color-on-accent);
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 45%);
+  }
+
+  &--success {
+    --pin-color: var(--color-success);
+  }
+
+  &--warning {
+    --pin-color: var(--color-warning);
+  }
+
+  &--error {
+    --pin-color: var(--color-error);
+  }
+
+  &--info {
+    --pin-color: var(--color-info);
+  }
+
+  &--teal {
+    --pin-color: var(--color-teal);
+  }
+
+  &--violet {
+    --pin-color: var(--color-violet);
+  }
+
+  /*
+   * Seçili işaret.
+   *
+   * Büyütmek için transform kullanılamıyor (MapLibre o özelliği kendi
+   * yazıyor), bu yüzden vurgu halkayla veriliyor: 'outline' düzeni bozmadan
+   * şeklin dışına çiziliyor ve yuvarlak köşeleri takip ediyor.
+   */
+  &--selected {
+    z-index: 1;
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+    border-radius: 999px;
+  }
+
+  &--selected.app-geomap__pin--badge {
+    border-color: var(--color-text);
+  }
+}
+
+/*
+ * MapLibre denetimleri koyu temaya uydurulmuyor, temanın renklerini alıyor.
+ * Kitaplığın varsayılanı beyaz zeminli; koyu panelin üstünde yama gibi
+ * duruyordu.
+ */
+.app-geomap {
+  .maplibregl-ctrl-group {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: none;
+
+    button + button {
+      border-top-color: var(--color-border);
+    }
+
+    button .maplibregl-ctrl-icon {
+      /* Simgeler siyah SVG; koyu zeminde görünmüyorlardı. */
+      filter: invert(1);
+    }
+  }
+
+  .maplibregl-ctrl-scale {
+    color: var(--color-muted);
+    background: var(--color-surface);
+    border-color: var(--color-border);
+  }
+
+  .maplibregl-ctrl-attrib {
+    background: var(--color-surface);
+
+    a {
+      color: var(--color-muted);
+    }
+  }
+
+  .maplibregl-ctrl-attrib-button {
+    filter: invert(1);
+  }
+}

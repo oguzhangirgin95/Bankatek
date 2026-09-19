@@ -1,0 +1,50 @@
+# Harita servisleri: karo sunucusu ve adres sunucusu.
+#
+# Ikisi de disari cikmaz; veriyi maps/setup.ps1'in urettigi '.maps' klasorunden
+# okurlar. Kapali aga tasinirken imajlarin da 'docker save' ile disari alinmasi
+# gerekir, cunku orada Docker Hub yok.
+
+services:
+  # Vektor karo arsivi ve yazi tipleri. Ayrintilar icin nginx.conf.
+  tiles:
+    image: nginx:alpine
+    container_name: bankatek-tiles
+    ports:
+      - "8088:80"
+    volumes:
+      - ../.maps/tiles:/data:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
+
+  # Adres arama ve ters geokodlama.
+  #
+  # Ilk acilista ice aktarma calisir: Turkiye icin birkac saat surer ve bittikten
+  # sonra 40-80 GB disk tutar. Veritabani adli birim (volume) icinde durdugu icin
+  # kap silinip yeniden kurulsa da ice aktarma tekrarlanmaz.
+  nominatim:
+    image: mediagis/nominatim:5.3
+    container_name: bankatek-nominatim
+    ports:
+      - "8080:8080"
+    environment:
+      # Dosya indirilmiyor, mount edilen klasorden okunuyor: ayni .pbf'i hem
+      # Planetiler hem Nominatim kullaniyor, iki kez indirmenin anlami yok.
+      PBF_PATH: /nominatim/data/turkey-latest.osm.pbf
+      # 'full': idari sinir, cadde, adres ve ilgi noktalarinin hepsi. Yalnizca
+      # adres yeterliyse 'address' cok daha kucuk bir veritabani cikarir.
+      IMPORT_STYLE: full
+      # Wikipedia onem puanlari sonuclarin siralamasini duzeltir ama indirme
+      # ister; kapali agda hazirlanamiyorsa false kalir.
+      IMPORT_WIKIPEDIA: "false"
+      NOMINATIM_PASSWORD: bankatek
+    volumes:
+      - ../.maps:/nominatim/data:ro
+      - nominatim-data:/var/lib/postgresql/16/main
+      - nominatim-flatnode:/nominatim/flatnode
+    # Varsayilan 64 MB; Turkiye boyutunda bir ice aktarma bununla basarisiz olur.
+    shm_size: 1gb
+    restart: unless-stopped
+
+volumes:
+  nominatim-data:
+  nominatim-flatnode:
